@@ -1,0 +1,313 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		65083E7F15D43C3A003108B5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65083E7E15D43C3A003108B5 /* UIKit.framework */; };
+		65083E8115D43C3A003108B5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65083E8015D43C3A003108B5 /* Foundation.framework */; };
+		65083E8315D43C3A003108B5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65083E8215D43C3A003108B5 /* CoreGraphics.framework */; };
+		65083E8515D43C3A003108B5 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65083E8415D43C3A003108B5 /* GLKit.framework */; };
+		65083E8715D43C3A003108B5 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65083E8615D43C3A003108B5 /* OpenGLES.framework */; };
+		65083E8D15D43C3A003108B5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 65083E8B15D43C3A003108B5 /* InfoPlist.strings */; };
+		65083E8F15D43C3A003108B5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083E8E15D43C3A003108B5 /* main.m */; };
+		65083E9315D43C3A003108B5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083E9215D43C3A003108B5 /* AppDelegate.m */; };
+		65083E9515D43C3B003108B5 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 65083E9415D43C3B003108B5 /* Shader.fsh */; };
+		65083E9715D43C3B003108B5 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 65083E9615D43C3B003108B5 /* Shader.vsh */; };
+		65083E9A15D43C3B003108B5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083E9915D43C3B003108B5 /* ViewController.m */; };
+		65083E9D15D43C3B003108B5 /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65083E9B15D43C3B003108B5 /* ViewController_iPhone.xib */; };
+		65083EA015D43C3B003108B5 /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65083E9E15D43C3B003108B5 /* ViewController_iPad.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		65083E7A15D43C3A003108B5 /* Demoteket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demoteket.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		65083E7E15D43C3A003108B5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		65083E8015D43C3A003108B5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		65083E8215D43C3A003108B5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		65083E8415D43C3A003108B5 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		65083E8615D43C3A003108B5 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		65083E8A15D43C3A003108B5 /* Demoteket-Info.plist */ = {isa = PBXFileReference; path = "Demoteket-Info.plist"; sourceTree = "<group>"; };
+		65083E8C15D43C3A003108B5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		65083E8E15D43C3A003108B5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		65083E9015D43C3A003108B5 /* Demoteket-Prefix.pch */ = {isa = PBXFileReference; path = "Demoteket-Prefix.pch"; sourceTree = "<group>"; };
+		65083E9115D43C3A003108B5 /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		65083E9215D43C3A003108B5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		65083E9415D43C3B003108B5 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
+		65083E9615D43C3B003108B5 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
+		65083E9815D43C3B003108B5 /* ViewController.h */ = {isa = PBXFileReference; path = ViewController.h; sourceTree = "<group>"; };
+		65083E9915D43C3B003108B5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		65083E9C15D43C3B003108B5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
+		65083E9F15D43C3B003108B5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		65083E7715D43C3A003108B5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				65083E7F15D43C3A003108B5 /* UIKit.framework in Frameworks */,
+				65083E8115D43C3A003108B5 /* Foundation.framework in Frameworks */,
+				65083E8315D43C3A003108B5 /* CoreGraphics.framework in Frameworks */,
+				65083E8515D43C3A003108B5 /* GLKit.framework in Frameworks */,
+				65083E8715D43C3A003108B5 /* OpenGLES.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		65083E6F15D43C3A003108B5 = {
+			isa = PBXGroup;
+			children = (
+				65083E8815D43C3A003108B5 /* Demoteket */,
+				65083E7D15D43C3A003108B5 /* Frameworks */,
+				65083E7B15D43C3A003108B5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		65083E7B15D43C3A003108B5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				65083E7A15D43C3A003108B5 /* Demoteket.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		65083E7D15D43C3A003108B5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				65083E7E15D43C3A003108B5 /* UIKit.framework */,
+				65083E8015D43C3A003108B5 /* Foundation.framework */,
+				65083E8215D43C3A003108B5 /* CoreGraphics.framework */,
+				65083E8415D43C3A003108B5 /* GLKit.framework */,
+				65083E8615D43C3A003108B5 /* OpenGLES.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		65083E8815D43C3A003108B5 /* Demoteket */ = {
+			isa = PBXGroup;
+			children = (
+				65083E9115D43C3A003108B5 /* AppDelegate.h */,
+				65083E9215D43C3A003108B5 /* AppDelegate.m */,
+				65083E9415D43C3B003108B5 /* Shader.fsh */,
+				65083E9615D43C3B003108B5 /* Shader.vsh */,
+				65083E9815D43C3B003108B5 /* ViewController.h */,
+				65083E9915D43C3B003108B5 /* ViewController.m */,
+				65083E9B15D43C3B003108B5 /* ViewController_iPhone.xib */,
+				65083E9E15D43C3B003108B5 /* ViewController_iPad.xib */,
+				65083E8915D43C3A003108B5 /* Supporting Files */,
+			);
+			path = Demoteket;
+			sourceTree = "<group>";
+		};
+		65083E8915D43C3A003108B5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				65083E8A15D43C3A003108B5 /* Demoteket-Info.plist */,
+				65083E8B15D43C3A003108B5 /* InfoPlist.strings */,
+				65083E8E15D43C3A003108B5 /* main.m */,
+				65083E9015D43C3A003108B5 /* Demoteket-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		65083E7915D43C3A003108B5 /* Demoteket */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 65083EA315D43C3B003108B5 /* Build configuration list for PBXNativeTarget "Demoteket" */;
+			buildPhases = (
+				65083E7615D43C3A003108B5 /* Sources */,
+				65083E7715D43C3A003108B5 /* Frameworks */,
+				65083E7815D43C3A003108B5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Demoteket;
+			productName = Demoteket;
+			productReference = 65083E7A15D43C3A003108B5 /* Demoteket.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		65083E7115D43C3A003108B5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 65083E7415D43C3A003108B5 /* Build configuration list for PBXProject "Demoteket" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 65083E6F15D43C3A003108B5;
+			productRefGroup = 65083E7B15D43C3A003108B5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				65083E7915D43C3A003108B5 /* Demoteket */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		65083E7815D43C3A003108B5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				65083E8D15D43C3A003108B5 /* InfoPlist.strings in Resources */,
+				65083E9515D43C3B003108B5 /* Shader.fsh in Resources */,
+				65083E9715D43C3B003108B5 /* Shader.vsh in Resources */,
+				65083E9D15D43C3B003108B5 /* ViewController_iPhone.xib in Resources */,
+				65083EA015D43C3B003108B5 /* ViewController_iPad.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		65083E7615D43C3A003108B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				65083E8F15D43C3A003108B5 /* main.m in Sources */,
+				65083E9315D43C3A003108B5 /* AppDelegate.m in Sources */,
+				65083E9A15D43C3B003108B5 /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		65083E8B15D43C3A003108B5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				65083E8C15D43C3A003108B5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		65083E9B15D43C3B003108B5 /* ViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				65083E9C15D43C3B003108B5 /* en */,
+			);
+			name = ViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		65083E9E15D43C3B003108B5 /* ViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				65083E9F15D43C3B003108B5 /* en */,
+			);
+			name = ViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		65083EA115D43C3B003108B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		65083EA215D43C3B003108B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		65083EA415D43C3B003108B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Demoteket/Demoteket-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "Demoteket/Demoteket-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		65083EA515D43C3B003108B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Demoteket/Demoteket-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "Demoteket/Demoteket-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		65083E7415D43C3A003108B5 /* Build configuration list for PBXProject "Demoteket" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				65083EA115D43C3B003108B5 /* Debug */,
+				65083EA215D43C3B003108B5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		65083EA315D43C3B003108B5 /* Build configuration list for PBXNativeTarget "Demoteket" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				65083EA415D43C3B003108B5 /* Debug */,
+				65083EA515D43C3B003108B5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 65083E7115D43C3A003108B5 /* Project object */;
+}
