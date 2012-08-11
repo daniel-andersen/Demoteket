@@ -43,7 +43,7 @@
 }
 
 - (void) render {
-    sceneModelViewMatrix = GLKMatrix4MakeTranslation(-5.0f, -0.2f, -19.0f);
+    sceneModelViewMatrix = GLKMatrix4MakeTranslation(-5.0f, -1.0f, -18.0f);
     sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, 0.1f, 1.0f, 0.0f, 0.0f);
 
     [floorPlan render];

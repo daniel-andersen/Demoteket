@@ -141,10 +141,10 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     char x2 = x < ROOM_MAX_SIZE - 1 ? tiles[y][x + 1] : 'X';
     char y2 = y < ROOM_MAX_SIZE - 1 ? tiles[y + 1][x] : 'X';
     int type = 0;
-    type += x1 != 'X' && x1 != ' ' ? 1 : 0;
-    type += y1 != 'X' && y1 != ' ' ? 2 : 0;
-    type += x2 != 'X' && x2 != ' ' ? 4 : 0;
-    type += y2 != 'X' && y2 != ' ' ? 8 : 0;
+    type += [self isCharAttachableToCornerBrick:x1] ? 1 : 0;
+    type += [self isCharAttachableToCornerBrick:y1] ? 2 : 0;
+    type += [self isCharAttachableToCornerBrick:x2] ? 4 : 0;
+    type += [self isCharAttachableToCornerBrick:y2] ? 8 : 0;
     return type;
 }
 
@@ -152,6 +152,10 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     char x1 = x > 0 ? tiles[y][x - 1] : 'X';
     char x2 = x < ROOM_MAX_SIZE - 1 ? tiles[y][x + 1] : 'X';
     return x1 != 'X' || x1 != ' ' || x2 != 'X' || x2 != ' ' ? 0 : 1;
+}
+
+- (bool) isCharAttachableToCornerBrick:(char)ch {
+    return ch == '|' || ch == '-';
 }
 
 - (void) render {
