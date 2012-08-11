@@ -23,14 +23,18 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@class ViewController;
+#import "FloorPlan.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface Exhibition : NSObject {
+    FloorPlan *floorPlan;
+}
 
-@property (strong, nonatomic) UIWindow *window;
+- (id) init;
 
-@property (strong, nonatomic) ViewController *viewController;
+- (void) createExhibition;
+
+- (void) render;
 
 @end

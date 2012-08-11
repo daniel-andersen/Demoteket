@@ -23,14 +23,51 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import <GLKit/GLKit.h>
 
-@class ViewController;
+#define QUADS_MAX_COUNT 256
+#define VERTICES_MAX_COUNT (QUADS_MAX_COUNT * 9 * 3 * sizeof(GLfloat))
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+typedef struct {
+    float x1, y1, z1;
+    float x2, y2, z2;
+    float x3, y3, z3;
+    float x4, y4, z4;
+} Quad;
 
-@property (strong, nonatomic) UIWindow *window;
+@interface Quads : NSObject {
 
-@property (strong, nonatomic) ViewController *viewController;
+@private
+
+    Quad quads[QUADS_MAX_COUNT];
+    int quadCount;
+    
+    GLKTextureInfo *textureInfo;
+    GLKEffectPropertyTexture *textureProperty;
+    bool textureToggled;
+
+    GLKVector4 color;
+    
+    GLfloat vertices[VERTICES_MAX_COUNT];
+    
+    GLuint vertexArray;
+    GLuint vertexBuffer;
+}
+
+- (id) init;
+- (void) dealloc;
+
+- (void) beginWithColor:(GLKVector4)col;
+- (void) beginWithTexture:(GLKTextureInfo*)texture;
+- (void) beginWithTexture:(GLKTextureInfo*)texture color:(GLKVector4)col;
+- (void) end;
+
+- (void) calculateNormals;
+
+- (void) addQuadVerticalX1:(float)x1 y1:(float)y1 z1:(float)z1 x2:(float)x2 y2:(float)y2 z2:(float)z2;
+- (void) addQuadHorizontalX1:(float)x1 z1:(float)z1 x2:(float)x2 z2:(float)z2 y:(float)y;
+- (void) addQuadX1:(float)x1 y1:(float)y1 z1:(float)z1 x2:(float)x2 y2:(float)y2 z2:(float)z2 x3:(float)x3 y3:(float)y3 z3:(float)z3 x4:(float)x4 y4:(float)y4 z4:(float)z4;
+
+- (void) render;
 
 @end

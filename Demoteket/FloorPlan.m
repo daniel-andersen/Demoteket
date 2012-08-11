@@ -23,14 +23,34 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import <GLKit/GLKit.h>
 
-@class ViewController;
+#import "FloorPlan.h"
+#import "Globals.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@implementation FloorPlan
 
-@property (strong, nonatomic) UIWindow *window;
+- (id) init {
+    if (self = [super init]) {
+    }
+    return self;
+}
 
-@property (strong, nonatomic) ViewController *viewController;
+- (void) dealloc {
+}
+
+- (void) createFloorPlan {
+    NSLog(@"Creating floor plan");
+    for (int i = 0; i < ROOM_COUNT; i++) {
+        rooms[i] = [[Room alloc] init];
+    }
+    [rooms[0] initializeRoomNumber:0];
+}
+
+- (void) render {
+    for (int i = 0; i < ROOM_COUNT; i++) {
+        [rooms[i] render];
+    }
+}
 
 @end

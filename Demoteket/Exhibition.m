@@ -23,14 +23,30 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import "Exhibition.h"
+#import "Globals.h"
 
-@class ViewController;
+@implementation Exhibition
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+- (id) init {
+    if (self = [super init]) {
+        textures = [[Textures alloc] init];
+        [textures load];
 
-@property (strong, nonatomic) UIWindow *window;
+        floorPlan = [[FloorPlan alloc] init];
+    }
+    return self;
+}
 
-@property (strong, nonatomic) ViewController *viewController;
+- (void) createExhibition {
+    [floorPlan createFloorPlan];
+}
+
+- (void) render {
+    sceneModelViewMatrix = GLKMatrix4MakeTranslation(-5.0f, -0.2f, -19.0f);
+    sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, 0.1f, 1.0f, 0.0f, 0.0f);
+
+    [floorPlan render];
+}
 
 @end

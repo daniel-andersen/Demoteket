@@ -23,14 +23,22 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import "Room.h"
 
-@class ViewController;
+#define ROOM_COUNT 5
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface FloorPlan : NSObject {
 
-@property (strong, nonatomic) UIWindow *window;
+@private
 
-@property (strong, nonatomic) ViewController *viewController;
+    Room *rooms[ROOM_COUNT];
+}
+
+- (id) init;
+- (void) dealloc;
+
+- (void) createFloorPlan;
+
+- (void) render;
 
 @end

@@ -23,14 +23,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#ifndef Demoteket_Globals_h
+#define Demoteket_Globals_h
 
-@class ViewController;
+#import <GLKit/GLKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+#import "Textures.h"
 
-@property (strong, nonatomic) UIWindow *window;
+#define BUFFER_OFFSET(i) ((char *)NULL + (i * sizeof(GLfloat)))
 
-@property (strong, nonatomic) ViewController *viewController;
+Textures *textures;
+GLKBaseEffect *glkEffect;
 
-@end
+GLKMatrix4 sceneModelViewMatrix;
+GLKMatrix4 mirrorModelViewMatrix;
+
+#endif

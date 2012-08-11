@@ -23,14 +23,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import <GLKit/GLKit.h>
 
-@class ViewController;
+@interface Textures : NSObject {
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@private
+    
+	GLKTextureInfo *wall;
+}
 
-@property (strong, nonatomic) UIWindow *window;
+- (void) load;
 
-@property (strong, nonatomic) ViewController *viewController;
+- (GLKTextureInfo*) loadTexture:(NSString*)filename;
+
+@property (readonly) GLKTextureInfo *wall;
 
 @end

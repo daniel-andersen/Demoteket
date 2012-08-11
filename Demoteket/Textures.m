@@ -23,14 +23,25 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import "Textures.h"
 
-@class ViewController;
+@implementation Textures
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@synthesize wall;
 
-@property (strong, nonatomic) UIWindow *window;
+- (void) load {
+    wall = [self loadTexture:@"wall.png"];
+}
 
-@property (strong, nonatomic) ViewController *viewController;
+- (GLKTextureInfo*) loadTexture:(NSString*)filename {
+    NSLog(@"Loading texture: %@", filename);
+    UIImage *image = [UIImage imageNamed:filename];
+    NSError *error = nil;
+    GLKTextureInfo *texture = [GLKTextureLoader textureWithCGImage:image.CGImage options:nil error:&error];
+    if (error) {
+        NSLog(@"Error loading texture from image: %@", error);
+    }
+    return texture;
+}
 
 @end

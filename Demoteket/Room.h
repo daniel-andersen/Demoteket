@@ -23,14 +23,32 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import "Quads.h"
 
-@class ViewController;
+#define ROOM_MAX_SIZE 16
+#define PILLAR_MAX_COUNT 32
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+#define ROOM_HEIGHT 5.0f
+#define BLOCK_SIZE 2.0f
 
-@property (strong, nonatomic) UIWindow *window;
+@interface Room : NSObject {
+    char tiles[ROOM_MAX_SIZE][ROOM_MAX_SIZE];
 
-@property (strong, nonatomic) ViewController *viewController;
+@private
+    bool isVisible;
+    
+    int roomNumber;
+    int stripNumber;
+
+    Quads *floor;
+    Quads *walls;
+    Quads *pillars[PILLAR_MAX_COUNT];
+    int pillarsCount;
+}
+
+- (void) initializeRoomNumber:(int)number;
+- (void) trashRoom;
+
+- (void) render;
 
 @end
