@@ -138,21 +138,22 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
             if (tiles[i][j] >= '1' && tiles[i][j] <= '9') {
                 int photoIndex = (int) tiles[i][j] - (int) '1';
                 int photoDirection = [self getPhotosDirectionX:j y:i];
-                float dist = BLOCK_SIZE - 0.01f;
+                float dist = BLOCK_SIZE - 0.1f;
+                float scaleHorz = BLOCK_SIZE;
                 if (photoDirection == 0) {
-                    [self addPhotosLightsQuads:photoIndex x1:centerX - dist y1:0.0f z1:z1 - BLOCK_SIZE*2 x2:centerX - dist y2:ROOM_HEIGHT z2:z2 + BLOCK_SIZE*2];
+                    [self addPhotosLightsQuads:photoIndex x1:centerX - dist y1:0.0f z1:z1 - scaleHorz x2:centerX - dist y2:ROOM_HEIGHT z2:z2 + scaleHorz];
                     [self addPhotosQuads:photoIndex dir:photoDirection x:centerX - dist y:ROOM_HEIGHT / 2 z:centerZ];
                 }
                 if (photoDirection == 1) {
-                    [self addPhotosLightsQuads:photoIndex x1:centerX + dist y1:0.0f z1:z1 - BLOCK_SIZE*2 x2:centerX + dist y2:ROOM_HEIGHT z2:z2 + BLOCK_SIZE*2];
+                    [self addPhotosLightsQuads:photoIndex x1:centerX + dist y1:0.0f z1:z1 - scaleHorz x2:centerX + dist y2:ROOM_HEIGHT z2:z2 + scaleHorz];
                     [self addPhotosQuads:photoIndex dir:photoDirection x:centerX + dist y:ROOM_HEIGHT / 2 z:centerZ];
                 }
                 if (photoDirection == 2) {
-                    [self addPhotosLightsQuads:photoIndex x1:x1 - BLOCK_SIZE*2 y1:0.0f z1:centerZ - dist x2:x2 + BLOCK_SIZE*2 y2:ROOM_HEIGHT z2:centerZ - dist];
+                    [self addPhotosLightsQuads:photoIndex x1:x1 - scaleHorz y1:0.0f z1:centerZ - dist x2:x2 + scaleHorz y2:ROOM_HEIGHT z2:centerZ - dist];
                     [self addPhotosQuads:photoIndex dir:photoDirection x:centerX y:ROOM_HEIGHT / 2 z:centerZ - dist];
                 }
                 if (photoDirection == 3) {
-                    [self addPhotosLightsQuads:photoIndex x1:x1 - BLOCK_SIZE*2 y1:0.0f z1:centerZ + dist x2:x2 + BLOCK_SIZE*2 y2:ROOM_HEIGHT z2:centerZ + dist];
+                    [self addPhotosLightsQuads:photoIndex x1:x1 - scaleHorz y1:0.0f z1:centerZ + dist x2:x2 + scaleHorz y2:ROOM_HEIGHT z2:centerZ + dist];
                     [self addPhotosQuads:photoIndex dir:photoDirection x:centerX y:ROOM_HEIGHT / 2 z:centerZ + dist];
                 }
             }
@@ -220,8 +221,8 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
 	    [photos[idx] beginWithTexture:[textures getPhotosTexture:idx]];
     }
     if (idx == 0) {
-	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.7f horizontalOffset:0.0f verticalOffset:0.0f];
-	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.7f horizontalOffset:1.5f verticalOffset:0.2f];
+	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.7f horizontalOffset:-0.75f verticalOffset:0.0f];
+	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.7f horizontalOffset: 0.75f verticalOffset:0.2f];
     }
 }
 
@@ -276,8 +277,10 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
         if (photos[i] != NULL) {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             glDepthMask(false);
+            glDepthFunc(GL_LEQUAL);
 		    [photosLight[i] render];
 
+            glDepthFunc(GL_LESS);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glDepthMask(true);
 		    [photos[i] render];

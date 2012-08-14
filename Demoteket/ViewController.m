@@ -146,7 +146,7 @@ enum
 {
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
 
-    self.effect.transform.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 100.0f);
+    self.effect.transform.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, ROOM_MAX_SIZE * BLOCK_SIZE);
     
     //_rotation += self.timeSinceLastUpdate * 0.5f;
 }
