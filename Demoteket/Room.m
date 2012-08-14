@@ -60,10 +60,10 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     }
     if (number == 0) {
         [self addStrip:@"+--------+"];
-        [self addStrip:@"d 1 1 1  |"];
+        [self addStrip:@"d 2 2 1  |"];
         [self addStrip:@"d        |"];
         [self addStrip:@"+   +-+  |"];
-        [self addStrip:@"|1  | |  |"];
+        [self addStrip:@"|2  | |  |"];
         [self addStrip:@"|  1| |  |"];
         [self addStrip:@"|   +-+  |"];
         [self addStrip:@"|        |"];
@@ -211,6 +211,7 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     if (photosLight[idx] == NULL) {
 	    photosLight[idx] = [[Quads alloc] init];
 	    [photosLight[idx] beginWithTexture:[textures getPhotosLightTexture:idx]];
+        [photosLight[idx] setBlendFuncSrc:GL_SRC_ALPHA dst:GL_ONE];
     }
     [photosLight[idx] addQuadVerticalX1:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2];
 }
@@ -266,9 +267,6 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
 }
 
 - (void) render {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
     [walls render];
     [photosBorder render];
     for (int i = 0; i < pillarsCount; i++) {
@@ -278,19 +276,15 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     }
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
         if (photos[i] != NULL) {
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             glDepthMask(false);
             glDepthFunc(GL_LEQUAL);
 		    [photosLight[i] render];
 
             glDepthFunc(GL_LESS);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glDepthMask(true);
 		    [photos[i] render];
         }
     }
-    
-    glDisable(GL_BLEND);
 }
 
 @end

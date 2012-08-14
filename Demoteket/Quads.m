@@ -30,6 +30,8 @@
 
 - (id) init {
     if (self = [super init]) {
+        blendEnabled = false;
+        isOrthoProjection = false;
     }
     return self;
 }
@@ -143,6 +145,16 @@
     }
 }
 
+- (void) setBlendFuncSrc:(GLenum)src dst:(GLenum)dst {
+    blendEnabled = true;
+    blendSrc = src;
+    blendDst = dst;
+}
+
+- (void) setOrthoProjection {
+    isOrthoProjection = true;
+}
+
 - (void) calculateNormals {
     int v = 0;
     for (int i = 0; i < quadCount * 8; i++) {
@@ -181,13 +193,20 @@
 }
 
 - (void) render {
+    if (blendEnabled) {
+        glEnable(GL_BLEND);
+        glBlendFunc(blendSrc, blendDst);
+    } else {
+        glDisable(GL_BLEND);
+    }
     glkEffect.texture2d0.name = textureProperty.name;
     glkEffect.texture2d0.enabled = textureToggled ? GL_TRUE : GL_FALSE;
     
     glkEffect.useConstantColor = YES;
     glkEffect.constantColor = color;
 
-    glkEffect.transform.modelviewMatrix = GLKMatrix4Multiply(sceneModelViewMatrix, mirrorModelViewMatrix);
+    glkEffect.transform.modelviewMatrix = isOrthoProjection ? GLKMatrix4Identity : GLKMatrix4Multiply(sceneModelViewMatrix, mirrorModelViewMatrix);
+    glkEffect.transform.projectionMatrix = isOrthoProjection ? orthoProjectionMatrix : sceneProjectionMatrix;
 	
     [glkEffect prepareToDraw];
     

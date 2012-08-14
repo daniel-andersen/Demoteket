@@ -52,6 +52,12 @@ typedef struct {
     
     GLuint vertexArray;
     GLuint vertexBuffer;
+    
+    bool blendEnabled;
+    GLenum blendSrc;
+    GLenum blendDst;
+    
+    bool isOrthoProjection;
 }
 
 - (id) init;
@@ -61,6 +67,9 @@ typedef struct {
 - (void) beginWithTexture:(GLuint)texture;
 - (void) beginWithTexture:(GLuint)texture color:(GLKVector4)col;
 - (void) end;
+
+- (void) setBlendFuncSrc:(GLenum)src dst:(GLenum)dst;
+- (void) setOrthoProjection;
 
 - (void) calculateNormals;
 

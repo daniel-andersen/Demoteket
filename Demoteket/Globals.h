@@ -36,6 +36,15 @@ Textures *textures;
 GLKBaseEffect *glkEffect;
 
 GLKMatrix4 sceneModelViewMatrix;
+GLKMatrix4 sceneProjectionMatrix;
+
 GLKMatrix4 mirrorModelViewMatrix;
+
+GLKMatrix4 orthoProjectionMatrix;
+
+float screenWidth;
+float screenHeight;
+
+GLuint glslProgram;
 
 #endif

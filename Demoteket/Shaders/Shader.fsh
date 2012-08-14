@@ -23,9 +23,31 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-varying lowp vec4 colorVarying;
+precision lowp float;
+
+varying vec2 v_Coordinates;
+
+uniform  sampler2D texture;
 
 void main()
 {
-	gl_FragColor = colorVarying;
+	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+    //color += texture2D(texture, vec2(gl_TexCoord[0].x + -3.0 * u_Scale.x, gl_TexCoord[0].y + -3.0 * u_Scale.y)) * 0.015625;
+    //color += texture2D(texture, vec2(gl_TexCoord[0].x + -2.0 * u_Scale.x, gl_TexCoord[0].y + -2.0 * u_Scale.y)) * 0.09375;
+    //color += texture2D(texture, vec2(gl_TexCoord[0].x + -1.0 * u_Scale.x, gl_TexCoord[0].y + -1.0 * u_Scale.y)) * 0.234375;
+    //color += texture2D(texture, vec2(gl_TexCoord[0].x +  0.0 * u_Scale.x, gl_TexCoord[0].y +  0.0 * u_Scale.y)) * 0.3125;
+    //color += texture2D(texture, vec2(gl_TexCoord[0].x +  1.0 * u_Scale.x, gl_TexCoord[0].y +  1.0 * u_Scale.y)) * 0.234375;
+    //color += texture2D(texture, vec2(gl_TexCoord[0].x +  2.0 * u_Scale.x, gl_TexCoord[0].y +  2.0 * u_Scale.y)) * 0.09375;
+    //color += texture2D(texture, vec2(gl_TexCoord[0].x +  3.0 * u_Scale.x, gl_TexCoord[0].y +  3.0 * u_Scale.y)) * 0.015625;
+    
+    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -3.0 * (1.0 / 256.0))) * 0.015625;
+    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -2.0 * (1.0 / 256.0))) * 0.09375;
+    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -1.0 * (1.0 / 256.0))) * 0.234375;
+    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  0.0 * (1.0 / 256.0))) * 0.3125;
+    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  1.0 * (1.0 / 256.0))) * 0.234375;
+    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  2.0 * (1.0 / 256.0))) * 0.09375;
+    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  3.0 * (1.0 / 256.0))) * 0.015625;
+
+	gl_FragColor = color;
+    //gl_FragColor = texture2D(texture, u_Scale);
 }

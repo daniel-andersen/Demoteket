@@ -77,9 +77,10 @@
     NSLog(@"Creating floor plan");
 
     floor = [[Quads alloc] init];
-    //[floor beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 0.05f)];
     [floor beginWithTexture:[textures getFloorTexture]];
-    [floor addQuadVerticalX1:-5.0f y1:0.0f z1:0.0f x2:10.0f y2:5.0f z2:0.0f];
+    [floor setOrthoProjection];
+    [floor addQuadVerticalX1:0.0f y1:screenHeight z1:0.0f x2:screenWidth y2:0.0f z2:0.0f];
+    //[floor addQuadVerticalX1:0.0f y1:0.0f z1:0.0f x2:5.0f y2:5.0f z2:0.0f];
     [floor end];
 
     for (int i = 0; i < ROOM_COUNT; i++) {
@@ -127,7 +128,17 @@
 }
 
 - (void) renderFloor {
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(false);
+
+    //glUseProgram(glslProgram);
+    
     [floor render];
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(true);
+
+    //glUseProgram(0);
 }
 
 @end

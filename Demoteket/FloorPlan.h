@@ -27,8 +27,8 @@
 
 #define ROOM_COUNT 5
 
-#define MIRROR_TEXTURE_WIDTH 128
-#define MIRROR_TEXTURE_HEIGHT 128
+#define MIRROR_TEXTURE_WIDTH 256
+#define MIRROR_TEXTURE_HEIGHT 256
 
 @interface FloorPlan : NSObject {
 

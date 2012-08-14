@@ -26,27 +26,14 @@
 #import "ViewController.h"
 #import "Globals.h"
 
-// Uniform index.
-enum
-{
-    UNIFORM_MODELVIEWPROJECTION_MATRIX,
-    UNIFORM_NORMAL_MATRIX,
-    NUM_UNIFORMS
-};
-GLint uniforms[NUM_UNIFORMS];
-
-// Attribute index.
 enum
 {
     ATTRIB_VERTEX,
-    ATTRIB_NORMAL,
-    NUM_ATTRIBUTES
+    ATTRIB_TEXCOORD,
 };
 
 @interface ViewController () {
     Exhibition *exhibition;
-
-    GLuint _program;
 }
 
 @property (strong, nonatomic) EAGLContext *context;
@@ -120,12 +107,14 @@ enum
     [self loadShaders];
     
     self.effect = [[GLKBaseEffect alloc] init];
-    //self.effect.light0.enabled = GL_TRUE;
-    self.effect.light0.diffuseColor = GLKVector4Make(1.0f, 0.4f, 0.4f, 1.0f);
+    glkEffect = self.effect;
     
     glEnable(GL_DEPTH_TEST);
     
-    glkEffect = self.effect;
+    screenWidth = self.view.bounds.size.width;
+    screenHeight = self.view.bounds.size.height;
+
+    NSLog(@"Screen size: %i, %i", (int) screenWidth, (int) screenHeight);
 }
 
 - (void)tearDownGL
@@ -134,9 +123,9 @@ enum
     
     self.effect = nil;
     
-    if (_program) {
-        glDeleteProgram(_program);
-        _program = 0;
+    if (glslProgram) {
+        glDeleteProgram(glslProgram);
+        glslProgram = 0;
     }
 }
 
@@ -144,9 +133,10 @@ enum
 
 - (void)update
 {
-    float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
+    float aspect = fabsf(screenWidth / screenHeight);
 
-    self.effect.transform.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, ROOM_MAX_SIZE * BLOCK_SIZE);
+    sceneProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, ROOM_MAX_SIZE * BLOCK_SIZE);
+    orthoProjectionMatrix = GLKMatrix4MakeOrtho(0, screenWidth, 0, screenHeight, -1.0f, 1.0f);
     
     //_rotation += self.timeSinceLastUpdate * 0.5f;
 }
@@ -166,7 +156,7 @@ enum
     NSString *vertShaderPathname, *fragShaderPathname;
     
     // Create shader program.
-    _program = glCreateProgram();
+    glslProgram = glCreateProgram();
     
     // Create and compile vertex shader.
     vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
@@ -183,19 +173,19 @@ enum
     }
     
     // Attach vertex shader to program.
-    glAttachShader(_program, vertShader);
+    glAttachShader(glslProgram, vertShader);
     
     // Attach fragment shader to program.
-    glAttachShader(_program, fragShader);
+    glAttachShader(glslProgram, fragShader);
     
     // Bind attribute locations.
     // This needs to be done prior to linking.
-    glBindAttribLocation(_program, ATTRIB_VERTEX, "position");
-    glBindAttribLocation(_program, ATTRIB_NORMAL, "normal");
+    glBindAttribLocation(glslProgram, ATTRIB_VERTEX, "position");
+    glBindAttribLocation(glslProgram, ATTRIB_TEXCOORD, "texCoord");
     
     // Link program.
-    if (![self linkProgram:_program]) {
-        NSLog(@"Failed to link program: %d", _program);
+    if (![self linkProgram:glslProgram]) {
+        NSLog(@"Failed to link program: %d", glslProgram);
         
         if (vertShader) {
             glDeleteShader(vertShader);
@@ -205,25 +195,21 @@ enum
             glDeleteShader(fragShader);
             fragShader = 0;
         }
-        if (_program) {
-            glDeleteProgram(_program);
-            _program = 0;
+        if (glslProgram) {
+            glDeleteProgram(glslProgram);
+            glslProgram = 0;
         }
         
         return NO;
     }
     
-    // Get uniform locations.
-    uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
-    uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
-    
     // Release vertex and fragment shaders.
     if (vertShader) {
-        glDetachShader(_program, vertShader);
+        glDetachShader(glslProgram, vertShader);
         glDeleteShader(vertShader);
     }
     if (fragShader) {
-        glDetachShader(_program, fragShader);
+        glDetachShader(glslProgram, fragShader);
         glDeleteShader(fragShader);
     }
     
