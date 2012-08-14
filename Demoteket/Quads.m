@@ -47,13 +47,13 @@
     color = col;
 }
 
-- (void) beginWithTexture:(GLKTextureInfo*)texture {
+- (void) beginWithTexture:(GLuint)texture {
     [self beginWithTexture:texture color:GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f)];
 }
 
-- (void) beginWithTexture:(GLKTextureInfo*)texture color:(GLKVector4)col {
+- (void) beginWithTexture:(GLuint)texture color:(GLKVector4)col {
     quadCount = 0;
-    textureInfo = texture;
+    textureId = texture;
     textureToggled = true;
     color = col;
 }
@@ -69,44 +69,44 @@
         vertices[v + 0] = quads[i].x1;
         vertices[v + 1] = quads[i].y1;
         vertices[v + 2] = quads[i].z1;
-        vertices[v + 3] = [textures getTextureOffsetX1:textureInfo];
-        vertices[v + 4] = [textures getTextureOffsetY2:textureInfo];
+        vertices[v + 3] = [textures getTextureOffsetX1:textureId];
+        vertices[v + 4] = [textures getTextureOffsetY2:textureId];
 		v += 8;
         
         vertices[v + 0] = quads[i].x2;
         vertices[v + 1] = quads[i].y2;
         vertices[v + 2] = quads[i].z2;
-        vertices[v + 3] = [textures getTextureOffsetX1:textureInfo];
-        vertices[v + 4] = [textures getTextureOffsetY1:textureInfo];
+        vertices[v + 3] = [textures getTextureOffsetX1:textureId];
+        vertices[v + 4] = [textures getTextureOffsetY1:textureId];
 		v += 8;
         
         vertices[v + 0] = quads[i].x3;
         vertices[v + 1] = quads[i].y3;
         vertices[v + 2] = quads[i].z3;
-        vertices[v + 3] = [textures getTextureOffsetX2:textureInfo];
-        vertices[v + 4] = [textures getTextureOffsetY1:textureInfo];
+        vertices[v + 3] = [textures getTextureOffsetX2:textureId];
+        vertices[v + 4] = [textures getTextureOffsetY1:textureId];
 		v += 8;
         
         // Triangle 2
         vertices[v + 0] = quads[i].x3;
         vertices[v + 1] = quads[i].y3;
         vertices[v + 2] = quads[i].z3;
-        vertices[v + 3] = [textures getTextureOffsetX2:textureInfo];
-        vertices[v + 4] = [textures getTextureOffsetY1:textureInfo];
+        vertices[v + 3] = [textures getTextureOffsetX2:textureId];
+        vertices[v + 4] = [textures getTextureOffsetY1:textureId];
 		v += 8;
         
         vertices[v + 0] = quads[i].x4;
         vertices[v + 1] = quads[i].y4;
         vertices[v + 2] = quads[i].z4;
-        vertices[v + 3] = [textures getTextureOffsetX2:textureInfo];
-        vertices[v + 4] = [textures getTextureOffsetY2:textureInfo];
+        vertices[v + 3] = [textures getTextureOffsetX2:textureId];
+        vertices[v + 4] = [textures getTextureOffsetY2:textureId];
 		v += 8;
         
         vertices[v + 0] = quads[i].x1;
         vertices[v + 1] = quads[i].y1;
         vertices[v + 2] = quads[i].z1;
-        vertices[v + 3] = [textures getTextureOffsetX1:textureInfo];
-        vertices[v + 4] = [textures getTextureOffsetY2:textureInfo];
+        vertices[v + 3] = [textures getTextureOffsetX1:textureId];
+        vertices[v + 4] = [textures getTextureOffsetY2:textureId];
 		v += 8;
 	}
     [self calculateNormals];
@@ -137,7 +137,7 @@
     if (textureToggled) {
     	textureProperty.enabled = YES;
         textureProperty.envMode = GLKTextureEnvModeDecal;
-        textureProperty.name = textureInfo.name;
+        textureProperty.name = textureId;
     } else {
     	textureProperty.enabled = NO;
     }

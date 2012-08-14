@@ -27,12 +27,19 @@
 
 #define ROOM_COUNT 5
 
+#define MIRROR_TEXTURE_WIDTH 128
+#define MIRROR_TEXTURE_HEIGHT 128
+
 @interface FloorPlan : NSObject {
 
 @private
 
     Room *rooms[ROOM_COUNT];
     Quads *floor;
+    
+    GLuint mirrorFramebuffer;
+    GLuint mirrorTexture;
+    GLuint mirrorDepthBuffer;
 }
 
 - (id) init;

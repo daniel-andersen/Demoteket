@@ -32,20 +32,24 @@
 
 @private
     
-	GLKTextureInfo *wall[WALL_COUNT];
-	GLKTextureInfo *photos[PHOTOS_COUNT];
-	GLKTextureInfo *photosLight[PHOTOS_COUNT];
+	GLuint wall[WALL_COUNT];
+	GLuint photos[PHOTOS_COUNT];
+	GLuint photosLight[PHOTOS_COUNT];
+    GLuint floor;
 }
 
 - (void) load;
 
-- (GLKTextureInfo*) getWallTexture:(int)index;
-- (GLKTextureInfo*) getPhotosTexture:(int)index;
-- (GLKTextureInfo*) getPhotosLightTexture:(int)index;
+- (GLuint) getWallTexture:(int)index;
+- (GLuint) getFloorTexture;
+- (GLuint) getPhotosTexture:(int)index;
+- (GLuint) getPhotosLightTexture:(int)index;
 
-- (float) getTextureOffsetX1:(GLKTextureInfo*)texture;
-- (float) getTextureOffsetY1:(GLKTextureInfo*)texture;
-- (float) getTextureOffsetX2:(GLKTextureInfo*)texture;
-- (float) getTextureOffsetY2:(GLKTextureInfo*)texture;
+- (void) setPhoto:(GLuint)texture;
+
+- (float) getTextureOffsetX1:(GLuint)textureId;
+- (float) getTextureOffsetY1:(GLuint)textureId;
+- (float) getTextureOffsetX2:(GLuint)textureId;
+- (float) getTextureOffsetY2:(GLuint)textureId;
 
 @end

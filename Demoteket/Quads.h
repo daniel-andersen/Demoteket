@@ -42,7 +42,7 @@ typedef struct {
     Quad quads[QUADS_MAX_COUNT];
     int quadCount;
     
-    GLKTextureInfo *textureInfo;
+    GLuint textureId;
     GLKEffectPropertyTexture *textureProperty;
     bool textureToggled;
 
@@ -58,8 +58,8 @@ typedef struct {
 - (void) dealloc;
 
 - (void) beginWithColor:(GLKVector4)col;
-- (void) beginWithTexture:(GLKTextureInfo*)texture;
-- (void) beginWithTexture:(GLKTextureInfo*)texture color:(GLKVector4)col;
+- (void) beginWithTexture:(GLuint)texture;
+- (void) beginWithTexture:(GLuint)texture color:(GLKVector4)col;
 - (void) end;
 
 - (void) calculateNormals;

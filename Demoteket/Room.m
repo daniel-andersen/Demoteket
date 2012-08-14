@@ -60,7 +60,7 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     }
     if (number == 0) {
         [self addStrip:@"+--------+"];
-        [self addStrip:@"d 2 1 1  |"];
+        [self addStrip:@"d 1 1 1  |"];
         [self addStrip:@"d        |"];
         [self addStrip:@"+   +-+  |"];
         [self addStrip:@"|1  | |  |"];
