@@ -23,10 +23,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import <math.h>
+
 #import "Exhibition.h"
 #import "Globals.h"
 
 @implementation Exhibition
+
+int countDown = 50;
+
+float anim = 0.0f;
+float z = 0.0f;
 
 - (id) init {
     if (self = [super init]) {
@@ -43,8 +50,16 @@
 }
 
 - (void) render {
-    sceneModelViewMatrix = GLKMatrix4MakeTranslation(-5.0f, -1.0f, -18.0f);
-    sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, 0.1f, 1.0f, 0.0f, 0.0f);
+    countDown--;
+    if (countDown < 0 && countDown > -300) {
+	    z += 0.04f;
+	    anim += 0.025f;
+    }
+    float x = -sin(anim - 1.0f) * 2.5f;
+    float a = sin(anim) * 0.6f;
+    sceneModelViewMatrix = GLKMatrix4Identity;
+    sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, a, 0.0f, 1.0f, 0.0f);
+    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, -5.0f + x, -2.0f, -18.0f + z);
 
     [floorPlan render];
 }

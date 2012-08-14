@@ -27,9 +27,12 @@
 
 #define ROOM_MAX_SIZE 16
 #define PILLAR_MAX_COUNT 32
+#define PHOTOS_MAX_COUNT 32
 
 #define ROOM_HEIGHT 5.0f
 #define BLOCK_SIZE 2.0f
+
+#define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
 
 @interface Room : NSObject {
     char tiles[ROOM_MAX_SIZE][ROOM_MAX_SIZE];
@@ -40,8 +43,13 @@
     int roomNumber;
     int stripNumber;
 
-    Quads *floor;
     Quads *walls;
+
+    Quads *photos[PHOTOS_MAX_COUNT];
+    Quads *photosLight[PHOTOS_MAX_COUNT];
+    Quads *photosBorder;
+    int photosCount;
+    
     Quads *pillars[PILLAR_MAX_COUNT];
     int pillarsCount;
 }

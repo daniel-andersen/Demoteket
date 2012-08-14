@@ -27,10 +27,22 @@
 
 @implementation Textures
 
-@synthesize wall;
-
 - (void) load {
-    wall = [self loadTexture:@"wall.png"];
+    wall[0] = [self loadTexture:@"wall.png"];
+    photos[0] = [self loadTexture:@"photo1.png"];
+    photosLight[0] = [self loadTexture:@"photosLight1.png"];
+}
+
+- (GLKTextureInfo*) getWallTexture:(int)index {
+    return wall[index];
+}
+
+- (GLKTextureInfo*) getPhotosTexture:(int)index {
+    return photos[index];
+}
+
+- (GLKTextureInfo*) getPhotosLightTexture:(int)index {
+    return photosLight[index];
 }
 
 - (GLKTextureInfo*) loadTexture:(NSString*)filename {
@@ -39,7 +51,7 @@
     NSError *error = nil;
     GLKTextureInfo *texture = [GLKTextureLoader textureWithCGImage:image.CGImage options:nil error:&error];
     if (error) {
-        NSLog(@"Error loading texture from image: %@", error);
+        NSLog(@"Error loading texture %@: %@", filename, error);
     }
     return texture;
 }

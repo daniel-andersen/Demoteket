@@ -32,6 +32,7 @@
 @private
 
     Room *rooms[ROOM_COUNT];
+    Quads *floor;
 }
 
 - (id) init;

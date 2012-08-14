@@ -60,12 +60,12 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     }
     if (number == 0) {
         [self addStrip:@"+--------+"];
-        [self addStrip:@"d        |"];
+        [self addStrip:@"d 1 1 1  |"];
         [self addStrip:@"d        |"];
         [self addStrip:@"+   +-+  |"];
-        [self addStrip:@"|   | |  |"];
+        [self addStrip:@"|1  | |  |"];
+        [self addStrip:@"|  1| |  |"];
         [self addStrip:@"|   +-+  |"];
-        [self addStrip:@"|        |"];
         [self addStrip:@"|        |"];
         [self addStrip:@"|        |"];
         [self addStrip:@"+--------+"];
@@ -81,16 +81,26 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
 
 - (void) createGeometrics {
     pillarsCount = 0;
-    
-    floor = [[Quads alloc] init];
-    [floor beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 0.05f)];
+    photosCount = 0;
+
+    for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
+        photos[i] = NULL;
+        photosLight[i] = NULL;
+    }
+
+    for (int i = 0; i < PILLAR_MAX_COUNT; i++) {
+        pillars[i] = NULL;
+    }
+
+    photosBorder = [[Quads alloc] init];
+    [photosBorder beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
 
     walls = [[Quads alloc] init];
-    [walls beginWithTexture:textures.wall];
+    [walls beginWithTexture:[textures getWallTexture:0]];
     
     for (int i = 0; i < ROOM_MAX_SIZE; i++) {
         for (int j = 0; j < ROOM_MAX_SIZE; j++) {
-            if (tiles[i][j] == 'X') {
+            if (tiles[i][j] == 'X' || tiles[i][j] == ' ') {
                 continue;
             }
             int x1 = ROOM_OFFSET_X[roomNumber] + (j * BLOCK_SIZE);
@@ -99,10 +109,6 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
             int z2 = z1 + BLOCK_SIZE;
             int centerX = x1 + (BLOCK_SIZE / 2);
             int centerZ = z1 + (BLOCK_SIZE / 2);
-            [floor addQuadHorizontalX1:x1 z1:z1 x2:x2 z2:z2 y:0.0f];
-            if (tiles[i][j] == ' ') {
-                continue;
-            }
             if (tiles[i][j] == '-') {
                 [walls addQuadVerticalX1:x1 y1:0.0f z1:centerZ x2:x2 y2:ROOM_HEIGHT z2:centerZ];
             }
@@ -129,10 +135,37 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
             if (tiles[i][j] == 'd') {
                 // TODO! Door!
             }
+            if (tiles[i][j] >= '1' && tiles[i][j] <= '9') {
+                int photoIndex = (int) tiles[i][j] - (int) '1';
+                int photoDirection = [self getPhotosDirectionX:j y:i];
+                float dist = BLOCK_SIZE - 0.01f;
+                if (photoDirection == 0) {
+                    [self addPhotosLightsQuads:photoIndex x1:centerX - dist y1:0.0f z1:z1 - BLOCK_SIZE*2 x2:centerX - dist y2:ROOM_HEIGHT z2:z2 + BLOCK_SIZE*2];
+                    [self addPhotosQuads:photoIndex dir:photoDirection x:centerX - dist y:ROOM_HEIGHT / 2 z:centerZ];
+                }
+                if (photoDirection == 1) {
+                    [self addPhotosLightsQuads:photoIndex x1:centerX + dist y1:0.0f z1:z1 - BLOCK_SIZE*2 x2:centerX + dist y2:ROOM_HEIGHT z2:z2 + BLOCK_SIZE*2];
+                    [self addPhotosQuads:photoIndex dir:photoDirection x:centerX + dist y:ROOM_HEIGHT / 2 z:centerZ];
+                }
+                if (photoDirection == 2) {
+                    [self addPhotosLightsQuads:photoIndex x1:x1 - BLOCK_SIZE*2 y1:0.0f z1:centerZ - dist x2:x2 + BLOCK_SIZE*2 y2:ROOM_HEIGHT z2:centerZ - dist];
+                    [self addPhotosQuads:photoIndex dir:photoDirection x:centerX y:ROOM_HEIGHT / 2 z:centerZ - dist];
+                }
+                if (photoDirection == 3) {
+                    [self addPhotosLightsQuads:photoIndex x1:x1 - BLOCK_SIZE*2 y1:0.0f z1:centerZ + dist x2:x2 + BLOCK_SIZE*2 y2:ROOM_HEIGHT z2:centerZ + dist];
+                    [self addPhotosQuads:photoIndex dir:photoDirection x:centerX y:ROOM_HEIGHT / 2 z:centerZ + dist];
+                }
+            }
         }
     }
     [walls end];
-    [floor end];
+    [photosBorder end];
+    for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
+        if (photos[i] != NULL) {
+		    [photos[i] end];
+		    [photosLight[i] end];
+        }
+    }
 }
 
 - (int) getCornerTypeX:(int)x y:(int)y {
@@ -141,53 +174,117 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     char x2 = x < ROOM_MAX_SIZE - 1 ? tiles[y][x + 1] : 'X';
     char y2 = y < ROOM_MAX_SIZE - 1 ? tiles[y + 1][x] : 'X';
     int type = 0;
-    type += [self isCharAttachableToCornerBrick:x1] ? 1 : 0;
-    type += [self isCharAttachableToCornerBrick:y1] ? 2 : 0;
-    type += [self isCharAttachableToCornerBrick:x2] ? 4 : 0;
-    type += [self isCharAttachableToCornerBrick:y2] ? 8 : 0;
+    type += [self isCharWallBrick:x1] ? 1 : 0;
+    type += [self isCharWallBrick:y1] ? 2 : 0;
+    type += [self isCharWallBrick:x2] ? 4 : 0;
+    type += [self isCharWallBrick:y2] ? 8 : 0;
     return type;
 }
 
-- (int) getDoorTypeX:(int)x y:(int)y {
-    char x1 = x > 0 ? tiles[y][x - 1] : 'X';
-    char x2 = x < ROOM_MAX_SIZE - 1 ? tiles[y][x + 1] : 'X';
-    return x1 != 'X' || x1 != ' ' || x2 != 'X' || x2 != ' ' ? 0 : 1;
+- (int) getDoorDirectionX:(int)x y:(int)y {
+    return ![self isWallX:x - 1 y:y] || ![self isWallX:x + 1 y:y] ? 0 : 1;
 }
 
-- (bool) isCharAttachableToCornerBrick:(char)ch {
-    return ch == '|' || ch == '-';
+- (int) getPhotosDirectionX:(int)x y:(int)y {
+    if ([self isWallX:x - 1 y:y]) {
+        return 0;
+    }
+    if ([self isWallX:x + 1 y:y]) {
+        return 1;
+    }
+    if ([self isWallX:x y:y - 1]) {
+        return 2;
+    }
+    return 3;
+}
+
+- (bool) isWallX:(int)x y:(int)y {
+    return x >= 0 && y >= 0 && x < ROOM_MAX_SIZE && y < ROOM_MAX_SIZE && [self isCharWallBrick:tiles[y][x]];
+}
+
+- (bool) isCharWallBrick:(char)ch {
+    return ch == '|' || ch == '-' || ch == '+';
+}
+
+- (void) addPhotosLightsQuads:(int)idx x1:(float)x1 y1:(float)y1 z1:(float)z1 x2:(float)x2 y2:(float)y2 z2:(float)z2 {
+    if (photosLight[idx] == NULL) {
+	    photosLight[idx] = [[Quads alloc] init];
+	    [photosLight[idx] beginWithTexture:[textures getPhotosLightTexture:idx]];
+    }
+    [photosLight[idx] addQuadVerticalX1:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2];
+}
+
+- (void) addPhotosQuads:(int)idx dir:(int) dir x:(float)x y:(float)y z:(float)z {
+    if (photos[idx] == NULL) {
+	    photos[idx] = [[Quads alloc] init];
+	    [photos[idx] beginWithTexture:[textures getPhotosTexture:idx]];
+    }
+    if (idx == 0) {
+	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.7f horizontalOffset:0.0f verticalOffset:0.0f];
+	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.7f horizontalOffset:1.5f verticalOffset:0.2f];
+    }
+}
+
+- (void) addPhotoQuads:(int)idx dir:(int)dir x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert {
+    y += offsetVert;
+    if (dir == 0) {
+        z += offsetHorz;
+	    [photos[idx] addQuadVerticalX1:x + PHOTO_DEPTH y1:y - height z1:z - width x2:x + PHOTO_DEPTH y2:y + height z2:z + width];
+        [photosBorder addQuadVerticalX1:x y1:y - height z1:z - width x2:x + PHOTO_DEPTH y2:y + height z2:z - width];
+        [photosBorder addQuadVerticalX1:x y1:y - height z1:z + width x2:x + PHOTO_DEPTH y2:y + height z2:z + width];
+        [photosBorder addQuadHorizontalX1:x z1:z - width x2:x + PHOTO_DEPTH z2:z + width y:y - height];
+        [photosBorder addQuadHorizontalX1:x z1:z - width x2:x + PHOTO_DEPTH z2:z + width y:y + height];
+    }
+    if (dir == 1) {
+        z += offsetHorz;
+	    [photos[idx] addQuadVerticalX1:x - PHOTO_DEPTH y1:y - height z1:z - width x2:x - PHOTO_DEPTH y2:y + height z2:z + width];
+        [photosBorder addQuadVerticalX1:x y1:y - height z1:z - width x2:x - PHOTO_DEPTH y2:y + height z2:z - width];
+        [photosBorder addQuadVerticalX1:x y1:y - height z1:z + width x2:x - PHOTO_DEPTH y2:y + height z2:z + width];
+        [photosBorder addQuadHorizontalX1:x z1:z - width x2:x - PHOTO_DEPTH z2:z + width y:y - height];
+        [photosBorder addQuadHorizontalX1:x z1:z - width x2:x - PHOTO_DEPTH z2:z + width y:y + height];
+    }
+    if (dir == 2) {
+        x += offsetHorz;
+	    [photos[idx] addQuadVerticalX1:x - width y1:y - height z1:z + PHOTO_DEPTH x2:x + width y2:y + height z2:z + PHOTO_DEPTH];
+        [photosBorder addQuadVerticalX1:x - width y1:y - height z1:z x2:x - width y2:y + height z2:z + PHOTO_DEPTH];
+        [photosBorder addQuadVerticalX1:x + width y1:y - height z1:z x2:x + width y2:y + height z2:z + PHOTO_DEPTH];
+        [photosBorder addQuadHorizontalX1:x - width z1:z x2:x + width z2:z + PHOTO_DEPTH y:y - height];
+        [photosBorder addQuadHorizontalX1:x - width z1:z x2:x + width z2:z + PHOTO_DEPTH y:y + height];
+    }
+    if (dir == 3) {
+        x += offsetHorz;
+	    [photos[idx] addQuadVerticalX1:x - width y1:y - height z1:z - PHOTO_DEPTH x2:x + width y2:y + height z2:z - PHOTO_DEPTH];
+        [photosBorder addQuadVerticalX1:x - width y1:y - height z1:z x2:x - width y2:y + height z2:z - PHOTO_DEPTH];
+        [photosBorder addQuadVerticalX1:x + width y1:y - height z1:z x2:x + width y2:y + height z2:z - PHOTO_DEPTH];
+        [photosBorder addQuadHorizontalX1:x - width z1:z x2:x + width z2:z - PHOTO_DEPTH y:y - height];
+        [photosBorder addQuadHorizontalX1:x - width z1:z x2:x + width z2:z - PHOTO_DEPTH y:y + height];
+    }
 }
 
 - (void) render {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    mirrorModelViewMatrix = GLKMatrix4MakeScale(1.0f, -1.0f, 1.0f);
-    [self renderObjects];
-    
-    mirrorModelViewMatrix = GLKMatrix4Identity;
-    
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    
-    glkEffect.transform.modelviewMatrix = sceneModelViewMatrix;
-    [self renderFloor];
-    
-    glkEffect.transform.modelviewMatrix = sceneModelViewMatrix;
-    [self renderObjects];
+    [walls render];
+    [photosBorder render];
+    for (int i = 0; i < pillarsCount; i++) {
+        if (pillars[i] != NULL) {
+	    	[pillars[i] render];
+        }
+    }
+    for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
+        if (photos[i] != NULL) {
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            glDepthMask(false);
+		    [photosLight[i] render];
+
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glDepthMask(true);
+		    [photos[i] render];
+        }
+    }
     
     glDisable(GL_BLEND);
-}
-
-- (void) renderFloor {
-    [floor render];
-}
-
-- (void) renderObjects {
-    [walls render];
-    for (int i = 0; i < pillarsCount; i++) {
-    	[pillars[i] render];
-    }
 }
 
 @end

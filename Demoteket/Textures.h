@@ -25,17 +25,22 @@
 
 #import <GLKit/GLKit.h>
 
+#define WALL_COUNT 1
+#define PHOTOS_COUNT 1
+
 @interface Textures : NSObject {
 
 @private
     
-	GLKTextureInfo *wall;
+	GLKTextureInfo *wall[WALL_COUNT];
+	GLKTextureInfo *photos[PHOTOS_COUNT];
+	GLKTextureInfo *photosLight[PHOTOS_COUNT];
 }
 
 - (void) load;
 
-- (GLKTextureInfo*) loadTexture:(NSString*)filename;
-
-@property (readonly) GLKTextureInfo *wall;
+- (GLKTextureInfo*) getWallTexture:(int)index;
+- (GLKTextureInfo*) getPhotosTexture:(int)index;
+- (GLKTextureInfo*) getPhotosLightTexture:(int)index;
 
 @end

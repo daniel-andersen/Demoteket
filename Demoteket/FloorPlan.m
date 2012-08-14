@@ -41,6 +41,11 @@
 
 - (void) createFloorPlan {
     NSLog(@"Creating floor plan");
+
+    floor = [[Quads alloc] init];
+    [floor beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 0.05f)];
+    [floor end];
+
     for (int i = 0; i < ROOM_COUNT; i++) {
         rooms[i] = [[Room alloc] init];
     }
@@ -48,9 +53,25 @@
 }
 
 - (void) render {
+    mirrorModelViewMatrix = GLKMatrix4MakeScale(1.0f, -1.0f, 1.0f);
+    [self renderRooms];
+
+    mirrorModelViewMatrix = GLKMatrix4Identity;
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    [self renderFloor];
+    [self renderRooms];
+}
+
+- (void) renderRooms {
     for (int i = 0; i < ROOM_COUNT; i++) {
         [rooms[i] render];
     }
+}
+
+- (void) renderFloor {
 }
 
 @end
