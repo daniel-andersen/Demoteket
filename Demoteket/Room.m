@@ -60,7 +60,7 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     }
     if (number == 0) {
         [self addStrip:@"+--------+"];
-        [self addStrip:@"d 1 1 1  |"];
+        [self addStrip:@"d 2 1 1  |"];
         [self addStrip:@"d        |"];
         [self addStrip:@"+   +-+  |"];
         [self addStrip:@"|1  | |  |"];
@@ -221,8 +221,11 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
 	    [photos[idx] beginWithTexture:[textures getPhotosTexture:idx]];
     }
     if (idx == 0) {
-	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.7f horizontalOffset:-0.75f verticalOffset:0.0f];
-	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.7f horizontalOffset: 0.75f verticalOffset:0.2f];
+	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset:0.0f];
+    }
+    if (idx == 1) {
+	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.8f horizontalOffset:-0.75f verticalOffset:0.0f];
+	    [self addPhotoQuads:idx dir:dir x:x y:y z:z width:0.5f height:0.8f horizontalOffset: 0.75f verticalOffset:0.2f];
     }
 }
 

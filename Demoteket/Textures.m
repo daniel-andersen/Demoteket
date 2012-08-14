@@ -27,10 +27,14 @@
 
 @implementation Textures
 
+static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404f};
+
 - (void) load {
     wall[0] = [self loadTexture:@"wall.png"];
     photos[0] = [self loadTexture:@"photo1.png"];
+    photos[1] = [self loadTexture:@"photo1.png"];
     photosLight[0] = [self loadTexture:@"photosLight1.png"];
+    photosLight[1] = [self loadTexture:@"photosLight2.png"];
 }
 
 - (GLKTextureInfo*) getWallTexture:(int)index {
@@ -43,6 +47,34 @@
 
 - (GLKTextureInfo*) getPhotosLightTexture:(int)index {
     return photosLight[index];
+}
+
+- (float) getTextureOffsetX1:(GLKTextureInfo*)texture {
+    if (texture == photosLight[1]) {
+        return PHOTOS_LIGHT_TEXTURE_OFFSET[0];
+    }
+    return 0.0f;
+}
+
+- (float) getTextureOffsetY1:(GLKTextureInfo*)texture {
+    if (texture == photosLight[1]) {
+        return PHOTOS_LIGHT_TEXTURE_OFFSET[1];
+    }
+    return 0.0f;
+}
+
+- (float) getTextureOffsetX2:(GLKTextureInfo*)texture {
+    if (texture == photosLight[1]) {
+        return PHOTOS_LIGHT_TEXTURE_OFFSET[2];
+    }
+    return 1.0f;
+}
+
+- (float) getTextureOffsetY2:(GLKTextureInfo*)texture {
+    if (texture == photosLight[1]) {
+        return PHOTOS_LIGHT_TEXTURE_OFFSET[3];
+    }
+    return 1.0f;
 }
 
 - (GLKTextureInfo*) loadTexture:(NSString*)filename {

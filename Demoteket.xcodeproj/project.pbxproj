@@ -28,6 +28,7 @@
 		6573202E15D502C9002562E9 /* Textures.m in Sources */ = {isa = PBXBuildFile; fileRef = 6573202D15D502C9002562E9 /* Textures.m */; };
 		6573203615D506AC002562E9 /* wall.png in Resources */ = {isa = PBXBuildFile; fileRef = 6573203515D506AC002562E9 /* wall.png */; };
 		659F9C2E15D6DB8700EF7825 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 659F9C2D15D6DB8700EF7825 /* Room.m */; };
+		65CB999415DA5C8C00174CDC /* photosLight2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CB999315DA5C8C00174CDC /* photosLight2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		6573203515D506AC002562E9 /* wall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall.png; sourceTree = "<group>"; };
 		659F9C2C15D6DB8700EF7825 /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		659F9C2D15D6DB8700EF7825 /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
+		65CB999315DA5C8C00174CDC /* photosLight2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photosLight2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 		6573203415D506AC002562E9 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				65CB999315DA5C8C00174CDC /* photosLight2.png */,
 				652CF33F15D98F5A00F4F07F /* photo1.png */,
 				652CF33C15D8FE8100F4F07F /* photosLight1.png */,
 				6573203515D506AC002562E9 /* wall.png */,
@@ -217,6 +220,7 @@
 				6573203615D506AC002562E9 /* wall.png in Resources */,
 				652CF33D15D8FE8100F4F07F /* photosLight1.png in Resources */,
 				652CF34015D98F5A00F4F07F /* photo1.png in Resources */,
+				65CB999415DA5C8C00174CDC /* photosLight2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

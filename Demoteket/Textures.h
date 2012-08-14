@@ -26,7 +26,7 @@
 #import <GLKit/GLKit.h>
 
 #define WALL_COUNT 1
-#define PHOTOS_COUNT 1
+#define PHOTOS_COUNT 2
 
 @interface Textures : NSObject {
 
@@ -42,5 +42,10 @@
 - (GLKTextureInfo*) getWallTexture:(int)index;
 - (GLKTextureInfo*) getPhotosTexture:(int)index;
 - (GLKTextureInfo*) getPhotosLightTexture:(int)index;
+
+- (float) getTextureOffsetX1:(GLKTextureInfo*)texture;
+- (float) getTextureOffsetY1:(GLKTextureInfo*)texture;
+- (float) getTextureOffsetX2:(GLKTextureInfo*)texture;
+- (float) getTextureOffsetY2:(GLKTextureInfo*)texture;
 
 @end

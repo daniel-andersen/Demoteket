@@ -69,44 +69,44 @@
         vertices[v + 0] = quads[i].x1;
         vertices[v + 1] = quads[i].y1;
         vertices[v + 2] = quads[i].z1;
-        vertices[v + 3] = 0.0f;
-        vertices[v + 4] = 1.0f;
+        vertices[v + 3] = [textures getTextureOffsetX1:textureInfo];
+        vertices[v + 4] = [textures getTextureOffsetY2:textureInfo];
 		v += 8;
         
         vertices[v + 0] = quads[i].x2;
         vertices[v + 1] = quads[i].y2;
         vertices[v + 2] = quads[i].z2;
-        vertices[v + 3] = 0.0f;
-        vertices[v + 4] = 0.0f;
+        vertices[v + 3] = [textures getTextureOffsetX1:textureInfo];
+        vertices[v + 4] = [textures getTextureOffsetY1:textureInfo];
 		v += 8;
         
         vertices[v + 0] = quads[i].x3;
         vertices[v + 1] = quads[i].y3;
         vertices[v + 2] = quads[i].z3;
-        vertices[v + 3] = 1.0f;
-        vertices[v + 4] = 0.0f;
+        vertices[v + 3] = [textures getTextureOffsetX2:textureInfo];
+        vertices[v + 4] = [textures getTextureOffsetY1:textureInfo];
 		v += 8;
         
         // Triangle 2
         vertices[v + 0] = quads[i].x3;
         vertices[v + 1] = quads[i].y3;
         vertices[v + 2] = quads[i].z3;
-        vertices[v + 3] = 1.0f;
-        vertices[v + 4] = 0.0f;
+        vertices[v + 3] = [textures getTextureOffsetX2:textureInfo];
+        vertices[v + 4] = [textures getTextureOffsetY1:textureInfo];
 		v += 8;
         
         vertices[v + 0] = quads[i].x4;
         vertices[v + 1] = quads[i].y4;
         vertices[v + 2] = quads[i].z4;
-        vertices[v + 3] = 1.0f;
-        vertices[v + 4] = 1.0f;
+        vertices[v + 3] = [textures getTextureOffsetX2:textureInfo];
+        vertices[v + 4] = [textures getTextureOffsetY2:textureInfo];
 		v += 8;
         
         vertices[v + 0] = quads[i].x1;
         vertices[v + 1] = quads[i].y1;
         vertices[v + 2] = quads[i].z1;
-        vertices[v + 3] = 0.0f;
-        vertices[v + 4] = 1.0f;
+        vertices[v + 3] = [textures getTextureOffsetX1:textureInfo];
+        vertices[v + 4] = [textures getTextureOffsetY2:textureInfo];
 		v += 8;
 	}
     [self calculateNormals];
