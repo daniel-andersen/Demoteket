@@ -58,6 +58,8 @@ typedef struct {
     GLenum blendDst;
     
     bool isOrthoProjection;
+
+    GLuint shaderProgram;
 }
 
 - (id) init;
@@ -70,6 +72,7 @@ typedef struct {
 
 - (void) setBlendFuncSrc:(GLenum)src dst:(GLenum)dst;
 - (void) setOrthoProjection;
+- (void) setShaderProgram:(GLuint)program;
 
 - (void) calculateNormals;
 

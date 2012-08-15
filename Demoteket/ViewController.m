@@ -136,7 +136,9 @@ enum
     float aspect = fabsf(screenWidth / screenHeight);
 
     sceneProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, ROOM_MAX_SIZE * BLOCK_SIZE);
+
     orthoProjectionMatrix = GLKMatrix4MakeOrtho(0, screenWidth, 0, screenHeight, -1.0f, 1.0f);
+    orthoModelViewMatrix = GLKMatrix4Identity;
     
     //_rotation += self.timeSinceLastUpdate * 0.5f;
 }
@@ -181,7 +183,7 @@ enum
     // Bind attribute locations.
     // This needs to be done prior to linking.
     glBindAttribLocation(glslProgram, ATTRIB_VERTEX, "position");
-    glBindAttribLocation(glslProgram, ATTRIB_TEXCOORD, "texCoord");
+    glBindAttribLocation(glslProgram, GLKVertexAttribTexCoord0, "texcoord0");
     
     // Link program.
     if (![self linkProgram:glslProgram]) {
@@ -202,6 +204,9 @@ enum
         
         return NO;
     }
+    
+    // Get uniform locations.
+    uniformModelViewProjectionMatrix = glGetUniformLocation(glslProgram, "modelViewProjectionMatrix");
     
     // Release vertex and fragment shaders.
     if (vertShader) {

@@ -61,8 +61,6 @@ float z = 0.0f;
     sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, a, 0.0f, 1.0f, 0.0f);
     sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, -5.0f + x, -2.0f, -18.0f + z);
 
-    glUseProgram(glslProgram);
-
     [floorPlan render];
 }
 

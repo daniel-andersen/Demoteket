@@ -32,6 +32,7 @@
     if (self = [super init]) {
         blendEnabled = false;
         isOrthoProjection = false;
+        shaderProgram = 0;
     }
     return self;
 }
@@ -155,6 +156,10 @@
     isOrthoProjection = true;
 }
 
+- (void) setShaderProgram:(GLuint)program {
+    shaderProgram = program;
+}
+
 - (void) calculateNormals {
     int v = 0;
     for (int i = 0; i < quadCount * 8; i++) {
@@ -205,11 +210,16 @@
     glkEffect.useConstantColor = YES;
     glkEffect.constantColor = color;
 
-    glkEffect.transform.modelviewMatrix = isOrthoProjection ? GLKMatrix4Identity : GLKMatrix4Multiply(sceneModelViewMatrix, mirrorModelViewMatrix);
+    glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : GLKMatrix4Multiply(sceneModelViewMatrix, mirrorModelViewMatrix);
     glkEffect.transform.projectionMatrix = isOrthoProjection ? orthoProjectionMatrix : sceneProjectionMatrix;
 	
     [glkEffect prepareToDraw];
     
+    if (shaderProgram != 0) {
+	    glUseProgram(shaderProgram);
+        glUniformMatrix4fv(uniformModelViewProjectionMatrix, 1, 0, GLKMatrix4Multiply(orthoProjectionMatrix, orthoModelViewMatrix).m);
+    }
+
     glBindVertexArrayOES(vertexArray);
     glDrawArrays(GL_TRIANGLES, 0, quadCount * 6);
 }

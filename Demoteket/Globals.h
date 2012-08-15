@@ -41,10 +41,12 @@ GLKMatrix4 sceneProjectionMatrix;
 GLKMatrix4 mirrorModelViewMatrix;
 
 GLKMatrix4 orthoProjectionMatrix;
+GLKMatrix4 orthoModelViewMatrix;
 
 float screenWidth;
 float screenHeight;
 
 GLuint glslProgram;
+GLuint uniformModelViewProjectionMatrix;
 
 #endif

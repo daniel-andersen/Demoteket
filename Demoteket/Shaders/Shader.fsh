@@ -32,14 +32,7 @@ uniform  sampler2D texture;
 void main()
 {
 	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
-    //color += texture2D(texture, vec2(gl_TexCoord[0].x + -3.0 * u_Scale.x, gl_TexCoord[0].y + -3.0 * u_Scale.y)) * 0.015625;
-    //color += texture2D(texture, vec2(gl_TexCoord[0].x + -2.0 * u_Scale.x, gl_TexCoord[0].y + -2.0 * u_Scale.y)) * 0.09375;
-    //color += texture2D(texture, vec2(gl_TexCoord[0].x + -1.0 * u_Scale.x, gl_TexCoord[0].y + -1.0 * u_Scale.y)) * 0.234375;
-    //color += texture2D(texture, vec2(gl_TexCoord[0].x +  0.0 * u_Scale.x, gl_TexCoord[0].y +  0.0 * u_Scale.y)) * 0.3125;
-    //color += texture2D(texture, vec2(gl_TexCoord[0].x +  1.0 * u_Scale.x, gl_TexCoord[0].y +  1.0 * u_Scale.y)) * 0.234375;
-    //color += texture2D(texture, vec2(gl_TexCoord[0].x +  2.0 * u_Scale.x, gl_TexCoord[0].y +  2.0 * u_Scale.y)) * 0.09375;
-    //color += texture2D(texture, vec2(gl_TexCoord[0].x +  3.0 * u_Scale.x, gl_TexCoord[0].y +  3.0 * u_Scale.y)) * 0.015625;
-    
+
     color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -3.0 * (1.0 / 256.0))) * 0.015625;
     color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -2.0 * (1.0 / 256.0))) * 0.09375;
     color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -1.0 * (1.0 / 256.0))) * 0.234375;
@@ -48,6 +41,7 @@ void main()
     color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  2.0 * (1.0 / 256.0))) * 0.09375;
     color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  3.0 * (1.0 / 256.0))) * 0.015625;
 
+	color.a = color.a * 0.995;
+    
 	gl_FragColor = color;
-    //gl_FragColor = texture2D(texture, u_Scale);
 }

@@ -24,12 +24,15 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 attribute vec4 position;
-attribute vec2 texCoord;
+attribute vec2 texcoord0;
+
+uniform mat4 modelViewProjectionMatrix;
 
 varying vec2 v_Coordinates;
 
 void main()
 {
-    v_Coordinates = texCoord;
-    gl_Position = position;
+    gl_Position = modelViewProjectionMatrix * position;
+
+    v_Coordinates = texcoord0;
 }
