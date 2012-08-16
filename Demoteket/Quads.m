@@ -32,7 +32,6 @@
     if (self = [super init]) {
         blendEnabled = false;
         isOrthoProjection = false;
-        shaderProgram = 0;
     }
     return self;
 }
@@ -135,15 +134,6 @@
     glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), BUFFER_OFFSET(5));
     
     glBindVertexArrayOES(0);
-    
-    textureProperty = [[GLKEffectPropertyTexture alloc] init];
-    if (textureToggled) {
-    	textureProperty.enabled = YES;
-        textureProperty.envMode = GLKTextureEnvModeDecal;
-        textureProperty.name = textureId;
-    } else {
-    	textureProperty.enabled = NO;
-    }
 }
 
 - (void) setBlendFuncSrc:(GLenum)src dst:(GLenum)dst {
@@ -154,10 +144,6 @@
 
 - (void) setOrthoProjection {
     isOrthoProjection = true;
-}
-
-- (void) setShaderProgram:(GLuint)program {
-    shaderProgram = program;
 }
 
 - (void) calculateNormals {
@@ -204,24 +190,47 @@
     } else {
         glDisable(GL_BLEND);
     }
-    glkEffect.texture2d0.name = textureProperty.name;
+
+    GLKBaseEffect *glkEffect = currentShaderProgram != 0 ? glkEffectShader : glkEffectNormal;
+    
+    glkEffect.texture2d0.name = textureId;
     glkEffect.texture2d0.enabled = textureToggled ? GL_TRUE : GL_FALSE;
+
+    if (currentShaderProgram != 0) {
+        glkEffect.texture2d1.name = [textures getFloorDistortionTexture];
+        glkEffect.texture2d1.enabled = GL_TRUE;
+    }
     
     glkEffect.useConstantColor = YES;
     glkEffect.constantColor = color;
 
     glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : GLKMatrix4Multiply(sceneModelViewMatrix, mirrorModelViewMatrix);
     glkEffect.transform.projectionMatrix = isOrthoProjection ? orthoProjectionMatrix : sceneProjectionMatrix;
-	
+
     [glkEffect prepareToDraw];
-    
-    if (shaderProgram != 0) {
-	    glUseProgram(shaderProgram);
-        glUniformMatrix4fv(uniformModelViewProjectionMatrix, 1, 0, GLKMatrix4Multiply(orthoProjectionMatrix, orthoModelViewMatrix).m);
+
+    if (currentShaderProgram != 0) {
+	    glUseProgram(currentShaderProgram);
+        glUniformMatrix4fv(uniformModelViewProjectionMatrix, 1, 0, GLKMatrix4Multiply(glkEffect.transform.projectionMatrix, glkEffect.transform.modelviewMatrix).m);
+    }
+
+    if (currentShaderProgram != 0) {
+        glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, [textures getFloorDistortionTexture]);
+        glUniform1i(uniformSampler1, 0);
+        glUniform1i(uniformSampler2, 1);
+        glActiveTexture(GL_TEXTURE0);
     }
 
     glBindVertexArrayOES(vertexArray);
     glDrawArrays(GL_TRIANGLES, 0, quadCount * 6);
+
+    if (currentShaderProgram != 0) {
+        glActiveTexture(GL_TEXTURE1);
+        glDisable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
+    }
 }
 
 @end

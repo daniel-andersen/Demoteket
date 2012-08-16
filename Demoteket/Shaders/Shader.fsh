@@ -27,21 +27,23 @@ precision lowp float;
 
 varying vec2 v_Coordinates;
 
-uniform  sampler2D texture;
+uniform sampler2D texture0;
+uniform sampler2D texture1;
 
 void main()
 {
-	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
-
-    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -3.0 * (1.0 / 256.0))) * 0.015625;
-    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -2.0 * (1.0 / 256.0))) * 0.09375;
-    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + -1.0 * (1.0 / 256.0))) * 0.234375;
-    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  0.0 * (1.0 / 256.0))) * 0.3125;
-    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  1.0 * (1.0 / 256.0))) * 0.234375;
-    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  2.0 * (1.0 / 256.0))) * 0.09375;
-    color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y +  3.0 * (1.0 / 256.0))) * 0.015625;
-
-	color.a = color.a * 0.995;
+	//vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+	//float a = 1.0 / 512.0;
     
-	gl_FragColor = color;
+    //color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y - 3.0 * a)) * 0.2;
+    //color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y - 2.0 * a)) * 0.2;
+    //color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y - 1.0 * a)) * 0.2;
+    //color += texture2D(texture, vec2(v_Coordinates.x, v_Coordinates.y + 0.0 * a)) * 0.2;
+
+	//gl_FragColor = color;
+
+	//gl_FragColor = texture2D(texture0, v_Coordinates) * min(gl_FragCoord.y * 0.01, 1.0);
+	//gl_FragColor = texture2D(texture0, v_Coordinates) * texture2D(texture1, v_Coordinates);
+
+	gl_FragColor = texture2D(texture0, vec2(gl_FragCoord.x * (1.0 / 480.0), gl_FragCoord.y * (1.0 / 320.0))) * (1.0 - texture2D(texture1, v_Coordinates));
 }

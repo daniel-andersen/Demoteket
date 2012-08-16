@@ -33,7 +33,8 @@
 #define BUFFER_OFFSET(i) ((char *)NULL + (i * sizeof(GLfloat)))
 
 Textures *textures;
-GLKBaseEffect *glkEffect;
+GLKBaseEffect *glkEffectNormal;
+GLKBaseEffect *glkEffectShader;
 
 GLKMatrix4 sceneModelViewMatrix;
 GLKMatrix4 sceneProjectionMatrix;
@@ -48,5 +49,9 @@ float screenHeight;
 
 GLuint glslProgram;
 GLuint uniformModelViewProjectionMatrix;
+GLuint uniformSampler1;
+GLuint uniformSampler2;
+
+GLuint currentShaderProgram;
 
 #endif

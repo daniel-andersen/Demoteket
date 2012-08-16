@@ -106,9 +106,10 @@ enum
     
     [self loadShaders];
     
-    self.effect = [[GLKBaseEffect alloc] init];
-    glkEffect = self.effect;
-    
+    glkEffectNormal = [[GLKBaseEffect alloc] init];
+    glkEffectShader = [[GLKBaseEffect alloc] init];
+    self.effect = glkEffectNormal;
+
     glEnable(GL_DEPTH_TEST);
     
     screenWidth = self.view.bounds.size.width;
@@ -207,6 +208,8 @@ enum
     
     // Get uniform locations.
     uniformModelViewProjectionMatrix = glGetUniformLocation(glslProgram, "modelViewProjectionMatrix");
+    uniformSampler1 = glGetUniformLocation(glslProgram, "texture0");
+    uniformSampler2 = glGetUniformLocation(glslProgram, "texture1");
     
     // Release vertex and fragment shaders.
     if (vertShader) {

@@ -35,6 +35,7 @@ static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404
     photos[1] = [self loadTexture:@"photo1.png"];
     photosLight[0] = [self loadTexture:@"photosLight1.png"];
     photosLight[1] = [self loadTexture:@"photosLight2.png"];
+    floorDistortion = [self loadTexture:@"floor_distortion.png"];
 }
 
 - (void) setPhoto:(GLuint)texture {
@@ -47,6 +48,10 @@ static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404
 
 - (GLuint) getFloorTexture {
     return floor;
+}
+
+- (GLuint) getFloorDistortionTexture {
+    return floorDistortion;
 }
 
 - (GLuint) getPhotosTexture:(int)index {

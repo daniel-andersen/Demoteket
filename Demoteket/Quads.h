@@ -43,7 +43,6 @@ typedef struct {
     int quadCount;
     
     GLuint textureId;
-    GLKEffectPropertyTexture *textureProperty;
     bool textureToggled;
 
     GLKVector4 color;
@@ -58,8 +57,6 @@ typedef struct {
     GLenum blendDst;
     
     bool isOrthoProjection;
-
-    GLuint shaderProgram;
 }
 
 - (id) init;
@@ -72,7 +69,6 @@ typedef struct {
 
 - (void) setBlendFuncSrc:(GLenum)src dst:(GLenum)dst;
 - (void) setOrthoProjection;
-- (void) setShaderProgram:(GLuint)program;
 
 - (void) calculateNormals;
 

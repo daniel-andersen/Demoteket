@@ -36,12 +36,14 @@
 	GLuint photos[PHOTOS_COUNT];
 	GLuint photosLight[PHOTOS_COUNT];
     GLuint floor;
+    GLuint floorDistortion;
 }
 
 - (void) load;
 
 - (GLuint) getWallTexture:(int)index;
 - (GLuint) getFloorTexture;
+- (GLuint) getFloorDistortionTexture;
 - (GLuint) getPhotosTexture:(int)index;
 - (GLuint) getPhotosLightTexture:(int)index;
 

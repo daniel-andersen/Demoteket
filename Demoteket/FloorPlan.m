@@ -77,11 +77,11 @@
     NSLog(@"Creating floor plan");
 
     floor = [[Quads alloc] init];
+    //[floor beginWithTexture:[textures getFloorTexture]];
+    //[floor setOrthoProjection];
+    //[floor addQuadVerticalX1:0.0f y1:screenHeight z1:0.0f x2:screenWidth y2:0.0f z2:0.0f];
     [floor beginWithTexture:[textures getFloorTexture]];
-    //[floor beginWithTexture:[textures getWallTexture:0]];
-    [floor setOrthoProjection];
-    [floor setShaderProgram:glslProgram];
-    [floor addQuadVerticalX1:0.0f y1:screenHeight z1:0.0f x2:screenWidth y2:0.0f z2:0.0f];
+    [floor addQuadHorizontalX1:-15.0f z1:-15.0f x2:15.0f z2:15.0f y:0.0f];
     [floor end];
 
     for (int i = 0; i < ROOM_COUNT; i++) {
@@ -106,7 +106,6 @@
     GLint oldViewport[4];
 	glGetIntegerv(GL_VIEWPORT, oldViewport);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, mirrorFramebuffer);
     
     glViewport(0, 0, MIRROR_TEXTURE_WIDTH, MIRROR_TEXTURE_HEIGHT);
@@ -129,6 +128,8 @@
 }
 
 - (void) renderFloor {
+    currentShaderProgram = glslProgram;
+
     glDisable(GL_DEPTH_TEST);
     glDepthMask(false);
 
@@ -136,6 +137,8 @@
 
     glEnable(GL_DEPTH_TEST);
     glDepthMask(true);
+
+    currentShaderProgram = 0;
 }
 
 @end
