@@ -80,7 +80,7 @@
     //[floor beginWithTexture:[textures getFloorTexture]];
     //[floor setOrthoProjection];
     //[floor addQuadVerticalX1:0.0f y1:screenHeight z1:0.0f x2:screenWidth y2:0.0f z2:0.0f];
-    [floor beginWithTexture:[textures getFloorTexture]];
+    [floor beginWithTexture:[textures getFloorDistortionTexture]];
     [floor addQuadHorizontalX1:-15.0f z1:-15.0f x2:15.0f z2:15.0f y:0.0f];
     [floor end];
 

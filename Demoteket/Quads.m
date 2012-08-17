@@ -217,7 +217,7 @@
     if (currentShaderProgram != 0) {
         glActiveTexture(GL_TEXTURE1);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, [textures getFloorDistortionTexture]);
+        glBindTexture(GL_TEXTURE_2D, [textures getFloorTexture]);
         glUniform1i(uniformSampler1, 0);
         glUniform1i(uniformSampler2, 1);
         glActiveTexture(GL_TEXTURE0);

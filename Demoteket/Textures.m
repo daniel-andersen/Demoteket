@@ -27,7 +27,9 @@
 
 @implementation Textures
 
+static float DEFAULT_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 1.0f};
 static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404f};
+static float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 5.0f, 5.0f};
 
 - (void) load {
     wall[0] = [self loadTexture:@"wall.png"];
@@ -35,7 +37,7 @@ static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404
     photos[1] = [self loadTexture:@"photo1.png"];
     photosLight[0] = [self loadTexture:@"photosLight1.png"];
     photosLight[1] = [self loadTexture:@"photosLight2.png"];
-    floorDistortion = [self loadTexture:@"floor_distortion.png"];
+    floorDistortion = [self loadTexture:@"floor_distortion.png" repeat:true];
 }
 
 - (void) setPhoto:(GLuint)texture {
@@ -63,40 +65,48 @@ static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404
 }
 
 - (float) getTextureOffsetX1:(GLuint)textureId {
-    if (textureId == photosLight[1]) {
-        return PHOTOS_LIGHT_TEXTURE_OFFSET[0];
-    }
-    return 0.0f;
+    return [self getTextureOffset:textureId index:0];
 }
 
 - (float) getTextureOffsetY1:(GLuint)textureId {
-    if (textureId == photosLight[1]) {
-        return PHOTOS_LIGHT_TEXTURE_OFFSET[1];
-    }
-    return 0.0f;
+    return [self getTextureOffset:textureId index:1];
 }
 
 - (float) getTextureOffsetX2:(GLuint)textureId {
-    if (textureId == photosLight[1]) {
-        return PHOTOS_LIGHT_TEXTURE_OFFSET[2];
-    }
-    return 1.0f;
+    return [self getTextureOffset:textureId index:2];
 }
 
 - (float) getTextureOffsetY2:(GLuint)textureId {
+    return [self getTextureOffset:textureId index:3];
+}
+
+- (float) getTextureOffset:(GLuint)textureId index:(int)index {
     if (textureId == photosLight[1]) {
-        return PHOTOS_LIGHT_TEXTURE_OFFSET[3];
+        return PHOTOS_LIGHT_TEXTURE_OFFSET[index];
     }
-    return 1.0f;
+    if (textureId == floorDistortion) {
+        return FLOOR_DISTORTION_TEXTURE_OFFSET[index];
+    }
+    return DEFAULT_TEXTURE_OFFSET[index];
 }
 
 - (GLuint) loadTexture:(NSString*)filename {
+    return [self loadTexture:filename repeat:false];
+}
+
+- (GLuint) loadTexture:(NSString*)filename repeat:(bool)repeat {
     NSLog(@"Loading texture: %@", filename);
     UIImage *image = [UIImage imageNamed:filename];
     NSError *error = nil;
     GLKTextureInfo *textureInfo = [GLKTextureLoader textureWithCGImage:image.CGImage options:nil error:&error];
     if (error) {
         NSLog(@"Error loading texture %@: %@", filename, error);
+    }
+    if (repeat) {
+		glBindTexture(GL_TEXTURE_2D, textureInfo.name);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glBindTexture(GL_TEXTURE_2D, 0);
     }
     return textureInfo.name;
 }
