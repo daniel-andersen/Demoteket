@@ -26,11 +26,13 @@
 #import "Quads.h"
 
 #define ROOM_MAX_SIZE 16
-#define PILLAR_MAX_COUNT 32
 #define PHOTOS_MAX_COUNT 32
 
 #define ROOM_HEIGHT 5.0f
-#define BLOCK_SIZE 2.0f
+#define BLOCK_SIZE 1.5f
+
+#define PILLAR_WIDTH (BLOCK_SIZE * 1.0f)
+#define PILLAR_DEPTH (BLOCK_SIZE * 0.05f)
 
 #define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
 
@@ -50,8 +52,7 @@
     Quads *photosBorder;
     int photosCount;
     
-    Quads *pillars[PILLAR_MAX_COUNT];
-    int pillarsCount;
+    Quads *pillars;
 }
 
 - (void) initializeRoomNumber:(int)number;

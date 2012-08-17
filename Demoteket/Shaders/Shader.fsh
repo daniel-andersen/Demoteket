@@ -32,20 +32,22 @@ uniform sampler2D texture1;
 
 void main()
 {
+    float pixelsize = 1.0 / 512.0;
+    
     vec4 displacementColor = texture2D(texture0, v_Coordinates) - vec4(0.5, 0.5, 0.5, 0.0);
     vec2 displacement = vec2(displacementColor.r, displacementColor.g);
-    vec2 tex1 = vec2(gl_FragCoord.x * (1.0 / 480.0), gl_FragCoord.y * (1.0 / 320.0));
-    vec2 tex2 = tex1 + displacement * 0.06;
-    vec2 tex3 = tex1 + displacement * 0.03;
+    //vec2 tex1 = vec2(gl_FragCoord.x * (1.0 / 1024.0), gl_FragCoord.y * (1.0 / 768.0));
+    vec2 tex1 = vec2(gl_FragCoord.x * (1.0 / 480.0), gl_FragCoord.y * (1.0 / 320.0)) + (displacement * 0.03);
+    vec2 tex2 = tex1 + vec2(-pixelsize, 0.0);
+    vec2 tex3 = tex1 + vec2( pixelsize, 0.0);
+    vec2 tex4 = tex1 + vec2(0.0, -pixelsize);
+    vec2 tex5 = tex1 + vec2(0.0,  pixelsize);
     
-    float refraction = min(gl_FragCoord.y * 0.01, 1.0);
-    vec4 floorColor = vec4(0.2, 0.2, 0.2, 1.0);
+    float refraction = min((gl_FragCoord.y * 0.005) + (1.0 - texture2D(texture0, v_Coordinates).b) * 0.5, 1.0);
+    vec4 floorColor = vec4(0.1, 0.09, 0.075, 1.0);
 
-    //float a = min(gl_FragCoord.y * 0.01, 1.0) * min(texture2D(texture0, v_Coordinates).b + 0.1, 1.0);
     float a = min(texture2D(texture0, v_Coordinates).b + 0.15, 1.0);
 
-    vec4 color = (texture2D(texture1, tex1) + texture2D(texture1, tex2) + texture2D(texture1, tex3)) * 0.3 * a;
+    vec4 color = ((texture2D(texture1, tex2) * 0.25) + (texture2D(texture1, tex3) * 0.25) + (texture2D(texture1, tex4) * 0.25) + (texture2D(texture1, tex4) * 0.25)) * 0.8;
 	gl_FragColor = (refraction * color) + ((1.0 - refraction) * floorColor);
-	//gl_FragColor = (texture2D(texture1, tex2) + texture2D(texture1, tex3)) * 0.5 * a;
-	//gl_FragColor = texture2D(texture1, tex2);
 }
