@@ -30,9 +30,12 @@
 static float DEFAULT_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 1.0f};
 static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404f};
 static float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 5.0f, 5.0f};
+static float PILLAR_BORDER_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.1f, 1.0f};
 
 - (void) load {
     wall[0] = [self loadTexture:@"wall.png"];
+    pillar[0] = [self loadTexture:@"pillar.png"];
+    pillarBorder[0] = [self loadTexture:@"pillar.png"];
     photos[0] = [self loadTexture:@"photo1.png"];
     photos[1] = [self loadTexture:@"photo1.png"];
     photosLight[0] = [self loadTexture:@"photosLight1.png"];
@@ -46,6 +49,14 @@ static float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 5.0f, 5.0f};
 
 - (GLuint) getWallTexture:(int)index {
     return wall[index];
+}
+
+- (GLuint) getPillarTexture:(int)index {
+    return pillar[index];
+}
+
+- (GLuint) getPillarBorderTexture:(int)index {
+    return pillarBorder[index];
 }
 
 - (GLuint) getFloorTexture {
@@ -86,6 +97,9 @@ static float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 5.0f, 5.0f};
     }
     if (textureId == floorDistortion) {
         return FLOOR_DISTORTION_TEXTURE_OFFSET[index];
+    }
+    if (textureId == pillarBorder[0]) {
+        return PILLAR_BORDER_TEXTURE_OFFSET[index];
     }
     return DEFAULT_TEXTURE_OFFSET[index];
 }

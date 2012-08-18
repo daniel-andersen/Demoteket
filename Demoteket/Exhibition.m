@@ -50,16 +50,18 @@ float z = 0.0f;
 }
 
 - (void) render {
-    /*countDown--;
-    if (countDown < 0 && countDown > -300) {
-	    anim += 0.04f;
-        z += 0.1f;
-    }*/
+    countDown--;
+    if (countDown < 0 && countDown > -400) {
+        if (countDown > -315) {
+		    anim += 0.02f;
+        }
+        z += 0.035f;
+    }
     float x = cos(anim) * 1.0f;
-    float a = sin(anim);
+    float a = sin(anim) * 0.5f;
     sceneModelViewMatrix = GLKMatrix4Identity;
     sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, a, 0.0f, 1.0f, 0.0f);
-    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, -5.0f + x, -2.0f, -17.0f + z);
+    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, -5.0f + x, -2.5f, -17.0f + z);
 
     [floorPlan render];
 }

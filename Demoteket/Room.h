@@ -53,6 +53,7 @@
     int photosCount;
     
     Quads *pillars;
+    Quads *pillarsBorder;
 }
 
 - (void) initializeRoomNumber:(int)number;

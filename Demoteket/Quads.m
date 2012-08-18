@@ -164,6 +164,10 @@
     [self addQuadX1:x1 y1:y z1:z1 x2:x1 y2:y z2:z2 x3:x2 y3:y z3:z2 x4:x2 y4:y z4:z1];
 }
 
+- (void) addQuadHorizontalX1:(float)x1 z1:(float)z1 x2:(float)x2 z2:(float)z2 x3:(float)x3 z3:(float)z3 x4:(float)x4 z4:(float)z4 y:(float)y {
+    [self addQuadX1:x1 y1:y z1:z1 x2:x2 y2:y z2:z2 x3:x3 y3:y z3:z3 x4:x4 y4:y z4:z4];
+}
+
 - (void) addQuadX1:(float)x1 y1:(float)y1 z1:(float)z1 x2:(float)x2 y2:(float)y2 z2:(float)z2 x3:(float)x3 y3:(float)y3 z3:(float)z3 x4:(float)x4 y4:(float)y4 z4:(float)z4 {
     if (quadCount >= QUADS_MAX_COUNT) {
         NSLog(@"Too many quads!");

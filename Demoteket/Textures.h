@@ -26,6 +26,7 @@
 #import <GLKit/GLKit.h>
 
 #define WALL_COUNT 1
+#define PILLAR_COUNT 1
 #define PHOTOS_COUNT 2
 
 @interface Textures : NSObject {
@@ -33,6 +34,8 @@
 @private
     
 	GLuint wall[WALL_COUNT];
+	GLuint pillar[PILLAR_COUNT];
+	GLuint pillarBorder[PILLAR_COUNT];
 	GLuint photos[PHOTOS_COUNT];
 	GLuint photosLight[PHOTOS_COUNT];
     GLuint floor;
@@ -42,6 +45,8 @@
 - (void) load;
 
 - (GLuint) getWallTexture:(int)index;
+- (GLuint) getPillarTexture:(int)index;
+- (GLuint) getPillarBorderTexture:(int)index;
 - (GLuint) getFloorTexture;
 - (GLuint) getFloorDistortionTexture;
 - (GLuint) getPhotosTexture:(int)index;
