@@ -51,6 +51,13 @@ GLuint glslProgram;
 GLuint uniformModelViewProjectionMatrix;
 GLuint uniformSampler1;
 GLuint uniformSampler2;
+GLuint uniformScreenSizeInv;
+GLuint uniformOffscreenSizeInv;
+GLuint uniformRefractionConstant;
+
+GLfloat screenSizeInv[2];
+GLfloat offscreenSizeInv[2];
+GLfloat refractionConstant;
 
 GLuint currentShaderProgram;
 

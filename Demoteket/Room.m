@@ -96,7 +96,7 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
     [pillars beginWithTexture:[textures getPillarTexture:0]];
 
     pillarsBorder = [[Quads alloc] init];
-    [pillarsBorder beginWithTexture:[textures getPillarBorderTexture:0] color:GLKVector4Make(0.5f, 0.5f, 0.5f, 1.0f)];
+    [pillarsBorder beginWithTexture:[textures getPillarBorderTexture:0] color:GLKVector4Make(0.7f, 0.7f, 0.7f, 1.0f)];
 
     photosBorder = [[Quads alloc] init];
     [photosBorder beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];

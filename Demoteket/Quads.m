@@ -224,6 +224,9 @@
         glBindTexture(GL_TEXTURE_2D, [textures getFloorTexture]);
         glUniform1i(uniformSampler1, 0);
         glUniform1i(uniformSampler2, 1);
+        glUniform2f(uniformScreenSizeInv, screenSizeInv[0], screenSizeInv[1]);
+        glUniform2f(uniformOffscreenSizeInv, offscreenSizeInv[0], offscreenSizeInv[1]);
+        glUniform1f(uniformRefractionConstant, refractionConstant);
         glActiveTexture(GL_TEXTURE0);
     }
 

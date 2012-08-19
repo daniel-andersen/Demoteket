@@ -112,10 +112,7 @@ enum
 
     glEnable(GL_DEPTH_TEST);
     
-    screenWidth = self.view.bounds.size.width;
-    screenHeight = self.view.bounds.size.height;
-
-    NSLog(@"Screen size: %i, %i", (int) screenWidth, (int) screenHeight);
+    [self getScreenSize];
 }
 
 - (void)tearDownGL
@@ -128,6 +125,18 @@ enum
         glDeleteProgram(glslProgram);
         glslProgram = 0;
     }
+}
+
+- (void) getScreenSize {
+    screenWidth = [UIScreen mainScreen].bounds.size.width * [UIScreen mainScreen].scale;
+    screenHeight = [UIScreen mainScreen].bounds.size.height * [UIScreen mainScreen].scale;
+    
+    screenSizeInv[0] = 1.0f / (float) screenWidth;
+    screenSizeInv[1] = 1.0f / (float) screenHeight;
+
+    refractionConstant = 0.005 * (480.0f / (float) screenHeight);
+
+    NSLog(@"Screen size: %i, %i", (int) screenWidth, (int) screenHeight);
 }
 
 #pragma mark - GLKView and GLKViewController delegate methods
@@ -210,6 +219,9 @@ enum
     uniformModelViewProjectionMatrix = glGetUniformLocation(glslProgram, "modelViewProjectionMatrix");
     uniformSampler1 = glGetUniformLocation(glslProgram, "texture0");
     uniformSampler2 = glGetUniformLocation(glslProgram, "texture1");
+    uniformScreenSizeInv = glGetUniformLocation(glslProgram, "screenSizeInv");
+    uniformOffscreenSizeInv = glGetUniformLocation(glslProgram, "offscreenSizeInv");
+    uniformRefractionConstant = glGetUniformLocation(glslProgram, "refractionConstant");
     
     // Release vertex and fragment shaders.
     if (vertShader) {

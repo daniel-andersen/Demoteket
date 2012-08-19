@@ -50,12 +50,13 @@ float z = 0.0f;
 }
 
 - (void) render {
+    float speed = 2.0f;
     countDown--;
-    if (countDown < 0 && countDown > -400) {
-        if (countDown > -315) {
-		    anim += 0.02f;
+    if (countDown < 0 && countDown > -400 / speed) {
+        if (countDown > -315 / speed) {
+		    anim += 0.02f * speed;
         }
-        z += 0.035f;
+        z += 0.035f * speed;
     }
     float x = cos(anim) * 1.0f;
     float a = sin(anim) * 0.5f;

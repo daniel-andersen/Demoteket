@@ -30,20 +30,23 @@ varying vec2 v_Coordinates;
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 
+uniform vec2 screenSizeInv;
+uniform vec2 offscreenSizeInv;
+uniform float refractionConstant;
+
 void main()
 {
-    float pixelsize = 1.0 / 512.0;
-    
     vec4 displacementColor = texture2D(texture0, v_Coordinates) - vec4(0.5, 0.5, 0.5, 0.0);
     vec2 displacement = vec2(displacementColor.r, displacementColor.g);
     //vec2 tex1 = vec2(gl_FragCoord.x * (1.0 / 1024.0), gl_FragCoord.y * (1.0 / 768.0));
-    vec2 tex1 = vec2(gl_FragCoord.x * (1.0 / 480.0), gl_FragCoord.y * (1.0 / 320.0)) + (displacement * 0.03);
-    vec2 tex2 = tex1 + vec2(-pixelsize, 0.0);
-    vec2 tex3 = tex1 + vec2( pixelsize, 0.0);
-    vec2 tex4 = tex1 + vec2(0.0, -pixelsize);
-    vec2 tex5 = tex1 + vec2(0.0,  pixelsize);
+    //vec2 tex1 = vec2(gl_FragCoord.x * (1.0 / 480.0), gl_FragCoord.y * (1.0 / 320.0)) + (displacement * 0.03);
+    vec2 tex1 = vec2(gl_FragCoord.x * screenSizeInv.y, gl_FragCoord.y * screenSizeInv.x) + (displacement * 0.03);
+    vec2 tex2 = tex1 + vec2(-offscreenSizeInv.x, 0.0);
+    vec2 tex3 = tex1 + vec2( offscreenSizeInv.x, 0.0);
+    vec2 tex4 = tex1 + vec2(0.0, -offscreenSizeInv.y);
+    vec2 tex5 = tex1 + vec2(0.0,  offscreenSizeInv.y);
     
-    float refraction = min((gl_FragCoord.y * 0.005) + (1.0 - texture2D(texture0, v_Coordinates).b) * 0.5, 1.0);
+    float refraction = min((gl_FragCoord.y * refractionConstant) + (1.0 - texture2D(texture0, v_Coordinates).b) * 0.5, 1.0);
     vec4 floorColor = vec4(0.1, 0.09, 0.075, 1.0);
 
     float a = min(texture2D(texture0, v_Coordinates).b + 0.15, 1.0);

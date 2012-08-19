@@ -27,9 +27,6 @@
 
 #define ROOM_COUNT 5
 
-#define MIRROR_TEXTURE_WIDTH 512
-#define MIRROR_TEXTURE_HEIGHT 512
-
 @interface FloorPlan : NSObject {
 
 @private
@@ -40,6 +37,9 @@
     GLuint mirrorFramebuffer;
     GLuint mirrorTexture;
     GLuint mirrorDepthBuffer;
+    
+    int offscreenTextureWidth;
+    int offscreenTextureHeight;
 }
 
 - (id) init;

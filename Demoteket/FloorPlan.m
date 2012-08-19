@@ -41,6 +41,13 @@
 }
 
 - (void) createMirrorFramebuffer {
+    offscreenTextureWidth = [self textureAtLeastSize:screenWidth];
+    offscreenTextureHeight = [self textureAtLeastSize:screenHeight];
+    offscreenSizeInv[0] = 1.0f / offscreenTextureWidth;
+    offscreenSizeInv[1] = 1.0f / offscreenTextureHeight;
+
+    NSLog(@"Texture size: %i, %i", offscreenTextureWidth, offscreenTextureHeight);
+    
     GLint oldFramebuffer;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &oldFramebuffer);
     
@@ -55,11 +62,11 @@
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, MIRROR_TEXTURE_WIDTH, MIRROR_TEXTURE_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, offscreenTextureWidth, offscreenTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTexture, 0);
 
     glBindRenderbuffer(GL_RENDERBUFFER, mirrorDepthBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, MIRROR_TEXTURE_WIDTH, MIRROR_TEXTURE_HEIGHT);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, offscreenTextureWidth, offscreenTextureHeight);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mirrorDepthBuffer);
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -71,6 +78,15 @@
     glBindFramebuffer(GL_FRAMEBUFFER, oldFramebuffer);
 
     [textures setPhoto:mirrorTexture];
+}
+
+- (int) textureAtLeastSize:(int)size {
+    int l = (int) log2(size);
+    if ((int) pow(2, l) == size) {
+        return size;
+    } else {
+        return (int) pow(2, l + 1);
+    }
 }
 
 - (void) createFloorPlan {
@@ -108,7 +124,7 @@
 
     glBindFramebuffer(GL_FRAMEBUFFER, mirrorFramebuffer);
     
-    glViewport(0, 0, MIRROR_TEXTURE_WIDTH, MIRROR_TEXTURE_HEIGHT);
+    glViewport(0, 0, offscreenTextureWidth, offscreenTextureHeight);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
