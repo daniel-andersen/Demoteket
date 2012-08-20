@@ -31,6 +31,8 @@
 #define ROOM_HEIGHT 5.0f
 #define BLOCK_SIZE 1.5f
 
+#define WALL_DEPTH (BLOCK_SIZE * 0.05f)
+
 #define PILLAR_WIDTH (BLOCK_SIZE * 1.0f)
 #define PILLAR_DEPTH (BLOCK_SIZE * 0.05f)
 

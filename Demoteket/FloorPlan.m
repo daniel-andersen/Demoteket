@@ -32,12 +32,17 @@
 
 - (id) init {
     if (self = [super init]) {
-        [self createMirrorFramebuffer];
+        [self initialize];
     }
     return self;
 }
 
 - (void) dealloc {
+}
+
+- (void) initialize {
+    [self createMirrorFramebuffer];
+    currentRoom = 0;
 }
 
 - (void) createMirrorFramebuffer {
@@ -104,15 +109,24 @@
         rooms[i] = [[Room alloc] init];
     }
     [rooms[0] initializeRoomNumber:0];
+    [rooms[1] initializeRoomNumber:1];
 }
 
 - (void) render {
+    //glEnable(GL_CULL_FACE);
+
+    glCullFace(GL_FRONT);
+    
     [self renderMirroredFloor];
+
+    glCullFace(GL_BACK);
 
     mirrorModelViewMatrix = GLKMatrix4Identity;
     
     [self renderFloor];
     [self renderRooms];
+
+	glDisable(GL_CULL_FACE);
 }
 
 - (void) renderMirroredFloor {
@@ -138,8 +152,10 @@
 }
 
 - (void) renderRooms {
-    for (int i = 0; i < ROOM_COUNT; i++) {
-        [rooms[i] render];
+    for (int i = currentRoom - 1; i < currentRoom + 2; i++) {
+        if (i >= 0 && i < ROOM_COUNT) {
+            [rooms[i] render];
+        }
     }
 }
 

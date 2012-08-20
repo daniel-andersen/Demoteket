@@ -148,11 +148,29 @@
 
 - (void) calculateNormals {
     int v = 0;
-    for (int i = 0; i < quadCount * 8; i++) {
-        vertices[v + 5] = 1.0f;
-        vertices[v + 6] = 0.0f;
-        vertices[v + 7] = 0.0f;
-        v += 8;
+    for (int i = 0; i < quadCount; i++) {
+        GLKVector3 p1 = GLKVector3Make(vertices[v +  0 + 0], vertices[v +  0 + 1], vertices[v +  0 + 2]);
+        GLKVector3 p2 = GLKVector3Make(vertices[v +  8 + 0], vertices[v +  8 + 1], vertices[v +  8 + 2]);
+        GLKVector3 p3 = GLKVector3Make(vertices[v + 16 + 0], vertices[v + 16 + 1], vertices[v + 16 + 2]);
+        
+        GLKVector3 v1 = GLKVector3Subtract(p2, p1);
+        GLKVector3 v2 = GLKVector3Subtract(p3, p1);
+
+        GLKVector3 n = GLKVector3Normalize(GLKVector3CrossProduct(v1, v2));
+
+        vertices[v +  0 + 5] = n.x;
+        vertices[v +  0 + 6] = n.y;
+        vertices[v +  0 + 7] = n.z;
+        
+        vertices[v +  8 + 5] = n.x;
+        vertices[v +  8 + 6] = n.y;
+        vertices[v +  8 + 7] = n.z;
+
+        vertices[v + 16 + 5] = n.x;
+        vertices[v + 16 + 6] = n.y;
+        vertices[v + 16 + 7] = n.z;
+
+        v += 8 * 3;
     }
 }
 

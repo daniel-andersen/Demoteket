@@ -34,6 +34,8 @@
     Room *rooms[ROOM_COUNT];
     Quads *floor;
     
+    int currentRoom;
+    
     GLuint mirrorFramebuffer;
     GLuint mirrorTexture;
     GLuint mirrorDepthBuffer;

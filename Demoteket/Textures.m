@@ -29,7 +29,7 @@
 
 static float DEFAULT_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 1.0f};
 static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404f};
-static float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 5.0f, 5.0f};
+static float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 55.0f, 55.0f};
 static float PILLAR_BORDER_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.1f, 1.0f};
 
 - (void) load {

@@ -28,8 +28,8 @@
 
 @implementation Room
 
-static int ROOM_OFFSET_X[] = {0, 0, 0, 0, 0};
-static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
+static float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4 - WALL_DEPTH, 0, 0, 0};
+static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
 - (id) init {
     if (self = [super init]) {
@@ -66,6 +66,20 @@ static int ROOM_OFFSET_Z[] = {0, 0, 0, 0, 0};
         [self addStrip:@"|  E|"];
         [self addStrip:@"|   |"];
         [self addStrip:@"| D |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"+---+"];
+	}
+    if (number == 1) {
+        [self addStrip:@"+---+"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   +"];
+        [self addStrip:@"|    "];
+        [self addStrip:@"|   +"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
