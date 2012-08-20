@@ -44,6 +44,8 @@ GLKMatrix4 mirrorModelViewMatrix;
 GLKMatrix4 orthoProjectionMatrix;
 GLKMatrix4 orthoModelViewMatrix;
 
+bool isRenderingMirror;
+
 float screenWidth;
 float screenHeight;
 

@@ -113,14 +113,10 @@
 }
 
 - (void) render {
-    //glEnable(GL_CULL_FACE);
-
-    glCullFace(GL_FRONT);
-    
+    isRenderingMirror = true;
     [self renderMirroredFloor];
 
-    glCullFace(GL_BACK);
-
+    isRenderingMirror = false;
     mirrorModelViewMatrix = GLKMatrix4Identity;
     
     [self renderFloor];

@@ -148,7 +148,7 @@
 
 - (void) calculateNormals {
     int v = 0;
-    for (int i = 0; i < quadCount; i++) {
+    for (int i = 0; i < quadCount * 2; i++) {
         GLKVector3 p1 = GLKVector3Make(vertices[v +  0 + 0], vertices[v +  0 + 1], vertices[v +  0 + 2]);
         GLKVector3 p2 = GLKVector3Make(vertices[v +  8 + 0], vertices[v +  8 + 1], vertices[v +  8 + 2]);
         GLKVector3 p3 = GLKVector3Make(vertices[v + 16 + 0], vertices[v + 16 + 1], vertices[v + 16 + 2]);
@@ -157,25 +157,27 @@
         GLKVector3 v2 = GLKVector3Subtract(p3, p1);
 
         GLKVector3 n = GLKVector3Normalize(GLKVector3CrossProduct(v1, v2));
+        n = GLKVector3Make(0.0f, -1.0f, 0.0f);
 
-        vertices[v +  0 + 5] = n.x;
-        vertices[v +  0 + 6] = n.y;
-        vertices[v +  0 + 7] = n.z;
+        vertices[v + 5] = n.x;
+        vertices[v + 6] = n.y;
+        vertices[v + 7] = n.z;
+        v += 8;
         
-        vertices[v +  8 + 5] = n.x;
-        vertices[v +  8 + 6] = n.y;
-        vertices[v +  8 + 7] = n.z;
+        vertices[v + 5] = n.x;
+        vertices[v + 6] = n.y;
+        vertices[v + 7] = n.z;
+        v += 8;
 
-        vertices[v + 16 + 5] = n.x;
-        vertices[v + 16 + 6] = n.y;
-        vertices[v + 16 + 7] = n.z;
-
-        v += 8 * 3;
+        vertices[v + 5] = n.x;
+        vertices[v + 6] = n.y;
+        vertices[v + 7] = n.z;
+        v += 8;
     }
 }
 
 - (void) addQuadVerticalX1:(float)x1 y1:(float)y1 z1:(float)z1 x2:(float)x2 y2:(float)y2 z2:(float)z2 {
-    [self addQuadX1:x1 y1:y1 z1:z1 x2:x1 y2:y2 z2:z1 x3:x2 y3:y2 z3:z2 x4:x2 y4:y1 z4:z2];
+    [self addQuadX1:x2 y1:y1 z1:z2 x2:x2 y2:y2 z2:z2 x3:x1 y3:y2 z3:z1 x4:x1 y4:y1 z4:z1];
 }
 
 - (void) addQuadHorizontalX1:(float)x1 z1:(float)z1 x2:(float)x2 z2:(float)z2 y:(float)y {
@@ -212,6 +214,9 @@
     } else {
         glDisable(GL_BLEND);
     }
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(isRenderingMirror ? GL_FRONT : GL_BACK);
 
     GLKBaseEffect *glkEffect = currentShaderProgram != 0 ? glkEffectShader : glkEffectNormal;
     
