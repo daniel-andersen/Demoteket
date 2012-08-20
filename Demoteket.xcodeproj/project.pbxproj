@@ -26,6 +26,7 @@
 		65083EAE15D4FACE003108B5 /* Quads.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083EAD15D4FACE003108B5 /* Quads.m */; };
 		652CF33D15D8FE8100F4F07F /* photosLight1.png in Resources */ = {isa = PBXBuildFile; fileRef = 652CF33C15D8FE8100F4F07F /* photosLight1.png */; };
 		652CF34015D98F5A00F4F07F /* photo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 652CF33F15D98F5A00F4F07F /* photo1.png */; };
+		654942C715E265380029C1E2 /* BezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 654942C615E265380029C1E2 /* BezierPath.m */; };
 		6570FC7A15DD70F8003A2003 /* floor_distortion.png in Resources */ = {isa = PBXBuildFile; fileRef = 6570FC7915DD70F8003A2003 /* floor_distortion.png */; };
 		6573202E15D502C9002562E9 /* Textures.m in Sources */ = {isa = PBXBuildFile; fileRef = 6573202D15D502C9002562E9 /* Textures.m */; };
 		6573203615D506AC002562E9 /* wall.png in Resources */ = {isa = PBXBuildFile; fileRef = 6573203515D506AC002562E9 /* wall.png */; };
@@ -62,6 +63,8 @@
 		65083EAF15D4FD52003108B5 /* Globals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
 		652CF33C15D8FE8100F4F07F /* photosLight1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photosLight1.png; sourceTree = "<group>"; };
 		652CF33F15D98F5A00F4F07F /* photo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo1.png; sourceTree = "<group>"; };
+		654942C515E265380029C1E2 /* BezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierPath.h; sourceTree = "<group>"; };
+		654942C615E265380029C1E2 /* BezierPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BezierPath.m; sourceTree = "<group>"; };
 		6570FC7915DD70F8003A2003 /* floor_distortion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = floor_distortion.png; sourceTree = "<group>"; };
 		6573202C15D502C9002562E9 /* Textures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Textures.h; sourceTree = "<group>"; };
 		6573202D15D502C9002562E9 /* Textures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Textures.m; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 				6573202D15D502C9002562E9 /* Textures.m */,
 				659F9C2C15D6DB8700EF7825 /* Room.h */,
 				659F9C2D15D6DB8700EF7825 /* Room.m */,
+				654942C515E265380029C1E2 /* BezierPath.h */,
+				654942C615E265380029C1E2 /* BezierPath.m */,
 			);
 			path = Demoteket;
 			sourceTree = "<group>";
@@ -247,6 +252,7 @@
 				65083EAE15D4FACE003108B5 /* Quads.m in Sources */,
 				6573202E15D502C9002562E9 /* Textures.m in Sources */,
 				659F9C2E15D6DB8700EF7825 /* Room.m in Sources */,
+				654942C715E265380029C1E2 /* BezierPath.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

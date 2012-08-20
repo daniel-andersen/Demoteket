@@ -23,19 +23,38 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <Foundation/Foundation.h>
+#import "Globals.h"
 
-#import "FloorPlan.h"
+#define BEZIER_MAX_POINTS 10
 
-@interface Exhibition : NSObject {
-    FloorPlan *floorPlan;
+#define BEZIER_DEST 0.5f
+
+#define BEZIER_NORMAL_LENGTH 5.0f
+
+@interface BezierPath : NSObject {
+
+@private
+    GLKVector2 points[BEZIER_MAX_POINTS];
+    int pointsCount;
+
+    GLKVector2 currentPoints[3];
+    GLKVector2 currentPosition;
+
+	float currentAngle;
+	float destAngle;
+
+    int nextIndex;
+    
+    GLKVector2 lastPosition;
+    
+    float t;
 }
 
-- (id) init;
+- (void) setAngle:(float)angle;
 
-- (void) createExhibition;
+- (void) addPoint:(GLKVector2)p;
 
-- (void) update;
-- (void) render;
+- (void) move:(float)speed;
+- (GLKVector3) getPositionAndAngle;
 
 @end

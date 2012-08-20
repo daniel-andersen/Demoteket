@@ -149,7 +149,8 @@ enum
 
     orthoProjectionMatrix = GLKMatrix4MakeOrtho(0, screenWidth, 0, screenHeight, -1.0f, 1.0f);
     orthoModelViewMatrix = GLKMatrix4Identity;
-    
+
+    [exhibition update];
     //_rotation += self.timeSinceLastUpdate * 0.5f;
 }
 

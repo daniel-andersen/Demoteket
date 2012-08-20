@@ -24,6 +24,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "Room.h"
+#import "BezierPath.h"
 
 #define ROOM_COUNT 5
 
@@ -33,6 +34,11 @@
 
     Room *rooms[ROOM_COUNT];
     Quads *floor;
+    
+    GLKVector3 position;
+
+    BezierPath *bezierPath;
+    int bezierPoint;
     
     int currentRoom;
     
@@ -49,6 +55,7 @@
 
 - (void) createFloorPlan;
 
+- (void) update;
 - (void) render;
 
 @end

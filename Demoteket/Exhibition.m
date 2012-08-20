@@ -30,10 +30,12 @@
 
 @implementation Exhibition
 
-int countDown = 50;
+float countDown = 50;
 
 float anim = 0.0f;
 float z = 0.0f;
+float x = 1.0f;
+float speed = 0.0f;
 
 - (id) init {
     if (self = [super init]) {
@@ -49,20 +51,31 @@ float z = 0.0f;
     [floorPlan createFloorPlan];
 }
 
+- (void) update {
+    [floorPlan update];
+}
+
 - (void) render {
-    float speed = 2.0f;
-    countDown--;
-    if (countDown < 0 && countDown > -400 / speed) {
-        if (countDown > -315 / speed) {
-		    anim += 0.02f * speed;
+    /*countDown--;
+    if (countDown < 0.0f) {
+        speed += 0.1f;
+        if (speed > 2.0f) {
+            speed = 2.0f;
         }
-        z += 0.035f * speed;
+        if (countDown > -205.0f / speed) {
+		    anim += 0.02f * speed;
+            z += 0.035f * speed;
+            x = cos(anim) * 1.0f;
+        } else if (countDown > -450.0f / speed){
+            x -= sin(anim) * 0.05f * speed;
+            z -= cos(anim) * 0.05f * speed;
+        } else {
+        }
     }
-    float x = cos(anim) * 1.0f;
     float a = sin(anim) * 0.5f;
     sceneModelViewMatrix = GLKMatrix4Identity;
     sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, a, 0.0f, 1.0f, 0.0f);
-    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, -5.0f + x, -2.5f, -17.0f + z);
+    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, -5.0f + x, -2.5f, -17.0f + z);*/
 
     [floorPlan render];
 }

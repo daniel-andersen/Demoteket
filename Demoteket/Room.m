@@ -53,38 +53,40 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 - (void) createRoomNumber:(int)number {
     roomNumber = number;
     stripNumber = 0;
+    bezierStripNumber = 0;
+    bezierPointCount = 0;
     for (int i = 0; i < ROOM_MAX_SIZE; i++) {
         for (int j = 0; j < ROOM_MAX_SIZE; j++) {
             tiles[i][j] = 'X';
         }
     }
     if (number == 0) {
-        [self addStrip:@"+---+"];
-        [self addStrip:@"d   |"];
-        [self addStrip:@"+   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|  E|"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"| D |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"+---+"];
+        [self addStrip:@"+---+"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"d   |"]; [self addBezierStrip:@"8  7 "];
+        [self addStrip:@"+   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|  E|"]; [self addBezierStrip:@" 3   "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"  4 6"];
+        [self addStrip:@"| D |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"   5 "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"2    "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"  1  "];
+        [self addStrip:@"+---+"]; [self addBezierStrip:@"  0  "];
 	}
     if (number == 1) {
-        [self addStrip:@"+---+"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   +"];
-        [self addStrip:@"|    "];
-        [self addStrip:@"|   +"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"|   |"];
-        [self addStrip:@"+---+"];
+        [self addStrip:@"+---+"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   +"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|    "]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   +"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"|   |"]; [self addBezierStrip:@"     "];
+        [self addStrip:@"+---+"]; [self addBezierStrip:@"     "];
 	}
 }
 
@@ -93,6 +95,21 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
         tiles[stripNumber][i] = [strip characterAtIndex:i];
     }
     stripNumber++;
+}
+
+- (void) addBezierStrip:(NSString *)strip {
+    for (int i = 0; i < [strip length]; i++) {
+        char ch = [strip characterAtIndex:i];
+        if (ch >= '0' && ch <= '9') {
+            int idx = (int) ch - (int) '0';
+            bezierPoints[idx].x = -((float) i * BLOCK_SIZE + (BLOCK_SIZE / 2.0f));
+            bezierPoints[idx].y = -((float) bezierStripNumber * BLOCK_SIZE + (BLOCK_SIZE / 2.0f));
+            if (idx + 1 > bezierPointCount) {
+                bezierPointCount = idx + 1;
+            }
+        }
+    }
+    bezierStripNumber++;
 }
 
 - (void) createGeometrics {
@@ -307,6 +324,12 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
 - (bool) isCharWallBrick:(char)ch {
     return ch == '|' || ch == '-' || ch == '+';
+}
+
+- (void) constructBezierPath:(BezierPath*)bezierPath {
+    for (int i = 0; i < bezierPointCount; i++) {
+        [bezierPath addPoint:bezierPoints[i]];
+    }
 }
 
 - (void) render {

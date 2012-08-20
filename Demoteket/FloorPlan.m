@@ -30,19 +30,16 @@
 
 @implementation FloorPlan
 
+float t = 0.0f;
+
 - (id) init {
     if (self = [super init]) {
-        [self initialize];
+        [self createMirrorFramebuffer];
     }
     return self;
 }
 
 - (void) dealloc {
-}
-
-- (void) initialize {
-    [self createMirrorFramebuffer];
-    currentRoom = 0;
 }
 
 - (void) createMirrorFramebuffer {
@@ -98,21 +95,30 @@
     NSLog(@"Creating floor plan");
 
     floor = [[Quads alloc] init];
-    //[floor beginWithTexture:[textures getFloorTexture]];
-    //[floor setOrthoProjection];
-    //[floor addQuadVerticalX1:0.0f y1:screenHeight z1:0.0f x2:screenWidth y2:0.0f z2:0.0f];
     [floor beginWithTexture:[textures getFloorDistortionTexture]];
     [floor addQuadHorizontalX1:-15.0f z1:-15.0f x2:15.0f z2:15.0f y:0.0f];
     [floor end];
+
+    currentRoom = 0;
 
     for (int i = 0; i < ROOM_COUNT; i++) {
         rooms[i] = [[Room alloc] init];
     }
     [rooms[0] initializeRoomNumber:0];
     [rooms[1] initializeRoomNumber:1];
+
+    bezierPath = [[BezierPath alloc] init];
+    [bezierPath setAngle:0.0f];
+    [rooms[0] constructBezierPath:bezierPath];
+}
+
+- (void) update {
+    [bezierPath move:0.02f];
 }
 
 - (void) render {
+    [self setupPosition];
+    
     isRenderingMirror = true;
     [self renderMirroredFloor];
 
@@ -123,6 +129,13 @@
     [self renderRooms];
 
 	glDisable(GL_CULL_FACE);
+}
+
+- (void) setupPosition {
+    GLKVector3 v = [bezierPath getPositionAndAngle];
+    sceneModelViewMatrix = GLKMatrix4Identity;
+    sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, v.z, 0.0f, 1.0f, 0.0f);
+    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, v.x, -2.5f, v.y);
 }
 
 - (void) renderMirroredFloor {

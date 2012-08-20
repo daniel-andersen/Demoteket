@@ -38,9 +38,7 @@ void main()
 {
     vec4 displacementColor = texture2D(texture0, v_Coordinates) - vec4(0.5, 0.5, 0.5, 0.0);
     vec2 displacement = vec2(displacementColor.r, displacementColor.g);
-    //vec2 tex1 = vec2(gl_FragCoord.x * (1.0 / 1024.0), gl_FragCoord.y * (1.0 / 768.0));
-    //vec2 tex1 = vec2(gl_FragCoord.x * (1.0 / 480.0), gl_FragCoord.y * (1.0 / 320.0)) + (displacement * 0.03);
-    vec2 tex1 = vec2(gl_FragCoord.x * screenSizeInv.y, gl_FragCoord.y * screenSizeInv.x) + (displacement * 0.03);
+    vec2 tex1 = vec2(gl_FragCoord.x * screenSizeInv.y, gl_FragCoord.y * screenSizeInv.x) + (displacement * 0.01);
     vec2 tex2 = tex1 + vec2(-offscreenSizeInv.x, 0.0);
     vec2 tex3 = tex1 + vec2( offscreenSizeInv.x, 0.0);
     vec2 tex4 = tex1 + vec2(0.0, -offscreenSizeInv.y);
