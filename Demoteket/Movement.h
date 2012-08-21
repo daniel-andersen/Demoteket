@@ -25,27 +25,32 @@
 
 #import "Globals.h"
 
-#define MOVEMENT_MAX_POINTS 10
+#define MOVEMENT_MAX_POINTS 1024
 
 #define MOVEMENT_POINT_DISTANCE 2.0f
 
 #define MOVEMENT_MAX_SPEED 0.1f
 #define MOVEMENT_VELOCITY_SPEED 0.005f
+#define MOVEMENT_VELOCITY_SPEED_MIN 0.001f
 
-#define ANGLE_MAX_SPEED 0.1f
-#define ANGLE_VELOCITY_SPEED 0.005f
+#define ANGLE_MAX_SPEED 0.025f
+#define ANGLE_VELOCITY 0.001f
 
 @interface Movement : NSObject {
 
 @private
     GLKVector2 points[MOVEMENT_MAX_POINTS];
+    float angles[MOVEMENT_MAX_POINTS];
     int pointsCount;
+
+    int pointIndex;
 
     GLKVector2 position;
     GLKVector2 movement;
     GLKVector2 velocity;
     
 	float angle;
+    float angleVelocity;
 	float destAngle;
 }
 
@@ -54,6 +59,7 @@
 - (void) setPositionToFirstPoint;
 
 - (void) addPoint:(GLKVector2)p;
+- (void) addPoint:(GLKVector2)p angle:(float)a;
 
 - (void) move:(float)speed;
 

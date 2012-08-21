@@ -108,13 +108,14 @@ float t = 0.0f;
     [rooms[1] initializeRoomNumber:1];
 
     movement = [[Movement alloc] init];
-    [rooms[0] constructMovement:movement];
+    [rooms[0] addMovements:movement];
+    [rooms[1] addMovements:movement];
     [movement setAngle:0.0f];
     [movement setPositionToFirstPoint];
 }
 
 - (void) update {
-    [movement move:0.02f];
+    [movement move:0.015f];
 }
 
 - (void) render {

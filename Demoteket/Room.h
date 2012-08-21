@@ -49,7 +49,7 @@
     
     int roomNumber;
 
-    GLKVector2 movementPoints[MOVEMENT_MAX_POINTS];
+    GLKVector3 movementPoints[MOVEMENT_MAX_POINTS];
     int movementPointCount;
     int movementStripNumber;
 
@@ -69,6 +69,6 @@
 
 - (void) render;
 
-- (void) constructMovement:(Movement*)movement;
+- (void) addMovements:(Movement*)movement;
 
 @end
