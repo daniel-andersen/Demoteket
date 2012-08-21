@@ -107,13 +107,14 @@ float t = 0.0f;
     [rooms[0] initializeRoomNumber:0];
     [rooms[1] initializeRoomNumber:1];
 
-    bezierPath = [[BezierPath alloc] init];
-    [bezierPath setAngle:0.0f];
-    [rooms[0] constructBezierPath:bezierPath];
+    movement = [[Movement alloc] init];
+    [rooms[0] constructMovement:movement];
+    [movement setAngle:0.0f];
+    [movement setPositionToFirstPoint];
 }
 
 - (void) update {
-    [bezierPath move:0.02f];
+    [movement move:0.02f];
 }
 
 - (void) render {
@@ -132,7 +133,7 @@ float t = 0.0f;
 }
 
 - (void) setupPosition {
-    GLKVector3 v = [bezierPath getPositionAndAngle];
+    GLKVector3 v = [movement getPositionAndAngle];
     sceneModelViewMatrix = GLKMatrix4Identity;
     sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, v.z, 0.0f, 1.0f, 0.0f);
     sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, v.x, -2.5f, v.y);

@@ -24,7 +24,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "Room.h"
-#import "BezierPath.h"
+#import "Movement.h"
 
 #define ROOM_COUNT 5
 
@@ -37,8 +37,7 @@
     
     GLKVector3 position;
 
-    BezierPath *bezierPath;
-    int bezierPoint;
+    Movement *movement;
     
     int currentRoom;
     

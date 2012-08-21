@@ -25,7 +25,7 @@
 
 #import "Quads.h"
 #import "Globals.h"
-#import "BezierPath.h"
+#import "Movement.h"
 
 #define ROOM_MAX_SIZE 16
 #define PHOTOS_MAX_COUNT 32
@@ -40,8 +40,6 @@
 
 #define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
 
-#define BEZIER_MAX_POINTS 10
-
 @interface Room : NSObject {
 @private
     char tiles[ROOM_MAX_SIZE][ROOM_MAX_SIZE];
@@ -51,9 +49,9 @@
     
     int roomNumber;
 
-    GLKVector2 bezierPoints[BEZIER_MAX_POINTS];
-    int bezierPointCount;
-    int bezierStripNumber;
+    GLKVector2 movementPoints[MOVEMENT_MAX_POINTS];
+    int movementPointCount;
+    int movementStripNumber;
 
     Quads *walls;
 
@@ -71,6 +69,6 @@
 
 - (void) render;
 
-- (void) constructBezierPath:(BezierPath*)bezierPath;
+- (void) constructMovement:(Movement*)movement;
 
 @end

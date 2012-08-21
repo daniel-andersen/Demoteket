@@ -25,36 +25,38 @@
 
 #import "Globals.h"
 
-#define BEZIER_MAX_POINTS 10
+#define MOVEMENT_MAX_POINTS 10
 
-#define BEZIER_DEST 0.5f
+#define MOVEMENT_POINT_DISTANCE 2.0f
 
-#define BEZIER_NORMAL_LENGTH 5.0f
+#define MOVEMENT_MAX_SPEED 0.1f
+#define MOVEMENT_VELOCITY_SPEED 0.005f
 
-@interface BezierPath : NSObject {
+#define ANGLE_MAX_SPEED 0.1f
+#define ANGLE_VELOCITY_SPEED 0.005f
+
+@interface Movement : NSObject {
 
 @private
-    GLKVector2 points[BEZIER_MAX_POINTS];
+    GLKVector2 points[MOVEMENT_MAX_POINTS];
     int pointsCount;
 
-    GLKVector2 currentPoints[3];
-    GLKVector2 currentPosition;
-
-	float currentAngle;
+    GLKVector2 position;
+    GLKVector2 movement;
+    GLKVector2 velocity;
+    
+	float angle;
 	float destAngle;
-
-    int nextIndex;
-    
-    GLKVector2 lastPosition;
-    
-    float t;
 }
 
-- (void) setAngle:(float)angle;
+- (void) setAngle:(float)a;
+- (void) setPosition:(GLKVector2)p;
+- (void) setPositionToFirstPoint;
 
 - (void) addPoint:(GLKVector2)p;
 
 - (void) move:(float)speed;
+
 - (GLKVector3) getPositionAndAngle;
 
 @end
