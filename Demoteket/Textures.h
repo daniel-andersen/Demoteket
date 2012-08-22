@@ -27,7 +27,7 @@
 
 #define WALL_COUNT 1
 #define PILLAR_COUNT 1
-#define PHOTOS_COUNT 2
+#define PHOTOS_COUNT 5
 
 @interface Textures : NSObject {
 

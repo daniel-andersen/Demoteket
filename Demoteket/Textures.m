@@ -31,15 +31,21 @@ static float DEFAULT_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 1.0f};
 static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404f};
 static float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 55.0f, 55.0f};
 static float PILLAR_BORDER_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.1f, 1.0f};
+static float PHOTO4_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 0.7382f};
 
 - (void) load {
     wall[0] = [self loadTexture:@"wall.png"];
     pillar[0] = [self loadTexture:@"pillar.png"];
     pillarBorder[0] = [self loadTexture:@"pillar.png"];
     photos[0] = [self loadTexture:@"photo1.png"];
-    photos[1] = [self loadTexture:@"photo1.png"];
+    photos[1] = [self loadTexture:@"photo2.png"];
+    photos[2] = [self loadTexture:@"photo3.png"];
+    photos[3] = [self loadTexture:@"photo4.png"];
+    photos[4] = [self loadTexture:@"photo5.png"];
     photosLight[0] = [self loadTexture:@"photosLight1.png"];
     photosLight[1] = [self loadTexture:@"photosLight2.png"];
+    photosLight[2] = [self loadTexture:@"photosLight2.png"];
+    photosLight[3] = [self loadTexture:@"photosLight1.png"];
     floorDistortion = [self loadTexture:@"floor_distortion.png" repeat:true];
 }
 
@@ -95,11 +101,17 @@ static float PILLAR_BORDER_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.1f, 1.0f};
     if (textureId == photosLight[1]) {
         return PHOTOS_LIGHT_TEXTURE_OFFSET[index];
     }
+    if (textureId == photosLight[2]) {
+        return PHOTOS_LIGHT_TEXTURE_OFFSET[index];
+    }
     if (textureId == floorDistortion) {
         return FLOOR_DISTORTION_TEXTURE_OFFSET[index];
     }
     if (textureId == pillarBorder[0]) {
         return PILLAR_BORDER_TEXTURE_OFFSET[index];
+    }
+    if (textureId == photos[3]) {
+        return PHOTO4_TEXTURE_OFFSET[index];
     }
     return DEFAULT_TEXTURE_OFFSET[index];
 }
@@ -116,12 +128,14 @@ static float PILLAR_BORDER_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.1f, 1.0f};
     if (error) {
         NSLog(@"Error loading texture %@: %@", filename, error);
     }
+    glBindTexture(GL_TEXTURE_2D, textureInfo.name);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     if (repeat) {
-		glBindTexture(GL_TEXTURE_2D, textureInfo.name);
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glBindTexture(GL_TEXTURE_2D, 0);
     }
+	glBindTexture(GL_TEXTURE_2D, 0);
     return textureInfo.name;
 }
 

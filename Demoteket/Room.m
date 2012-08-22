@@ -211,7 +211,7 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 }
 
 - (void) addWallGridX:(int)gridX gridY:(int)gridY x:(float)x z:(float)z angle:(float)angle {
-    int type = arc4random() % PHOTOS_COUNT;
+    int type = arc4random() % 2;
     tiles[gridY][gridX] = type;
     [self addWallType:type x:x z:z angle:angle];
 }
@@ -227,8 +227,13 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 }
 
 - (void) addPillarGridX:(int)gridX gridY:(int)gridY x:(float)x z:(float)z angle:(float)angle {
-    int type = arc4random() % PHOTOS_COUNT;
-    [self addPillarType:type x:x z:z angle:angle];
+    if (angle > 2.0f) {
+	    [self addPillarType:3 x:x z:z angle:angle];
+    } else if (angle > 0.74f && angle < 0.76f) {
+	    [self addPillarType:2 x:x z:z angle:angle];
+    } else {
+	    [self addPillarType:1 x:x z:z angle:angle];
+    }
 }
 
 - (void) addPillarType:(int)type x:(float)x z:(float)z angle:(float)angle {
@@ -262,16 +267,22 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
 - (void) addPhotosType:(int)type x:(float)x z:(float)z angle:(float)angle {
     if (type == 0) {
-	    [self addPhotoQuadsType:type x:x y:ROOM_HEIGHT / 2.0f z:z width:0.5f height:1.0f horizontalOffset:-0.35f verticalOffset:0.0f angle:angle];
-	    [self addPhotoQuadsType:type x:x y:ROOM_HEIGHT / 2.0f z:z width:0.5f height:1.0f horizontalOffset: 0.35f verticalOffset:0.0f angle:angle];
+	    [self addPhotoQuads:0 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.5f height:1.0f horizontalOffset:-0.35f verticalOffset:0.0f angle:angle];
+	    [self addPhotoQuads:1 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.5f height:1.0f horizontalOffset: 0.35f verticalOffset:0.0f angle:angle];
     }
     if (type == 1) {
-	    [self addPhotoQuadsType:type x:x y:ROOM_HEIGHT / 2.0f z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset:-0.5f angle:angle];
-	    [self addPhotoQuadsType:type x:x y:ROOM_HEIGHT / 2.0f z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset: 0.5f angle:angle];
+	    [self addPhotoQuads:1 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset:-0.5f angle:angle];
+	    [self addPhotoQuads:2 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset: 0.5f angle:angle];
+    }
+    if (type == 2) {
+	    [self addPhotoQuads:3 x:x y:ROOM_HEIGHT / 2.0f z:z width:1.5f height:1.5f * 0.7382f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
+    }
+    if (type == 3) {
+	    [self addPhotoQuads:4 x:x y:ROOM_HEIGHT / 2.0f z:z width:1.2f height:1.2f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
     }
 }
 
-- (void) addPhotoQuadsType:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
+- (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
     if (photos[index] == NULL) {
 	    photos[index] = [[Quads alloc] init];
 	    [photos[index] beginWithTexture:[textures getPhotosTexture:index]];
