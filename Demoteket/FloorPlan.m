@@ -107,11 +107,42 @@ float t = 0.0f;
     [rooms[0] initializeRoomNumber:0];
     [rooms[1] initializeRoomNumber:1];
 
+    [self createPath];
+}
+
+- (void) createPath {
     movement = [[Movement alloc] init];
-    [rooms[0] addMovements:movement];
-    [rooms[1] addMovements:movement];
+
+    [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:false];
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 7.0f) angle:letterToAngle('D')] lookAt:GLKVector2Make(0.5f, 7.0f) pause:true];
+
+    [movement addOffsetPoint:GLKVector2Make(-2.0f, -2.5f) lookAt:GLKVector2Make(4.0f, 13.0f)];
+    [movement addOffsetPoint:GLKVector2Make(-1.5f,  0.0f)];
+    [movement addOffsetPoint:GLKVector2Make(-1.0f,  1.5f)];
+    [movement addOffsetPoint:GLKVector2Make( 2.0f,  4.5f)];
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(2.5f, 7.0f) angle:-0.3f] lookAt:GLKVector2Make(2.5f, 7.0f) pause:true];
+
+    [movement addOffsetPoint:GLKVector2Make(2.0f, 0.0f) lookAt:GLKVector2Make(4.0f, 0.0f)];
+    [movement addOffsetPoint:GLKVector2Make(2.0f, 2.0f) pause:true];
+
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(1.0f, -1.0f) angle:letterToAngle('I')] pause:true];
+    
+    [movement addOffsetPoint:GLKVector2Make(2.5f, -3.0f) lookAt:GLKVector2Make(-6.0f, -9.0f)];
+    [movement addOffsetPoint:GLKVector2Make(-5.0f, -3.0f) pause:true];
+
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(1.0f, -3.5f) angle:letterToAngle('P')] lookAt:GLKVector2Make(1.0f, -3.0f) pause:true];
+
     [movement setAngle:0.0f];
     [movement setPositionToFirstPoint];
+}
+
+- (GLKVector2) lookAt:(GLKVector2)p angle:(float)angle {
+    angle -= M_PI_2;
+    return GLKVector2Make(p.x + (cos(angle) * LOOK_AT_DISTANCE), p.y + (sin(angle) * LOOK_AT_DISTANCE));
+}
+
+- (void) nextPhoto {
+    [movement resume];
 }
 
 - (void) update {

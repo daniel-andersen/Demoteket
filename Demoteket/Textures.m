@@ -25,13 +25,17 @@
 
 #import "Textures.h"
 
-@implementation Textures
+const float DEFAULT_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 1.0f};
+const float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404f};
+const float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 55.0f, 55.0f};
+const float PILLAR_BORDER_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.1f, 1.0f};
+const float PHOTO4_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 0.7382f};
+const float PHOTO5_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.9062f, 1.0f};
+const float DEMOTEKET_LOGO_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 0.7187f};
 
-static float DEFAULT_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 1.0f};
-static float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404f};
-static float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 55.0f, 55.0f};
-static float PILLAR_BORDER_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.1f, 1.0f};
-static float PHOTO4_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 0.7382f};
+const bool PHOTO_ALPHA_ENABLED[] = {false, false, false, false, false, true};
+
+@implementation Textures
 
 - (void) load {
     wall[0] = [self loadTexture:@"wall.png"];
@@ -42,10 +46,12 @@ static float PHOTO4_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 0.7382f};
     photos[2] = [self loadTexture:@"photo3.png"];
     photos[3] = [self loadTexture:@"photo4.png"];
     photos[4] = [self loadTexture:@"photo5.png"];
+    photos[5] = [self loadTexture:@"demoteket_logo.png"];
     photosLight[0] = [self loadTexture:@"photosLight1.png"];
     photosLight[1] = [self loadTexture:@"photosLight2.png"];
     photosLight[2] = [self loadTexture:@"photosLight2.png"];
     photosLight[3] = [self loadTexture:@"photosLight1.png"];
+    photosLight[4] = [self loadTexture:@"photosLight1.png"];
     floorDistortion = [self loadTexture:@"floor_distortion.png" repeat:true];
 }
 
@@ -112,6 +118,12 @@ static float PHOTO4_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 0.7382f};
     }
     if (textureId == photos[3]) {
         return PHOTO4_TEXTURE_OFFSET[index];
+    }
+    if (textureId == photos[4]) {
+        return PHOTO5_TEXTURE_OFFSET[index];
+    }
+    if (textureId == photos[PHOTO_INDEX_DEMOTEKET_LOGO]) {
+        return DEMOTEKET_LOGO_TEXTURE_OFFSET[index];
     }
     return DEFAULT_TEXTURE_OFFSET[index];
 }

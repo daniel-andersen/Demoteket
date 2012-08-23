@@ -51,32 +51,15 @@ float speed = 0.0f;
     [floorPlan createFloorPlan];
 }
 
+- (void) tap:(GLKVector2)p {
+    [floorPlan nextPhoto];
+}
+
 - (void) update {
     [floorPlan update];
 }
 
 - (void) render {
-    /*countDown--;
-    if (countDown < 0.0f) {
-        speed += 0.1f;
-        if (speed > 2.0f) {
-            speed = 2.0f;
-        }
-        if (countDown > -205.0f / speed) {
-		    anim += 0.02f * speed;
-            z += 0.035f * speed;
-            x = cos(anim) * 1.0f;
-        } else if (countDown > -450.0f / speed){
-            x -= sin(anim) * 0.05f * speed;
-            z -= cos(anim) * 0.05f * speed;
-        } else {
-        }
-    }
-    float a = sin(anim) * 0.5f;
-    sceneModelViewMatrix = GLKMatrix4Identity;
-    sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, a, 0.0f, 1.0f, 0.0f);
-    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, -5.0f + x, -2.5f, -17.0f + z);*/
-
     [floorPlan render];
 }
 

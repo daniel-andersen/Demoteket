@@ -35,6 +35,8 @@
 
 - (void) createExhibition;
 
+- (void) tap:(GLKVector2)p;
+
 - (void) update;
 - (void) render;
 

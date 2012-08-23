@@ -26,7 +26,9 @@
 		65083EAE15D4FACE003108B5 /* Quads.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083EAD15D4FACE003108B5 /* Quads.m */; };
 		652CF33D15D8FE8100F4F07F /* photosLight1.png in Resources */ = {isa = PBXBuildFile; fileRef = 652CF33C15D8FE8100F4F07F /* photosLight1.png */; };
 		652CF34015D98F5A00F4F07F /* photo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 652CF33F15D98F5A00F4F07F /* photo1.png */; };
+		6544839E15E618CF008132FC /* demoteket_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6544839D15E618CF008132FC /* demoteket_logo.png */; };
 		654942C715E265380029C1E2 /* Movement.m in Sources */ = {isa = PBXBuildFile; fileRef = 654942C615E265380029C1E2 /* Movement.m */; };
+		656B8C8A15E565100048FA39 /* Globals.c in Sources */ = {isa = PBXBuildFile; fileRef = 656B8C8915E565100048FA39 /* Globals.c */; };
 		6570FC7A15DD70F8003A2003 /* floor_distortion.png in Resources */ = {isa = PBXBuildFile; fileRef = 6570FC7915DD70F8003A2003 /* floor_distortion.png */; };
 		6573202E15D502C9002562E9 /* Textures.m in Sources */ = {isa = PBXBuildFile; fileRef = 6573202D15D502C9002562E9 /* Textures.m */; };
 		6573203615D506AC002562E9 /* wall.png in Resources */ = {isa = PBXBuildFile; fileRef = 6573203515D506AC002562E9 /* wall.png */; };
@@ -67,8 +69,10 @@
 		65083EAF15D4FD52003108B5 /* Globals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
 		652CF33C15D8FE8100F4F07F /* photosLight1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photosLight1.png; sourceTree = "<group>"; };
 		652CF33F15D98F5A00F4F07F /* photo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo1.png; sourceTree = "<group>"; };
+		6544839D15E618CF008132FC /* demoteket_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demoteket_logo.png; sourceTree = "<group>"; };
 		654942C515E265380029C1E2 /* Movement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movement.h; sourceTree = "<group>"; };
 		654942C615E265380029C1E2 /* Movement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movement.m; sourceTree = "<group>"; };
+		656B8C8915E565100048FA39 /* Globals.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Globals.c; sourceTree = "<group>"; };
 		6570FC7915DD70F8003A2003 /* floor_distortion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = floor_distortion.png; sourceTree = "<group>"; };
 		6573202C15D502C9002562E9 /* Textures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Textures.h; sourceTree = "<group>"; };
 		6573202D15D502C9002562E9 /* Textures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Textures.m; sourceTree = "<group>"; };
@@ -147,6 +151,7 @@
 				65083EAC15D4FACD003108B5 /* Quads.h */,
 				65083EAD15D4FACE003108B5 /* Quads.m */,
 				65083EAF15D4FD52003108B5 /* Globals.h */,
+				656B8C8915E565100048FA39 /* Globals.c */,
 				6573202C15D502C9002562E9 /* Textures.h */,
 				6573202D15D502C9002562E9 /* Textures.m */,
 				659F9C2C15D6DB8700EF7825 /* Room.h */,
@@ -171,6 +176,7 @@
 		6573203415D506AC002562E9 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6544839D15E618CF008132FC /* demoteket_logo.png */,
 				658AE92015E4E674009B12D9 /* photo5.png */,
 				658AE91E15E4DD5C009B12D9 /* photo4.png */,
 				658AE91915E4CAA5009B12D9 /* photo2.png */,
@@ -250,6 +256,7 @@
 				658AE91C15E4CAA5009B12D9 /* photo3.png in Resources */,
 				658AE91F15E4DD5C009B12D9 /* photo4.png in Resources */,
 				658AE92115E4E674009B12D9 /* photo5.png in Resources */,
+				6544839E15E618CF008132FC /* demoteket_logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +276,7 @@
 				6573202E15D502C9002562E9 /* Textures.m in Sources */,
 				659F9C2E15D6DB8700EF7825 /* Room.m in Sources */,
 				654942C715E265380029C1E2 /* Movement.m in Sources */,
+				656B8C8A15E565100048FA39 /* Globals.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,41 +27,65 @@
 
 #define MOVEMENT_MAX_POINTS 1024
 
-#define MOVEMENT_POINT_DISTANCE 2.0f
+#define MOVEMENT_POINT_DISTANCE 1.0f
 
-#define MOVEMENT_MAX_SPEED 0.1f
-#define MOVEMENT_VELOCITY_SPEED 0.005f
-#define MOVEMENT_VELOCITY_SPEED_MIN 0.001f
+#define MOVEMENT_MAX_SPEED 0.08f
+#define MOVEMENT_SLOWING_DISTANCE 2.0f
+#define MOVEMENT_STEERING_SPEED 0.004f
 
-#define ANGLE_MAX_SPEED 0.025f
-#define ANGLE_VELOCITY 0.001f
+#define ANGLE_TRANSITION_SPEED 0.01f
+
+#define MOVEMENT_TYPE_ANGLE_IN_MOVING_DIR 0
+#define MOVEMENT_TYPE_ANGLE_LOOK_AT       1
+#define MOVEMENT_TYPE_ANGLE_LOOK_IN       2
+
+typedef struct {
+    int type;
+    GLKVector2 position;
+    GLKVector2 lookAt;
+    float lookIn;
+    bool pause;
+} MovementPoint;
 
 @interface Movement : NSObject {
 
 @private
-    GLKVector2 points[MOVEMENT_MAX_POINTS];
-    float angles[MOVEMENT_MAX_POINTS];
+    MovementPoint points[MOVEMENT_MAX_POINTS];
     int pointsCount;
 
     int pointIndex;
 
     GLKVector2 position;
-    GLKVector2 movement;
     GLKVector2 velocity;
     
 	float angle;
-    float angleVelocity;
-	float destAngle;
+    float angleTransition;
+
+    MovementPoint oldDestAnglePoint;
+    
+    bool paused;
 }
 
 - (void) setAngle:(float)a;
 - (void) setPosition:(GLKVector2)p;
 - (void) setPositionToFirstPoint;
 
-- (void) addPoint:(GLKVector2)p;
-- (void) addPoint:(GLKVector2)p angle:(float)a;
+- (void) addPoint:(GLKVector2)p pause:(bool)pause;
+- (void) addPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause;
+- (void) addPoint:(GLKVector2)p lookIn:(float)a pause:(bool)pause;
+- (void) addPointInMovingDirection:(GLKVector2)p pause:(bool)pause;
+
+- (void) addOffsetPoint:(GLKVector2)p pause:(bool)pause;
+- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause;
+- (void) addOffsetPointInMovingDirection:(GLKVector2)p pause:(bool)pause;
+
+- (void) addOffsetPoint:(GLKVector2)p;
+- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt;
+- (void) addOffsetPoint:(GLKVector2)p lookIn:(float)a;
+- (void) addOffsetPointInMovingDirection:(GLKVector2)p;
 
 - (void) move:(float)speed;
+- (void) resume;
 
 - (GLKVector3) getPositionAndAngle;
 

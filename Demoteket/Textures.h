@@ -27,7 +27,11 @@
 
 #define WALL_COUNT 1
 #define PILLAR_COUNT 1
-#define PHOTOS_COUNT 5
+#define PHOTOS_COUNT 6
+
+#define PHOTO_INDEX_DEMOTEKET_LOGO 5
+
+extern const bool PHOTO_ALPHA_ENABLED[];
 
 @interface Textures : NSObject {
 

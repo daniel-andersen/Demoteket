@@ -71,6 +71,9 @@ enum
 
     exhibition = [[Exhibition alloc] init];
 	[exhibition createExhibition];
+
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
+    [self.view addGestureRecognizer:tapRecognizer];
 }
 
 - (void)viewDidUnload
@@ -137,6 +140,11 @@ enum
     refractionConstant = 0.005 * (480.0f / (float) screenHeight);
 
     NSLog(@"Screen size: %i, %i", (int) screenWidth, (int) screenHeight);
+}
+
+- (void) handleTapFrom:(UITapGestureRecognizer*)recognizer {
+    CGPoint touchLocation = [recognizer locationInView:recognizer.view];
+    [exhibition tap:GLKVector2Make(touchLocation.x / screenHeight, touchLocation.y / screenWidth)];
 }
 
 #pragma mark - GLKView and GLKViewController delegate methods

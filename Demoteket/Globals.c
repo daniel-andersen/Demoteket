@@ -23,46 +23,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "Quads.h"
-#import "Globals.h"
-#import "Movement.h"
+#import <math.h>
 
-#define ROOM_MAX_SIZE 16
-#define PHOTOS_MAX_COUNT 32
-
-#define ROOM_HEIGHT 5.0f
-#define BLOCK_SIZE 1.5f
-
-#define WALL_DEPTH (BLOCK_SIZE * 0.05f)
-
-#define PILLAR_WIDTH (BLOCK_SIZE * 1.0f)
-#define PILLAR_DEPTH (BLOCK_SIZE * 0.05f)
-
-#define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
-
-@interface Room : NSObject {
-@private
-    char tiles[ROOM_MAX_SIZE][ROOM_MAX_SIZE];
-    int stripNumber;
-
-    bool isVisible;
-    
-    int roomNumber;
-
-    Quads *walls;
-
-    Quads *photos[PHOTOS_MAX_COUNT];
-    Quads *photosLight[PHOTOS_MAX_COUNT];
-    Quads *photosBorder;
-    int photosCount;
-    
-    Quads *pillars;
-    Quads *pillarsBorder;
+float letterToAngle(char ch) {
+    return 2.0f * M_PI * (float) (((int) ch - (int) 'A') / (float) ((int) 'Z' - (int) 'A'));
 }
-
-- (void) initializeRoomNumber:(int)number;
-- (void) trashRoom;
-
-- (void) render;
-
-@end

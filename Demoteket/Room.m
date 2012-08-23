@@ -53,40 +53,38 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 - (void) createRoomNumber:(int)number {
     roomNumber = number;
     stripNumber = 0;
-    movementStripNumber = 0;
-    movementPointCount = 0;
     for (int i = 0; i < ROOM_MAX_SIZE; i++) {
         for (int j = 0; j < ROOM_MAX_SIZE; j++) {
             tiles[i][j] = 'X';
         }
     }
     if (number == 0) {
-        [self addStrip:@"+---+"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"d   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"+   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@" 3S  "];
-        [self addStrip:@"|  E|"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"| D |"]; [self addMovementStrip:@"   2 "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"   1Z"];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"+---+"]; [self addMovementStrip:@"  0A "];
+        [self addStrip:@"+---+"];
+        [self addStrip:@"d   |"];
+        [self addStrip:@"+   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|  E|"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"| D |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"+---+"];
 	}
     if (number == 1) {
-        [self addStrip:@"+---+"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"  1M "];
-        [self addStrip:@"|   +"]; [self addMovementStrip:@"   O0"];
-        [self addStrip:@"| I  "]; [self addMovementStrip:@" 2M  "];
-        [self addStrip:@"|   +"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@" 3L  "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"| D |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"|   |"]; [self addMovementStrip:@"     "];
-        [self addStrip:@"+---+"]; [self addMovementStrip:@"     "];
+        [self addStrip:@"+---+"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   +"];
+        [self addStrip:@"| I  "];
+        [self addStrip:@"|   +"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"| D |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"|   |"];
+        [self addStrip:@"+---+"];
 	}
 }
 
@@ -95,37 +93,6 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
         tiles[stripNumber][i] = [strip characterAtIndex:i];
     }
     stripNumber++;
-}
-
-- (void) addMovementStrip:(NSString*)strip {
-    for (int i = 0; i < [strip length]; i++) {
-        char ch = [strip characterAtIndex:i];
-        if (ch >= '0' && ch <= '9') {
-            int idx = (int) ch - (int) '0';
-            movementPoints[idx].x = -((float) i * BLOCK_SIZE + (BLOCK_SIZE / 2.0f));
-            movementPoints[idx].y = -((float) movementStripNumber * BLOCK_SIZE + (BLOCK_SIZE / 2.0f));
-            movementPoints[idx].z = [self getMovementPointAngle:strip index:i];
-            if (idx + 1 > movementPointCount) {
-                movementPointCount = idx + 1;
-            }
-        }
-    }
-    movementStripNumber++;
-}
-
-- (float) getMovementPointAngle:(NSString*)strip index:(int)i {
-    char ch1 = i > 0 ? [strip characterAtIndex:i - 1] : ' ';
-    char ch2 = i < [strip length] - 1 ? [strip characterAtIndex:i + 1] : ' ';
-    char ch = ch1 >= 'A' && ch1 <= 'Z' ? ch1 : (ch2 >= 'A' && ch2 <= 'Z' ? ch2 : ' ');
-    if (ch == ' ') {
-        return -1.0f;
-    } else {
-        return [self letterToAngle:ch];
-    }
-}
-
-- (float) letterToAngle:(char)ch {
-    return 2.0f * M_PI * (float) (((int) ch - (int) 'A') / (float) ((int) 'Z' - (int) 'A'));
 }
 
 - (void) createGeometrics {
@@ -194,7 +161,7 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
                 // TODO! Door!
             }
             if (tiles[i][j] >= 'A' && tiles[i][j] <= 'Z') {
-                [self addPillarGridX:j gridY:i x:centerX z:centerZ angle:[self letterToAngle:tiles[i][j]]];
+                [self addPillarGridX:j gridY:i x:centerX z:centerZ angle:letterToAngle(tiles[i][j])];
             }
         }
     }
@@ -212,6 +179,9 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
 - (void) addWallGridX:(int)gridX gridY:(int)gridY x:(float)x z:(float)z angle:(float)angle {
     int type = arc4random() % 2;
+    if (gridY == 0 && gridX == 1 && roomNumber == 0) {
+        type = 3;
+    }
     tiles[gridY][gridX] = type;
     [self addWallType:type x:x z:z angle:angle];
 }
@@ -229,7 +199,9 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 - (void) addPillarGridX:(int)gridX gridY:(int)gridY x:(float)x z:(float)z angle:(float)angle {
     if (angle > 2.0f) {
 	    [self addPillarType:3 x:x z:z angle:angle];
-    } else if (angle > 0.74f && angle < 0.76f) {
+    } else if (angle > 0.74f && angle < 0.76f && roomNumber == 0) {
+	    [self addPillarType:4 x:x z:z angle:angle];
+    } else if (angle > 0.74f && angle < 0.76f && roomNumber == 1) {
 	    [self addPillarType:2 x:x z:z angle:angle];
     } else {
 	    [self addPillarType:1 x:x z:z angle:angle];
@@ -278,7 +250,10 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 	    [self addPhotoQuads:3 x:x y:ROOM_HEIGHT / 2.0f z:z width:1.5f height:1.5f * 0.7382f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
     }
     if (type == 3) {
-	    [self addPhotoQuads:4 x:x y:ROOM_HEIGHT / 2.0f z:z width:1.2f height:1.2f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
+	    [self addPhotoQuads:4 x:x y:ROOM_HEIGHT / 2.0f z:z width:1.2f * 0.9062f height:1.2f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
+    }
+    if (type == 4) {
+	    [self addPhotoQuads:PHOTO_INDEX_DEMOTEKET_LOGO x:x y:ROOM_HEIGHT / 2.0f z:z width:1.2f height:1.2f * 0.7187f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
     }
 }
 
@@ -286,6 +261,9 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     if (photos[index] == NULL) {
 	    photos[index] = [[Quads alloc] init];
 	    [photos[index] beginWithTexture:[textures getPhotosTexture:index]];
+        if (PHOTO_ALPHA_ENABLED[index]) {
+	        [photos[index] setBlendFuncSrc:GL_SRC_ALPHA dst:GL_ONE_MINUS_SRC_ALPHA];
+        }
     }
     width /= 2.0f;
     height /= 2.0f;
@@ -350,14 +328,6 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
 - (bool) isCharWallBrick:(char)ch {
     return ch == '|' || ch == '-' || ch == '+';
-}
-
-- (void) addMovements:(Movement*)movement {
-    GLKVector2 offset = GLKVector2Make(ROOM_OFFSET_X[roomNumber], ROOM_OFFSET_Z[roomNumber]);
-    for (int i = 0; i < movementPointCount; i++) {
-        GLKVector2 p = GLKVector2Subtract(GLKVector2Make(movementPoints[i].x, movementPoints[i].y), offset);
-        [movement addPoint:p angle:movementPoints[i].z];
-    }
 }
 
 - (void) render {

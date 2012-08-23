@@ -63,4 +63,6 @@ GLfloat refractionConstant;
 
 GLuint currentShaderProgram;
 
+extern float letterToAngle(char ch);
+
 #endif

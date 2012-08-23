@@ -28,6 +28,8 @@
 
 #define ROOM_COUNT 5
 
+#define LOOK_AT_DISTANCE 2.0f
+
 @interface FloorPlan : NSObject {
 
 @private
@@ -53,6 +55,8 @@
 - (void) dealloc;
 
 - (void) createFloorPlan;
+
+- (void) nextPhoto;
 
 - (void) update;
 - (void) render;
