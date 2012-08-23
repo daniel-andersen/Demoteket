@@ -35,15 +35,17 @@
 
 #define ANGLE_TRANSITION_SPEED 0.01f
 
-#define MOVEMENT_TYPE_ANGLE_IN_MOVING_DIR 0
-#define MOVEMENT_TYPE_ANGLE_LOOK_AT       1
-#define MOVEMENT_TYPE_ANGLE_LOOK_IN       2
+#define MOVEMENT_TYPE_ANGLE_IN_MOVING_DIR   0
+#define MOVEMENT_TYPE_ANGLE_LOOK_AT         1
+#define MOVEMENT_TYPE_ANGLE_LOOK_IN         2
+#define MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE 3
 
 typedef struct {
     int type;
     GLKVector2 position;
     GLKVector2 lookAt;
     float lookIn;
+    float continueDist;
     bool pause;
 } MovementPoint;
 
@@ -83,6 +85,8 @@ typedef struct {
 - (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt;
 - (void) addOffsetPoint:(GLKVector2)p lookIn:(float)a;
 - (void) addOffsetPointInMovingDirection:(GLKVector2)p;
+
+- (void) lookAt:(GLKVector2)p continueDistance:(float)dist;
 
 - (void) move:(float)speed;
 - (void) resume;

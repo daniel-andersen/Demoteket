@@ -120,11 +120,11 @@ float t = 0.0f;
     [movement addOffsetPoint:GLKVector2Make(-1.5f,  0.0f)];
     [movement addOffsetPoint:GLKVector2Make(-1.0f,  1.5f)];
     [movement addOffsetPoint:GLKVector2Make( 2.0f,  4.5f)];
-    [movement addOffsetPoint:[self lookAt:GLKVector2Make(2.5f, 7.0f) angle:-0.3f] lookAt:GLKVector2Make(2.5f, 7.0f) pause:true];
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(2.6f, 7.0f) angle:-0.3f] lookAt:GLKVector2Make(2.4f, 7.0f) pause:true];
 
-    [movement addOffsetPoint:GLKVector2Make(2.0f, 0.0f) lookAt:GLKVector2Make(4.0f, 0.0f)];
-    [movement addOffsetPoint:GLKVector2Make(2.0f, 2.0f) pause:true];
-
+    [movement lookAt:GLKVector2Make(4.0f, 0.0f) continueDistance:0.5f];
+    [movement addOffsetPoint:GLKVector2Make(2.0f, 0.0f)];
+    [movement addOffsetPoint:GLKVector2Make(0.0f, 2.0f)];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(1.0f, -1.0f) angle:letterToAngle('I')] pause:true];
     
     [movement addOffsetPoint:GLKVector2Make(2.5f, -3.0f) lookAt:GLKVector2Make(-6.0f, -9.0f)];

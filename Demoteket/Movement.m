@@ -53,6 +53,7 @@
 
 - (void) setPositionToFirstPoint {
     position = points[0].position;
+    [self nextPoint];
 }
 
 - (void) addPoint:(GLKVector2)p pause:(bool)pause {
@@ -121,14 +122,22 @@
     [self addPointInMovingDirection:[self getOffsetPoint:p] pause:false];
 }
 
+- (void) lookAt:(GLKVector2)p continueDistance:(float)dist {
+    points[pointsCount].type = MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE;
+    points[pointsCount].position = points[pointsCount - 1].position;
+    points[pointsCount].lookAt = [self getOffsetPoint:p];
+    points[pointsCount].continueDist = dist;
+    pointsCount++;
+}
+
 - (GLKVector2) getOffsetPoint:(GLKVector2)p {
     return GLKVector2Add(p, pointsCount > 0 ? points[pointsCount - 1].position : GLKVector2Make(0.0f, 0.0f));
 }
 
 - (void) move:(float)t {
     [self updateMovement];
-    [self updatePath];
     [self updateAngle];
+    [self updatePath];
 }
 
 - (void) resume {
@@ -152,6 +161,7 @@
     }
     velocity = GLKVector2Add(velocity, steering);
     position = GLKVector2Add(position, velocity);
+    //NSLog(@"%f, %f, %f, %f", position.x, position.y, points[pointIndex].position.x, points[pointIndex].position.y);
 }
 
 - (void) updateAngle {
@@ -169,7 +179,7 @@
 
 - (float) calculateAngle:(MovementPoint)point {
     if (point.type != MOVEMENT_TYPE_ANGLE_LOOK_IN) {
-	    GLKVector2 dir = point.type == MOVEMENT_TYPE_ANGLE_LOOK_AT ? GLKVector2Subtract(point.lookAt, position) : velocity;
+	    GLKVector2 dir = point.type == MOVEMENT_TYPE_ANGLE_LOOK_AT || point.type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE ? GLKVector2Subtract(point.lookAt, position) : velocity;
 	    if (GLKVector2Length(dir) <= 0.0f) {
 	        return 0.0f;
 	    }
@@ -188,6 +198,9 @@
         paused = true;
         return;
     }
+    if (points[pointIndex].type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE && angleTransition < points[pointIndex].continueDist) {
+        return;
+    }
     [self nextPoint];
 }
 
@@ -195,11 +208,12 @@
     MovementPoint oldPoint = points[pointIndex];
     pointIndex = MIN(pointIndex + 1, pointsCount - 1);
     MovementPoint newPoint = points[pointIndex];
-    if (oldPoint.type != newPoint.type) {
-        //angleTransition = 0.0f;
-    } else if (newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT && !GLKVector2AllEqualToVector2(newPoint.lookAt, oldPoint.lookAt)) {
-        oldDestAnglePoint = oldPoint;
-        angleTransition = 0.0f;
+    if ((newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT || newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE) &&
+        (oldPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT || oldPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE)) {
+        if (!GLKVector2AllEqualToVector2(newPoint.lookAt, oldPoint.lookAt)) {
+	        oldDestAnglePoint = oldPoint;
+	        angleTransition = 0.0f;
+        }
     }
 }
 

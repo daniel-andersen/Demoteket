@@ -47,11 +47,12 @@ const bool PHOTO_ALPHA_ENABLED[] = {false, false, false, false, false, true};
     photos[3] = [self loadTexture:@"photo4.png"];
     photos[4] = [self loadTexture:@"photo5.png"];
     photos[5] = [self loadTexture:@"demoteket_logo.png"];
-    photosLight[0] = [self loadTexture:@"photosLight1.png"];
-    photosLight[1] = [self loadTexture:@"photosLight2.png"];
+    photosLight[0] = [self loadTexture:@"photosLight2.png"];
+    photosLight[1] = [self loadTexture:@"photosLight1.png"];
     photosLight[2] = [self loadTexture:@"photosLight2.png"];
     photosLight[3] = [self loadTexture:@"photosLight1.png"];
     photosLight[4] = [self loadTexture:@"photosLight1.png"];
+    photosLight[5] = [self loadTexture:@"photosLight1.png"];
     floorDistortion = [self loadTexture:@"floor_distortion.png" repeat:true];
 }
 
@@ -104,7 +105,7 @@ const bool PHOTO_ALPHA_ENABLED[] = {false, false, false, false, false, true};
 }
 
 - (float) getTextureOffset:(GLuint)textureId index:(int)index {
-    if (textureId == photosLight[1]) {
+    if (textureId == photosLight[0]) {
         return PHOTOS_LIGHT_TEXTURE_OFFSET[index];
     }
     if (textureId == photosLight[2]) {
