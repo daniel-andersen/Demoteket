@@ -214,4 +214,8 @@ float t = 0.0f;
     currentShaderProgram = 0;
 }
 
+- (bool) isBackNextButtonsVisible {
+    return [movement isPaused];
+}
+
 @end

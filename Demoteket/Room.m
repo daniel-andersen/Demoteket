@@ -149,17 +149,7 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
                 }
             }
             if (tiles[i][j] == '+') {
-                int type = [self getCornerTypeX:j y:i];
-                if ((type & 1) == 1) {
-                    [walls[2] addQuadVerticalX1:x1 y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:centerZ];
-                } else if ((type & 4) == 4) {
-                    [walls[3] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:x2 y2:ROOM_HEIGHT z2:centerZ];
-                }
-                if ((type & 2) == 2) {
-                    [walls[2] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:z1];
-                } else if ((type & 8) == 8) {
-                    [walls[3] addQuadVerticalX1:centerX y1:0.0f z1:z2 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
-                }
+                [self addCornerGridX:j gridY:i x1:x1 z1:z1 centerX:centerX centerZ:centerZ x2:x2 z2:z2];
             }
             if (tiles[i][j] == 'd') {
                 [self addDoorGridX:j gridY:i x:centerX z:centerZ];
@@ -178,6 +168,41 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     }
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
 		[photos[i] end];
+    }
+}
+
+- (void) addCornerGridX:(int)gridX gridY:(int)gridY x1:(float)x1 z1:(float)z1 centerX:(float)centerX centerZ:(float)centerZ x2:(float)x2 z2:(float)z2 {
+    if ([self isWallX:gridX - 1 y:gridY]) {
+        int wallType = [self isWallX:gridX - 1 y:gridY] == 0 ? 4 : 2;
+        if ([self isOutsideRoomX:gridX y:gridY - 1]) {
+	        [walls[wallType] addQuadVerticalX1:x1 y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+        } else {
+	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:x1 y2:ROOM_HEIGHT z2:centerZ];
+        }
+    }
+    if ([self isWallX:gridX + 1 y:gridY]) {
+        int wallType = [self isWallX:gridX + 1 y:gridY] == 0 ? 5 : 3;
+        if ([self isOutsideRoomX:gridX y:gridY - 1]) {
+	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:x2 y2:ROOM_HEIGHT z2:centerZ];
+        } else {
+	        [walls[wallType] addQuadVerticalX1:x2 y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+        }
+    }
+    if ([self isWallX:gridX y:gridY - 1]) {
+        int wallType = [self isWallX:gridX y:gridY - 1] == 0 ? 4 : 2;
+        if ([self isOutsideRoomX:gridX - 1 y:gridY]) {
+	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:z1];
+        } else {
+	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:z1 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+        }
+    }
+    if ([self isWallX:gridX y:gridY + 1]) {
+        int wallType = [self isWallX:gridX y:gridY - 1] == 0 ? 5 : 3;
+        if ([self isOutsideRoomX:gridX - 1 y:gridY]) {
+	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:z2 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+        } else {
+	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:z2];
+        }
     }
 }
 
@@ -311,15 +336,6 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float y2 = y + height;
     
 	[photos[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
-}
-
-- (int) getCornerTypeX:(int)x y:(int)y {
-    int type = 0;
-    type |= [self isWallX:x - 1 y:y] ? 1 : 0;
-    type |= [self isWallX:x y:y - 1] ? 2 : 0;
-    type |= [self isWallX:x + 1 y:y] ? 4 : 0;
-    type |= [self isWallX:x y:y + 1] ? 8 : 0;
-    return type;
 }
 
 - (int) getDoorDirectionX:(int)x y:(int)y {

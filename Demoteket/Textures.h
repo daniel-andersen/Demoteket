@@ -53,6 +53,9 @@ extern Texture photosTexture[PHOTOS_TEXTURE_COUNT];
 extern Texture floorTexture;
 extern Texture floorDistortionTexture;
 
+extern Texture nextButtonTexture;
+extern Texture prevButtonTexture;
+
 extern void loadTextures();
 
 @interface Textures : NSObject

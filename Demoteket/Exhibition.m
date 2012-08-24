@@ -23,8 +23,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <math.h>
-
 #import "Exhibition.h"
 #import "Globals.h"
 
@@ -39,12 +37,37 @@ float speed = 0.0f;
 
 - (id) init {
     if (self = [super init]) {
-        textures = [[Textures alloc] init];
-        [textures load];
-
-        floorPlan = [[FloorPlan alloc] init];
+        [self initialize];
     }
     return self;
+}
+
+- (void) initialize {
+    textures = [[Textures alloc] init];
+    [textures load];
+    
+    floorPlan = [[FloorPlan alloc] init];
+    
+    float border = 0.05f;
+    float size = 0.1f;
+    
+    nextButton = [[Quads alloc] init];
+    [nextButton beginWithTexture:nextButtonTexture];
+    [nextButton setOrthoProjection];
+    [nextButton addQuadX1:1.0f - border y1:border z1:0.0f
+                       x2:1.0f - border y2:border + size z2:0.0f
+                       x3:1.0f - border - size y3:border + size z3:0.0f
+                       x4:1.0f - border - size y4:border z4:0.0f];
+    [nextButton end];
+
+    prevButton = [[Quads alloc] init];
+    [prevButton beginWithTexture:prevButtonTexture];
+    [prevButton setOrthoProjection];
+    [prevButton addQuadX1:border + size y1:border z1:0.0f
+                       x2:border + size y2:border + size z2:0.0f
+                       x3:border y3:border + size z3:0.0f
+                       x4:border y4:border z4:0.0f];
+    [prevButton end];
 }
 
 - (void) createExhibition {
@@ -61,6 +84,10 @@ float speed = 0.0f;
 
 - (void) render {
     [floorPlan render];
+    if ([floorPlan isBackNextButtonsVisible]) {
+	    [nextButton render];
+	    [prevButton render];
+    }
 }
 
 @end

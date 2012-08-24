@@ -27,7 +27,8 @@
 
 #define MOVEMENT_MAX_POINTS 1024
 
-#define MOVEMENT_POINT_DISTANCE 1.0f
+#define MOVEMENT_POINT_DISTANCE_NEXT 1.0f
+#define MOVEMENT_POINT_DISTANCE_PAUSE 0.75f
 
 #define MOVEMENT_MAX_SPEED 0.1f
 #define MOVEMENT_SLOWING_DISTANCE 2.0f
@@ -90,6 +91,8 @@ typedef struct {
 
 - (void) move:(float)speed;
 - (void) resume;
+
+- (bool) isPaused;
 
 - (GLKVector3) getPositionAndAngle;
 

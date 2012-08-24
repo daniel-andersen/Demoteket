@@ -141,6 +141,9 @@
 }
 
 - (void) resume {
+    if (!paused) {
+        return;
+    }
     paused = false;
     [self nextPoint];
 }
@@ -190,11 +193,13 @@
 }
 
 - (void) updatePath {
-    if (paused || GLKVector2Distance(position, points[pointIndex].position) > MOVEMENT_POINT_DISTANCE) {
+    if (paused || GLKVector2Distance(position, points[pointIndex].position) > MOVEMENT_POINT_DISTANCE_NEXT) {
         return;
     }
     if (points[pointIndex].pause) {
-        paused = true;
+        if (GLKVector2Distance(position, points[pointIndex].position) < MOVEMENT_POINT_DISTANCE_PAUSE) {
+	        paused = true;
+        }
         return;
     }
     if (points[pointIndex].type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE && angleTransition < points[pointIndex].continueDist) {
@@ -218,6 +223,10 @@
 
 - (GLKVector3) getPositionAndAngle {
     return GLKVector3Make(position.x, position.y, angle);
+}
+
+- (bool) isPaused {
+    return paused;
 }
 
 @end

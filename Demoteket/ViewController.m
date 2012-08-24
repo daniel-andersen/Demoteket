@@ -155,7 +155,7 @@ enum
 
     sceneProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, ROOM_MAX_SIZE * BLOCK_SIZE);
 
-    orthoProjectionMatrix = GLKMatrix4MakeOrtho(0, screenWidth, 0, screenHeight, -1.0f, 1.0f);
+    orthoProjectionMatrix = GLKMatrix4MakeOrtho(0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 1.0f);
     orthoModelViewMatrix = GLKMatrix4Identity;
 
     [exhibition update];

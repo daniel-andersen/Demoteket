@@ -36,6 +36,9 @@ Texture photosTexture[PHOTOS_TEXTURE_COUNT];
 Texture floorTexture;
 Texture floorDistortionTexture;
 
+Texture nextButtonTexture;
+Texture prevButtonTexture;
+
 Texture textureMake(GLuint id) {
     Texture texture;
     texture.texCoordX1 = 0.0f;
@@ -74,10 +77,13 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 @implementation Textures
 
 - (void) load {
+    nextButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&nextButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    prevButtonTexture = [self loadTexture:@"prev_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     wallTexture[0] = [self loadTexture:@"wall1.png"];
     wallTexture[1] = [self loadTexture:@"wall2.png"];
     wallTexture[2] = wallTexture[0]; textureSetTexCoords(&wallTexture[2], 0.0f, 0.0f, 0.25f, 1.0f);
-    wallTexture[3] = wallTexture[0]; textureSetTexCoords(&wallTexture[3], 0.75f, 0.0f, 1.0f, 1.0f);
+    wallTexture[3] = wallTexture[0]; textureSetTexCoords(&wallTexture[3], 1.0f, 0.0f, 0.75f, 1.0f);
     wallTexture[4] = wallTexture[1]; textureSetTexCoords(&wallTexture[4], 0.0f, 0.0f, 0.25f, 1.0f);
     wallTexture[5] = wallTexture[1]; textureSetTexCoords(&wallTexture[5], 0.75f, 0.0f, 1.0f, 1.0f);
 

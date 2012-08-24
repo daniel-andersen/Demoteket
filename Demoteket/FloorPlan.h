@@ -58,6 +58,8 @@
 
 - (void) nextPhoto;
 
+- (bool) isBackNextButtonsVisible;
+
 - (void) update;
 - (void) render;
 
