@@ -28,7 +28,9 @@
 #import "Movement.h"
 
 #define ROOM_MAX_SIZE 16
+
 #define PHOTOS_MAX_COUNT 32
+#define WALL_COUNT 6
 
 #define ROOM_HEIGHT 5.0f
 #define BLOCK_SIZE 1.5f
@@ -49,12 +51,13 @@
     
     int roomNumber;
 
-    Quads *walls;
+    Quads *walls[WALL_COUNT];
+    Quads *wallsBorder;
 
     Quads *photos[PHOTOS_MAX_COUNT];
-    Quads *photosLight[PHOTOS_MAX_COUNT];
-    Quads *photosBorder;
     int photosCount;
+
+    Quads *photosBorder;
     
     Quads *pillars;
     Quads *pillarsBorder;

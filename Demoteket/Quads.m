@@ -30,7 +30,6 @@
 
 - (id) init {
     if (self = [super init]) {
-        blendEnabled = false;
         isOrthoProjection = false;
     }
     return self;
@@ -49,13 +48,13 @@
     color = col;
 }
 
-- (void) beginWithTexture:(GLuint)texture {
-    [self beginWithTexture:texture color:GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f)];
+- (void) beginWithTexture:(Texture)tex {
+    [self beginWithTexture:tex color:GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f)];
 }
 
-- (void) beginWithTexture:(GLuint)texture color:(GLKVector4)col {
+- (void) beginWithTexture:(Texture)tex color:(GLKVector4)col {
     quadCount = 0;
-    textureId = texture;
+    texture = tex;
     textureToggled = true;
     color = col;
 }
@@ -71,44 +70,44 @@
         vertices[v + 0] = quads[i].x1;
         vertices[v + 1] = quads[i].y1;
         vertices[v + 2] = quads[i].z1;
-        vertices[v + 3] = [textures getTextureOffsetX2:textureId];
-        vertices[v + 4] = [textures getTextureOffsetY2:textureId];
+        vertices[v + 3] = texture.texCoordX2;
+        vertices[v + 4] = texture.texCoordY2;
 		v += 8;
         
         vertices[v + 0] = quads[i].x2;
         vertices[v + 1] = quads[i].y2;
         vertices[v + 2] = quads[i].z2;
-        vertices[v + 3] = [textures getTextureOffsetX2:textureId];
-        vertices[v + 4] = [textures getTextureOffsetY1:textureId];
+        vertices[v + 3] = texture.texCoordX2;
+        vertices[v + 4] = texture.texCoordY1;
 		v += 8;
         
         vertices[v + 0] = quads[i].x3;
         vertices[v + 1] = quads[i].y3;
         vertices[v + 2] = quads[i].z3;
-        vertices[v + 3] = [textures getTextureOffsetX1:textureId];
-        vertices[v + 4] = [textures getTextureOffsetY1:textureId];
+        vertices[v + 3] = texture.texCoordX1;
+        vertices[v + 4] = texture.texCoordY1;
 		v += 8;
         
         // Triangle 2
         vertices[v + 0] = quads[i].x3;
         vertices[v + 1] = quads[i].y3;
         vertices[v + 2] = quads[i].z3;
-        vertices[v + 3] = [textures getTextureOffsetX1:textureId];
-        vertices[v + 4] = [textures getTextureOffsetY1:textureId];
+        vertices[v + 3] = texture.texCoordX1;
+        vertices[v + 4] = texture.texCoordY1;
 		v += 8;
         
         vertices[v + 0] = quads[i].x4;
         vertices[v + 1] = quads[i].y4;
         vertices[v + 2] = quads[i].z4;
-        vertices[v + 3] = [textures getTextureOffsetX1:textureId];
-        vertices[v + 4] = [textures getTextureOffsetY2:textureId];
+        vertices[v + 3] = texture.texCoordX1;
+        vertices[v + 4] = texture.texCoordY2;
 		v += 8;
         
         vertices[v + 0] = quads[i].x1;
         vertices[v + 1] = quads[i].y1;
         vertices[v + 2] = quads[i].z1;
-        vertices[v + 3] = [textures getTextureOffsetX2:textureId];
-        vertices[v + 4] = [textures getTextureOffsetY2:textureId];
+        vertices[v + 3] = texture.texCoordX2;
+        vertices[v + 4] = texture.texCoordY2;
 		v += 8;
 	}
     [self calculateNormals];
@@ -134,12 +133,6 @@
     glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), BUFFER_OFFSET(5));
     
     glBindVertexArrayOES(0);
-}
-
-- (void) setBlendFuncSrc:(GLenum)src dst:(GLenum)dst {
-    blendEnabled = true;
-    blendSrc = src;
-    blendDst = dst;
 }
 
 - (void) setOrthoProjection {
@@ -208,9 +201,9 @@
 }
 
 - (void) render {
-    if (blendEnabled) {
+    if (texture.blendEnabled) {
         glEnable(GL_BLEND);
-        glBlendFunc(blendSrc, blendDst);
+        glBlendFunc(texture.blendSrc, texture.blendDst);
     } else {
         glDisable(GL_BLEND);
     }
@@ -220,11 +213,11 @@
 
     GLKBaseEffect *glkEffect = currentShaderProgram != 0 ? glkEffectShader : glkEffectNormal;
     
-    glkEffect.texture2d0.name = textureId;
+    glkEffect.texture2d0.name = texture.id;
     glkEffect.texture2d0.enabled = textureToggled ? GL_TRUE : GL_FALSE;
 
     if (currentShaderProgram != 0) {
-        glkEffect.texture2d1.name = [textures getFloorDistortionTexture];
+        glkEffect.texture2d1.name = floorDistortionTexture.id;
         glkEffect.texture2d1.enabled = GL_TRUE;
     }
     
@@ -239,12 +232,10 @@
     if (currentShaderProgram != 0) {
 	    glUseProgram(currentShaderProgram);
         glUniformMatrix4fv(uniformModelViewProjectionMatrix, 1, 0, GLKMatrix4Multiply(glkEffect.transform.projectionMatrix, glkEffect.transform.modelviewMatrix).m);
-    }
 
-    if (currentShaderProgram != 0) {
         glActiveTexture(GL_TEXTURE1);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, [textures getFloorTexture]);
+        glBindTexture(GL_TEXTURE_2D, floorTexture.id);
         glUniform1i(uniformSampler1, 0);
         glUniform1i(uniformSampler2, 1);
         glUniform2f(uniformScreenSizeInv, screenSizeInv[0], screenSizeInv[1]);

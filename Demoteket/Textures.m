@@ -25,115 +25,82 @@
 
 #import "Textures.h"
 
-const float DEFAULT_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 1.0f};
-const float PHOTOS_LIGHT_TEXTURE_OFFSET[] = {0.0f, 0.1404f, 1.0f, 1.0f - 0.1404f};
-const float FLOOR_DISTORTION_TEXTURE_OFFSET[] = {0.0f, 0.0f, 55.0f, 55.0f};
-const float PILLAR_BORDER_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.1f, 1.0f};
-const float PHOTO4_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 0.7382f};
-const float PHOTO5_TEXTURE_OFFSET[] = {0.0f, 0.0f, 0.9062f, 1.0f};
-const float DEMOTEKET_LOGO_TEXTURE_OFFSET[] = {0.0f, 0.0f, 1.0f, 0.7187f};
+Texture wallTexture[WALL_TEXTURE_COUNT];
+Texture wallBorderTexture;
 
-const bool PHOTO_ALPHA_ENABLED[] = {false, false, false, false, false, true};
+Texture pillarTexture;
+Texture pillarBorderTexture;
+
+Texture photosTexture[PHOTOS_TEXTURE_COUNT];
+
+Texture floorTexture;
+Texture floorDistortionTexture;
+
+Texture textureMake(GLuint id) {
+    Texture texture;
+    texture.texCoordX1 = 0.0f;
+    texture.texCoordY1 = 0.0f;
+    texture.texCoordX2 = 1.0f;
+    texture.texCoordY2 = 1.0f;
+    texture.blendEnabled = false;
+    texture.id = id;
+    return texture;
+}
+
+Texture textureCopy(Texture texture, float texCoordX1, float texCoordY1, float texCoordX2, float texCoordY2) {
+    Texture newTexture;
+    newTexture.id = texture.id;
+    newTexture.blendEnabled = texture.blendEnabled;
+    newTexture.texCoordX1 = texCoordX1;
+    newTexture.texCoordY1 = texCoordY1;
+    newTexture.texCoordX2 = texCoordX2;
+    newTexture.texCoordY2 = texCoordY2;
+    return newTexture;
+}
+
+void textureSetTexCoords(Texture *texture, float texCoordX1, float texCoordY1, float texCoordX2, float texCoordY2) {
+    texture->texCoordX1 = texCoordX1;
+    texture->texCoordY1 = texCoordY1;
+    texture->texCoordX2 = texCoordX2;
+    texture->texCoordY2 = texCoordY2;
+}
+
+void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
+    texture->blendEnabled = true;
+    texture->blendSrc = blendSrc;
+    texture->blendDst = blendDst;
+}
 
 @implementation Textures
 
 - (void) load {
-    wall[0] = [self loadTexture:@"wall.png"];
-    pillar[0] = [self loadTexture:@"pillar.png"];
-    pillarBorder[0] = [self loadTexture:@"pillar.png"];
-    photos[0] = [self loadTexture:@"photo1.png"];
-    photos[1] = [self loadTexture:@"photo2.png"];
-    photos[2] = [self loadTexture:@"photo3.png"];
-    photos[3] = [self loadTexture:@"photo4.png"];
-    photos[4] = [self loadTexture:@"photo5.png"];
-    photos[5] = [self loadTexture:@"demoteket_logo.png"];
-    photosLight[0] = [self loadTexture:@"photosLight2.png"];
-    photosLight[1] = [self loadTexture:@"photosLight1.png"];
-    photosLight[2] = [self loadTexture:@"photosLight2.png"];
-    photosLight[3] = [self loadTexture:@"photosLight1.png"];
-    photosLight[4] = [self loadTexture:@"photosLight1.png"];
-    photosLight[5] = [self loadTexture:@"photosLight1.png"];
-    floorDistortion = [self loadTexture:@"floor_distortion.png" repeat:true];
+    wallTexture[0] = [self loadTexture:@"wall1.png"];
+    wallTexture[1] = [self loadTexture:@"wall2.png"];
+    wallTexture[2] = wallTexture[0]; textureSetTexCoords(&wallTexture[2], 0.0f, 0.0f, 0.25f, 1.0f);
+    wallTexture[3] = wallTexture[0]; textureSetTexCoords(&wallTexture[3], 0.75f, 0.0f, 1.0f, 1.0f);
+    wallTexture[4] = wallTexture[1]; textureSetTexCoords(&wallTexture[4], 0.0f, 0.0f, 0.25f, 1.0f);
+    wallTexture[5] = wallTexture[1]; textureSetTexCoords(&wallTexture[5], 0.75f, 0.0f, 1.0f, 1.0f);
+
+    wallBorderTexture = textureCopy(wallTexture[2], 0.0f, 0.0f, 0.1f, 1.0f);
+
+    pillarTexture = [self loadTexture:@"pillar.png"];
+    pillarBorderTexture = textureCopy(pillarTexture, 0.0f, 0.0f, 0.1f, 1.0f);
+    
+    photosTexture[0] = [self loadTexture:@"photo1.png"];
+    photosTexture[1] = [self loadTexture:@"photo2.png"];
+    photosTexture[2] = [self loadTexture:@"photo3.png"];
+    photosTexture[3] = [self loadTexture:@"photo4.png"]; textureSetTexCoords(&photosTexture[3], 0.0f, 0.0f, 1.0f, 0.7382f);
+    photosTexture[4] = [self loadTexture:@"photo5.png"]; textureSetTexCoords(&photosTexture[4], 0.0f, 0.0f, 0.9062f, 1.0f);
+    photosTexture[5] = [self loadTexture:@"demoteket_logo.png"]; textureSetBlend(&photosTexture[5], GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    floorDistortionTexture = [self loadTexture:@"floor_distortion.png" repeat:true]; textureSetTexCoords(&floorDistortionTexture, 0.0f, 0.0f, 55.0f, 55.0f);
 }
 
-- (void) setPhoto:(GLuint)texture {
-    floor = texture;
-}
-
-- (GLuint) getWallTexture:(int)index {
-    return wall[index];
-}
-
-- (GLuint) getPillarTexture:(int)index {
-    return pillar[index];
-}
-
-- (GLuint) getPillarBorderTexture:(int)index {
-    return pillarBorder[index];
-}
-
-- (GLuint) getFloorTexture {
-    return floor;
-}
-
-- (GLuint) getFloorDistortionTexture {
-    return floorDistortion;
-}
-
-- (GLuint) getPhotosTexture:(int)index {
-    return photos[index];
-}
-
-- (GLuint) getPhotosLightTexture:(int)index {
-    return photosLight[index];
-}
-
-- (float) getTextureOffsetX1:(GLuint)textureId {
-    return [self getTextureOffset:textureId index:0];
-}
-
-- (float) getTextureOffsetY1:(GLuint)textureId {
-    return [self getTextureOffset:textureId index:1];
-}
-
-- (float) getTextureOffsetX2:(GLuint)textureId {
-    return [self getTextureOffset:textureId index:2];
-}
-
-- (float) getTextureOffsetY2:(GLuint)textureId {
-    return [self getTextureOffset:textureId index:3];
-}
-
-- (float) getTextureOffset:(GLuint)textureId index:(int)index {
-    if (textureId == photosLight[0]) {
-        return PHOTOS_LIGHT_TEXTURE_OFFSET[index];
-    }
-    if (textureId == photosLight[2]) {
-        return PHOTOS_LIGHT_TEXTURE_OFFSET[index];
-    }
-    if (textureId == floorDistortion) {
-        return FLOOR_DISTORTION_TEXTURE_OFFSET[index];
-    }
-    if (textureId == pillarBorder[0]) {
-        return PILLAR_BORDER_TEXTURE_OFFSET[index];
-    }
-    if (textureId == photos[3]) {
-        return PHOTO4_TEXTURE_OFFSET[index];
-    }
-    if (textureId == photos[4]) {
-        return PHOTO5_TEXTURE_OFFSET[index];
-    }
-    if (textureId == photos[PHOTO_INDEX_DEMOTEKET_LOGO]) {
-        return DEMOTEKET_LOGO_TEXTURE_OFFSET[index];
-    }
-    return DEFAULT_TEXTURE_OFFSET[index];
-}
-
-- (GLuint) loadTexture:(NSString*)filename {
+- (Texture) loadTexture:(NSString*)filename {
     return [self loadTexture:filename repeat:false];
 }
 
-- (GLuint) loadTexture:(NSString*)filename repeat:(bool)repeat {
+- (Texture) loadTexture:(NSString*)filename repeat:(bool)repeat {
     NSLog(@"Loading texture: %@", filename);
     UIImage *image = [UIImage imageNamed:filename];
     NSError *error = nil;
@@ -149,7 +116,8 @@ const bool PHOTO_ALPHA_ENABLED[] = {false, false, false, false, false, true};
     	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
 	glBindTexture(GL_TEXTURE_2D, 0);
-    return textureInfo.name;
+    Texture texture = textureMake(textureInfo.name);
+    return texture;
 }
 
 @end

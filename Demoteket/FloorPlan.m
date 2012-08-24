@@ -78,8 +78,8 @@ float t = 0.0f;
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, oldFramebuffer);
-
-    [textures setPhoto:mirrorTexture];
+    
+    floorTexture = textureMake(mirrorTexture);
 }
 
 - (int) textureAtLeastSize:(int)size {
@@ -95,7 +95,7 @@ float t = 0.0f;
     NSLog(@"Creating floor plan");
 
     floor = [[Quads alloc] init];
-    [floor beginWithTexture:[textures getFloorDistortionTexture]];
+    [floor beginWithTexture:floorDistortionTexture];
     [floor addQuadHorizontalX1:-15.0f z1:-15.0f x2:15.0f z2:15.0f y:0.0f];
     [floor end];
 
@@ -122,15 +122,14 @@ float t = 0.0f;
     [movement addOffsetPoint:GLKVector2Make( 2.0f,  4.5f)];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(2.6f, 7.0f) angle:-0.3f] lookAt:GLKVector2Make(2.4f, 7.0f) pause:true];
 
-    [movement lookAt:GLKVector2Make(4.0f, 0.0f) continueDistance:0.5f];
-    [movement addOffsetPoint:GLKVector2Make(2.0f, 0.0f)];
-    [movement addOffsetPoint:GLKVector2Make(0.0f, 2.0f)];
-    [movement addOffsetPoint:[self lookAt:GLKVector2Make(1.0f, -1.0f) angle:letterToAngle('I')] pause:true];
+    [movement lookAt:GLKVector2Make(5.0f, 0.0f) continueDistance:0.7f];
+    [movement addOffsetPoint:GLKVector2Make(3.0f, 4.0f)];
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(1.0f, -1.5f) angle:letterToAngle('H')] pause:true];
     
-    [movement addOffsetPoint:GLKVector2Make(2.5f, -3.0f) lookAt:GLKVector2Make(-6.0f, -9.0f)];
+    [movement addOffsetPoint:GLKVector2Make(2.5f, -5.0f) lookAt:GLKVector2Make(-6.0f, -9.0f)];
     [movement addOffsetPoint:GLKVector2Make(-5.0f, -3.0f) pause:true];
 
-    [movement addOffsetPoint:[self lookAt:GLKVector2Make(1.0f, -3.5f) angle:letterToAngle('P')] lookAt:GLKVector2Make(1.0f, -3.0f) pause:true];
+    [movement addOffsetPoint:GLKVector2Make(1.5f, -4.0f) lookAt:GLKVector2Make(1.0f, -3.0f) pause:true];
 
     [movement setAngle:0.0f];
     [movement setPositionToFirstPoint];

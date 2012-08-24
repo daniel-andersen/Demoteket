@@ -58,7 +58,7 @@
 
 - (void) addPoint:(GLKVector2)p pause:(bool)pause {
     if (pointsCount > 0) {
-	    points[pointsCount].type = points[pointsCount - 1].type;
+	    points[pointsCount].type = points[pointsCount - 1].type != MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE ? points[pointsCount - 1].type : MOVEMENT_TYPE_ANGLE_LOOK_AT;
 	    points[pointsCount].lookAt = points[pointsCount - 1].lookAt;
     } else {
 	    points[pointsCount].type = MOVEMENT_TYPE_ANGLE_IN_MOVING_DIR;
@@ -151,7 +151,7 @@
     if (distance <= 0.0f) {
         return;
     }
-    float slowingDistance = points[pointIndex].pause ? MOVEMENT_SLOWING_DISTANCE : distance;
+    float slowingDistance = points[pointIndex].pause || points[pointIndex].type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE ? MOVEMENT_SLOWING_DISTANCE : distance;
     float rampedSpeed = MOVEMENT_MAX_SPEED * distance / slowingDistance;
     float clippedSpeed = MIN(rampedSpeed, MOVEMENT_MAX_SPEED);
     GLKVector2 desiredVelocity = GLKVector2MultiplyScalar(targetOffset, clippedSpeed / distance);
@@ -161,7 +161,6 @@
     }
     velocity = GLKVector2Add(velocity, steering);
     position = GLKVector2Add(position, velocity);
-    //NSLog(@"%f, %f, %f, %f", position.x, position.y, points[pointIndex].position.x, points[pointIndex].position.y);
 }
 
 - (void) updateAngle {

@@ -25,42 +25,38 @@
 
 #import <GLKit/GLKit.h>
 
-#define WALL_COUNT 1
-#define PILLAR_COUNT 1
-#define PHOTOS_COUNT 6
+#define WALL_TEXTURE_COUNT 6
+#define PHOTOS_TEXTURE_COUNT 6
 
 #define PHOTO_INDEX_DEMOTEKET_LOGO 5
 
-extern const bool PHOTO_ALPHA_ENABLED[];
+typedef struct {
+    GLuint id;
+    float texCoordX1, texCoordY1, texCoordX2, texCoordY2;
+    bool blendEnabled;
+    GLenum blendSrc, blendDst;
+} Texture;
 
-@interface Textures : NSObject {
+extern Texture textureMake(GLuint id);
+extern Texture textureCopy(Texture texture, float texCoordX1, float texCoordY1, float texCoordX2, float texCoordY2);
+extern void textureSetTexCoords(Texture *texture, float texCoordX1, float texCoordY1, float texCoordX2, float texCoordY2);
+extern void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst);
 
-@private
-    
-	GLuint wall[WALL_COUNT];
-	GLuint pillar[PILLAR_COUNT];
-	GLuint pillarBorder[PILLAR_COUNT];
-	GLuint photos[PHOTOS_COUNT];
-	GLuint photosLight[PHOTOS_COUNT];
-    GLuint floor;
-    GLuint floorDistortion;
-}
+extern Texture wallTexture[WALL_TEXTURE_COUNT];
+extern Texture wallBorderTexture;
+
+extern Texture pillarTexture;
+extern Texture pillarBorderTexture;
+
+extern Texture photosTexture[PHOTOS_TEXTURE_COUNT];
+
+extern Texture floorTexture;
+extern Texture floorDistortionTexture;
+
+extern void loadTextures();
+
+@interface Textures : NSObject
 
 - (void) load;
-
-- (GLuint) getWallTexture:(int)index;
-- (GLuint) getPillarTexture:(int)index;
-- (GLuint) getPillarBorderTexture:(int)index;
-- (GLuint) getFloorTexture;
-- (GLuint) getFloorDistortionTexture;
-- (GLuint) getPhotosTexture:(int)index;
-- (GLuint) getPhotosLightTexture:(int)index;
-
-- (void) setPhoto:(GLuint)texture;
-
-- (float) getTextureOffsetX1:(GLuint)textureId;
-- (float) getTextureOffsetY1:(GLuint)textureId;
-- (float) getTextureOffsetX2:(GLuint)textureId;
-- (float) getTextureOffsetY2:(GLuint)textureId;
 
 @end

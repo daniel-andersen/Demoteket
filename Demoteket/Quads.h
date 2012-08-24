@@ -24,6 +24,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <GLKit/GLKit.h>
+#import "Textures.h"
 
 #define QUADS_MAX_COUNT 256
 #define VERTICES_MAX_COUNT (QUADS_MAX_COUNT * 9 * 3 * sizeof(GLfloat))
@@ -42,7 +43,7 @@ typedef struct {
     Quad quads[QUADS_MAX_COUNT];
     int quadCount;
     
-    GLuint textureId;
+    Texture texture;
     bool textureToggled;
 
     GLKVector4 color;
@@ -52,10 +53,6 @@ typedef struct {
     GLuint vertexArray;
     GLuint vertexBuffer;
     
-    bool blendEnabled;
-    GLenum blendSrc;
-    GLenum blendDst;
-    
     bool isOrthoProjection;
 }
 
@@ -63,11 +60,10 @@ typedef struct {
 - (void) dealloc;
 
 - (void) beginWithColor:(GLKVector4)col;
-- (void) beginWithTexture:(GLuint)texture;
-- (void) beginWithTexture:(GLuint)texture color:(GLKVector4)col;
+- (void) beginWithTexture:(Texture)texture;
+- (void) beginWithTexture:(Texture)texture color:(GLKVector4)col;
 - (void) end;
 
-- (void) setBlendFuncSrc:(GLenum)src dst:(GLenum)dst;
 - (void) setOrthoProjection;
 
 - (void) calculateNormals;
