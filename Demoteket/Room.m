@@ -156,9 +156,9 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
                     [walls[3] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:x2 y2:ROOM_HEIGHT z2:centerZ];
                 }
                 if ((type & 2) == 2) {
-                    [walls[2] addQuadVerticalX1:centerX y1:0.0f z1:z1 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+                    [walls[2] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:z1];
                 } else if ((type & 8) == 8) {
-                    [walls[3] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:z2];
+                    [walls[3] addQuadVerticalX1:centerX y1:0.0f z1:z2 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
                 }
             }
             if (tiles[i][j] == 'd') {
