@@ -229,11 +229,10 @@
     glkEffect.useConstantColor = YES;
     glkEffect.constantColor = color;
 
-    GLKMatrix4 modelViewMatrix = GLKMatrix4Identity;
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, worldRotation.x, 1.0f, 0.0f, 0.0f);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, worldRotation.y + rotateY, 0.0f, 1.0f, 0.0f);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, worldRotation.z, 0.0f, 0.0f, 1.0f);
-    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, worldPosition.x, worldPosition.y, worldPosition.z);
+    GLKMatrix4 modelViewMatrix = sceneModelViewMatrix;
+    if (rotateY != 0.0f) {
+        modelViewMatrix = GLKMatrix4Multiply(GLKMatrix4Rotate(GLKMatrix4Identity, rotateY, 0.0f, 1.0f, 0.0f), modelViewMatrix);
+    }
     
     glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
     glkEffect.transform.projectionMatrix = isOrthoProjection ? orthoProjectionMatrix : sceneProjectionMatrix;

@@ -40,10 +40,7 @@ Textures *textures;
 GLKBaseEffect *glkEffectNormal;
 GLKBaseEffect *glkEffectShader;
 
-GLKVector3 worldPosition;
-GLKVector3 worldRotation;
-
-GLKMatrix4 sceneRotationMatrix;
+GLKMatrix4 sceneModelViewMatrix;
 GLKMatrix4 sceneProjectionMatrix;
 
 GLKMatrix4 mirrorModelViewMatrix;
