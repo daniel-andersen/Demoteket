@@ -94,6 +94,8 @@ float t = 0.0f;
 - (void) createFloorPlan {
     NSLog(@"Creating floor plan");
 
+    [self addPhotos];
+
     floor = [[Quads alloc] init];
     [floor beginWithTexture:floorDistortionTexture];
     [floor addQuadHorizontalX1:-15.0f z1:-15.0f x2:15.0f z2:15.0f y:0.0f];
@@ -110,13 +112,51 @@ float t = 0.0f;
     [self createPath];
 }
 
+- (void) addPhotos {
+    userPhotosCount = 0;
+
+    Texture demoteketTextTexture = [textures textToTexture:@"DEMOTEKET AARHUS\n\niOS version af:\nDaniel Andersen" withSizeOf:demoteketLogoTexture];
+    textureSetBlend(&demoteketTextTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:6.0f room:0] angle:0.0f photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] angle:0.0f photoTexture:[textures loadTexture:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] angle:0.0f photoTexture:[textures loadTexture:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
+}
+
+- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture {
+    return [self newPhotoWithTitle:title author:author position:p angle:angle photoTexture:photoTexture textTexture:textTexture frontFacing:true];
+}
+
+- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture frontFacing:(bool)frontFacing {
+    PhotoInfo *info = [[PhotoInfo alloc] init];
+    [info setTitle:title];
+    [info setAuthor:author];
+    [info setPosition:p];
+    [info setAngle:angle];
+    [info setPhotoTexture:photoTexture];
+    [info setTextTexture:textTexture];
+    [info setPhotoIndex:photosTextureCount + 0];
+    [info setTextIndex:photosTextureCount + 1];
+    [info setFrontFacing:frontFacing];
+    photosTexture[photosTextureCount + 0] = photoTexture;
+    photosTexture[photosTextureCount + 1] = textTexture;
+    photosTextureCount += 2;
+    return info;
+}
+
+- (GLKVector2) photoPositionX:(float)x z:(float)z room:(int)room {
+    return GLKVector2Make(ROOM_OFFSET_X[room] + (x * BLOCK_SIZE) + (BLOCK_SIZE / 2.0f),
+                          ROOM_OFFSET_Z[room] + (z * BLOCK_SIZE) + (BLOCK_SIZE / 2.0f));
+}
+
 - (void) createPath {
     movement = [[Movement alloc] init];
 
+    [movement addUserPhoto:userPhotos[0]];
     [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:false];
-    [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 7.0f) angle:letterToAngle('D')] lookAt:GLKVector2Make(0.5f, 7.0f) pause:true];
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 6.0f) angle:letterToAngle('D')] lookAt:GLKVector2Make(0.5f, 7.0f) pause:true];
 
-    [movement addOffsetPoint:GLKVector2Make(-2.0f, -2.5f) lookAt:GLKVector2Make(4.0f, 13.0f)];
+    [movement addOffsetPoint:GLKVector2Make(-2.0f, -1.5f) lookAt:GLKVector2Make(4.0f, 13.0f)];
     [movement addOffsetPoint:GLKVector2Make(-1.5f,  0.0f)];
     [movement addOffsetPoint:GLKVector2Make(-1.0f,  1.5f)];
     [movement addOffsetPoint:GLKVector2Make( 2.0f,  4.5f)];
@@ -140,8 +180,16 @@ float t = 0.0f;
     return GLKVector2Make(p.x + (cos(angle) * LOOK_AT_DISTANCE), p.y + (sin(angle) * LOOK_AT_DISTANCE));
 }
 
+- (void) prevPhoto {
+    [movement goBack];
+}
+
 - (void) nextPhoto {
-    [movement resume];
+    [movement goForth];
+}
+
+- (PhotoInfo*) getPhoto {
+    return [movement getCurrentPhoto];
 }
 
 - (void) update {
@@ -165,9 +213,8 @@ float t = 0.0f;
 
 - (void) setupPosition {
     GLKVector3 v = [movement getPositionAndAngle];
-    sceneModelViewMatrix = GLKMatrix4Identity;
-    sceneModelViewMatrix = GLKMatrix4Rotate(sceneModelViewMatrix, v.z, 0.0f, 1.0f, 0.0f);
-    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, v.x, -2.5f, v.y);
+    worldRotation = GLKVector3Make(0.0f, v.z, 0.0f);
+    worldPosition = GLKVector3Make(v.x, -2.5f, v.y);
 }
 
 - (void) renderMirroredFloor {
@@ -214,8 +261,12 @@ float t = 0.0f;
     currentShaderProgram = 0;
 }
 
-- (bool) isBackNextButtonsVisible {
-    return [movement isPaused];
+- (bool) isBackButtonVisible {
+    return [movement canGoBack];
+}
+
+- (bool) isNextButtonVisible {
+    return [movement canGoForth];
 }
 
 @end

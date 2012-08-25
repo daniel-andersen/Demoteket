@@ -36,7 +36,7 @@
 
     Room *rooms[ROOM_COUNT];
     Quads *floor;
-    
+
     GLKVector3 position;
 
     Movement *movement;
@@ -56,9 +56,13 @@
 
 - (void) createFloorPlan;
 
+- (void) prevPhoto;
 - (void) nextPhoto;
 
-- (bool) isBackNextButtonsVisible;
+- (PhotoInfo*) getPhoto;
+
+- (bool) isBackButtonVisible;
+- (bool) isNextButtonVisible;
 
 - (void) update;
 - (void) render;

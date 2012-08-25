@@ -25,13 +25,17 @@
 
 #import <GLKit/GLKit.h>
 
+#define USER_PHOTOS_MAX_COUNT 32
+
 #define WALL_TEXTURE_COUNT 6
-#define PHOTOS_TEXTURE_COUNT 6
+#define PHOTOS_TEXTURE_COUNT (3 + USER_PHOTOS_MAX_COUNT)
 
 #define PHOTO_INDEX_DEMOTEKET_LOGO 5
 
 typedef struct {
     GLuint id;
+    int width, height;
+    int imageWidth, imageHeight;
     float texCoordX1, texCoordY1, texCoordX2, texCoordY2;
     bool blendEnabled;
     GLenum blendSrc, blendDst;
@@ -49,6 +53,9 @@ extern Texture pillarTexture;
 extern Texture pillarBorderTexture;
 
 extern Texture photosTexture[PHOTOS_TEXTURE_COUNT];
+extern int photosTextureCount;
+
+extern Texture demoteketLogoTexture;
 
 extern Texture floorTexture;
 extern Texture floorDistortionTexture;
@@ -61,5 +68,11 @@ extern void loadTextures();
 @interface Textures : NSObject
 
 - (void) load;
+
+- (Texture) loadTexture:(NSString*)filename;
+- (Texture) loadTexture:(NSString*)filename repeat:(bool)repeat;
+
+- (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture;
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height;
 
 @end

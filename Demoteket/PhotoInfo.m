@@ -23,52 +23,42 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "Quads.h"
-#import "Globals.h"
-#import "Movement.h"
+#import "PhotoInfo.h"
 
-#define ROOM_MAX_SIZE 16
+@implementation PhotoInfo
 
-#define PHOTOS_MAX_COUNT 32
-#define WALL_COUNT 6
+@synthesize position;
+@synthesize angle;
 
-#define ROOM_HEIGHT 5.0f
-#define BLOCK_SIZE 1.5f
+@synthesize title;
+@synthesize author;
 
-#define WALL_DEPTH (BLOCK_SIZE * 0.05f)
+@synthesize photoQuads;
+@synthesize textQuads;
 
-#define PILLAR_WIDTH (BLOCK_SIZE * 1.0f)
-#define PILLAR_DEPTH (BLOCK_SIZE * 0.05f)
+@synthesize photoTexture;
+@synthesize textTexture;
 
-#define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
+@synthesize photoIndex;
+@synthesize textIndex;
 
-extern const float ROOM_OFFSET_X[];
-extern const float ROOM_OFFSET_Z[];
+@synthesize frontFacing;
 
-@interface Room : NSObject {
-@private
-    char tiles[ROOM_MAX_SIZE][ROOM_MAX_SIZE];
-    int stripNumber;
+- (void) beginQuads {
+    photoQuads = [[Quads alloc] init];
+    [photoQuads beginWithTexture:photoTexture];
 
-    bool isVisible;
-    
-    int roomNumber;
-
-    Quads *walls[WALL_COUNT];
-    Quads *wallsBorder;
-
-    Quads *photos[PHOTOS_MAX_COUNT];
-    int photosCount;
-
-    Quads *photosBorder;
-    
-    Quads *pillars;
-    Quads *pillarsBorder;
+    textQuads = [[Quads alloc] init];
+    [textQuads beginWithTexture:textTexture];
 }
 
-- (void) initializeRoomNumber:(int)number;
-- (void) trashRoom;
+- (void) endQuads {
+    [photoQuads end];
+    [textQuads end];
+}
 
-- (void) render;
+- (void) turnAround {
+    [photoQuads rotateY:0.1f];
+}
 
 @end

@@ -23,6 +23,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import <QuartzCore/QuartzCore.h>
 #import "Textures.h"
 
 Texture wallTexture[WALL_TEXTURE_COUNT];
@@ -32,6 +33,9 @@ Texture pillarTexture;
 Texture pillarBorderTexture;
 
 Texture photosTexture[PHOTOS_TEXTURE_COUNT];
+int photosTextureCount = 0;
+
+Texture demoteketLogoTexture;
 
 Texture floorTexture;
 Texture floorDistortionTexture;
@@ -92,12 +96,11 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     pillarTexture = [self loadTexture:@"pillar.png"];
     pillarBorderTexture = textureCopy(pillarTexture, 0.0f, 0.0f, 0.1f, 1.0f);
     
-    photosTexture[0] = [self loadTexture:@"photo1.png"];
-    photosTexture[1] = [self loadTexture:@"photo2.png"];
-    photosTexture[2] = [self loadTexture:@"photo3.png"];
-    photosTexture[3] = [self loadTexture:@"photo4.png"]; textureSetTexCoords(&photosTexture[3], 0.0f, 0.0f, 1.0f, 0.7382f);
-    photosTexture[4] = [self loadTexture:@"photo5.png"]; textureSetTexCoords(&photosTexture[4], 0.0f, 0.0f, 0.9062f, 1.0f);
-    photosTexture[5] = [self loadTexture:@"demoteket_logo.png"]; textureSetBlend(&photosTexture[5], GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    photosTexture[photosTextureCount++] = [self loadTexture:@"photo1.png"];
+    photosTexture[photosTextureCount++] = [self loadTexture:@"photo2.png"];
+    photosTexture[photosTextureCount++] = [self loadTexture:@"photo3.png"];
+
+    demoteketLogoTexture = [self loadTexture:@"demoteket_logo.png"]; textureSetBlend(&demoteketLogoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     floorDistortionTexture = [self loadTexture:@"floor_distortion.png" repeat:true]; textureSetTexCoords(&floorDistortionTexture, 0.0f, 0.0f, 55.0f, 55.0f);
 }
@@ -108,11 +111,15 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 
 - (Texture) loadTexture:(NSString*)filename repeat:(bool)repeat {
     NSLog(@"Loading texture: %@", filename);
-    UIImage *image = [UIImage imageNamed:filename];
+    return [self loadTextureWithImage:[UIImage imageNamed:filename] repeat:repeat];
+}
+
+- (Texture) loadTextureWithImage:(UIImage*)image repeat:(bool)repeat {
     NSError *error = nil;
     GLKTextureInfo *textureInfo = [GLKTextureLoader textureWithCGImage:image.CGImage options:nil error:&error];
+    
     if (error) {
-        NSLog(@"Error loading texture %@: %@", filename, error);
+        NSLog(@"Error loading texture: %@", error);
     }
     glBindTexture(GL_TEXTURE_2D, textureInfo.name);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -123,7 +130,36 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     }
 	glBindTexture(GL_TEXTURE_2D, 0);
     Texture texture = textureMake(textureInfo.name);
+    texture.width = textureInfo.width;
+    texture.height = textureInfo.height;
+    texture.imageWidth = textureInfo.width;
+    texture.imageHeight = textureInfo.height;
     return texture;
+}
+
+- (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture {
+    return [self textToTexture:text width:texture.width height:texture.height];
+}
+
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height {
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, height)];
+    label.text = text;
+    label.font = [UIFont fontWithName:@"Helvetica" size:18.0f];
+    label.textColor = [UIColor colorWithRed:248.0f / 255.0f green:230.0f / 255.0f blue:213.0f / 255.0f alpha:1.0f];
+    label.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
+    label.numberOfLines = 0;
+    
+    UIGraphicsBeginImageContext(label.bounds.size);
+    
+    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0.0f, 0.0f);
+    CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, 1.0);
+    
+    [label.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return [self loadTextureWithImage:image repeat:false];
 }
 
 @end

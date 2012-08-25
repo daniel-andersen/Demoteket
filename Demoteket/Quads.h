@@ -54,6 +54,8 @@ typedef struct {
     GLuint vertexBuffer;
     
     bool isOrthoProjection;
+    
+    float rotateY;
 }
 
 - (id) init;
@@ -63,6 +65,8 @@ typedef struct {
 - (void) beginWithTexture:(Texture)texture;
 - (void) beginWithTexture:(Texture)texture color:(GLKVector4)col;
 - (void) end;
+
+- (void) rotateY:(float)angle;
 
 - (void) setOrthoProjection;
 

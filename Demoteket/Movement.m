@@ -37,10 +37,15 @@
 - (void) reset {
     pointsCount = 0;
     pointIndex = 0;
+    photosCount = 0;
+    photosIndex = 0;
     velocity = GLKVector2Make(0.0f, 0.0f);
     angle = 0.0f;
     angleTransition = 1.0f;
     paused = false;
+    for (int i = 0; i < MOVEMENT_MAX_POINTS; i++) {
+        points[i].photosIndex = -1;
+    }
 }
 
 - (void) setAngle:(float)a {
@@ -54,6 +59,12 @@
 - (void) setPositionToFirstPoint {
     position = points[0].position;
     [self nextPoint];
+}
+
+- (void) addUserPhoto:(PhotoInfo*)photoInfo {
+    photos[photosCount] = photoInfo;
+    points[pointsCount].photosIndex = photosCount;
+    photosCount++;
 }
 
 - (void) addPoint:(GLKVector2)p pause:(bool)pause {
@@ -140,12 +151,27 @@
     [self updatePath];
 }
 
-- (void) resume {
+- (void) goForth {
     if (!paused) {
         return;
     }
     paused = false;
     [self nextPoint];
+}
+
+- (void) goBack {
+    if (!paused) {
+        return;
+    }
+    paused = false;
+    [self prevPoint];
+}
+
+- (PhotoInfo*) getCurrentPhoto {
+    if (!paused) {
+        return NULL;
+    }
+    return photos[photosIndex];
 }
 
 - (void) updateMovement {
@@ -208,6 +234,9 @@
     [self nextPoint];
 }
 
+- (void) prevPoint {
+}
+
 - (void) nextPoint {
     MovementPoint oldPoint = points[pointIndex];
     pointIndex = MIN(pointIndex + 1, pointsCount - 1);
@@ -219,6 +248,9 @@
 	        angleTransition = 0.0f;
         }
     }
+    if (newPoint.photosIndex != -1) {
+        photosIndex = newPoint.photosIndex;
+    }
 }
 
 - (GLKVector3) getPositionAndAngle {
@@ -227,6 +259,22 @@
 
 - (bool) isPaused {
     return paused;
+}
+
+- (bool) canGoBack {
+    if (!paused) {
+        return false;
+    }
+	for (int i = pointIndex - 1; i >= 0; i--) {
+        if (points[i].pause) {
+            return true;
+        }
+    }
+    return false;
+}
+
+- (bool) canGoForth {
+    return paused && pointIndex < pointsCount - 1;
 }
 
 @end

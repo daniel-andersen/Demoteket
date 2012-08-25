@@ -134,6 +134,8 @@ enum
     screenWidth = [UIScreen mainScreen].bounds.size.width * [UIScreen mainScreen].scale;
     screenHeight = [UIScreen mainScreen].bounds.size.height * [UIScreen mainScreen].scale;
     
+    aspectRatio = fabsf(screenWidth / screenHeight);
+    
     screenSizeInv[0] = 1.0f / (float) screenWidth;
     screenSizeInv[1] = 1.0f / (float) screenHeight;
 
@@ -151,9 +153,7 @@ enum
 
 - (void)update
 {
-    float aspect = fabsf(screenWidth / screenHeight);
-
-    sceneProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, ROOM_MAX_SIZE * BLOCK_SIZE);
+    sceneProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspectRatio, 0.1f, ROOM_MAX_SIZE * BLOCK_SIZE);
 
     orthoProjectionMatrix = GLKMatrix4MakeOrtho(0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 1.0f);
     orthoModelViewMatrix = GLKMatrix4Identity;

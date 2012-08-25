@@ -31,6 +31,7 @@
 - (id) init {
     if (self = [super init]) {
         isOrthoProjection = false;
+        rotateY = 0.0f;
     }
     return self;
 }
@@ -135,6 +136,10 @@
     glBindVertexArrayOES(0);
 }
 
+- (void) rotateY:(float)angle {
+    rotateY = angle;
+}
+
 - (void) setOrthoProjection {
     isOrthoProjection = true;
 }
@@ -224,7 +229,13 @@
     glkEffect.useConstantColor = YES;
     glkEffect.constantColor = color;
 
-    glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : GLKMatrix4Multiply(sceneModelViewMatrix, mirrorModelViewMatrix);
+    GLKMatrix4 modelViewMatrix = GLKMatrix4Identity;
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, worldRotation.x, 1.0f, 0.0f, 0.0f);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, worldRotation.y + rotateY, 0.0f, 1.0f, 0.0f);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, worldRotation.z, 0.0f, 0.0f, 1.0f);
+    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, worldPosition.x, worldPosition.y, worldPosition.z);
+    
+    glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
     glkEffect.transform.projectionMatrix = isOrthoProjection ? orthoProjectionMatrix : sceneProjectionMatrix;
 
     [glkEffect prepareToDraw];

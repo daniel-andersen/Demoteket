@@ -24,51 +24,49 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "Quads.h"
-#import "Globals.h"
-#import "Movement.h"
 
-#define ROOM_MAX_SIZE 16
+@interface PhotoInfo : NSObject {
 
-#define PHOTOS_MAX_COUNT 32
-#define WALL_COUNT 6
-
-#define ROOM_HEIGHT 5.0f
-#define BLOCK_SIZE 1.5f
-
-#define WALL_DEPTH (BLOCK_SIZE * 0.05f)
-
-#define PILLAR_WIDTH (BLOCK_SIZE * 1.0f)
-#define PILLAR_DEPTH (BLOCK_SIZE * 0.05f)
-
-#define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
-
-extern const float ROOM_OFFSET_X[];
-extern const float ROOM_OFFSET_Z[];
-
-@interface Room : NSObject {
 @private
-    char tiles[ROOM_MAX_SIZE][ROOM_MAX_SIZE];
-    int stripNumber;
-
-    bool isVisible;
     
-    int roomNumber;
-
-    Quads *walls[WALL_COUNT];
-    Quads *wallsBorder;
-
-    Quads *photos[PHOTOS_MAX_COUNT];
-    int photosCount;
-
-    Quads *photosBorder;
+    GLKVector2 position;
+    float angle;
     
-    Quads *pillars;
-    Quads *pillarsBorder;
+    NSString *title;
+    NSString *author;
+    
+    Quads *photoQuads;
+    Quads *textQuads;
+    
+    Texture photoTexture;
+    Texture textTexture;
+
+    int photoIndex;
+    int textIndex;
+    
+    bool frontFacing;
 }
 
-- (void) initializeRoomNumber:(int)number;
-- (void) trashRoom;
+- (void) beginQuads;
+- (void) endQuads;
 
-- (void) render;
+- (void) turnAround;
+
+@property(readwrite) GLKVector2 position;
+@property(readwrite) float angle;
+
+@property(readwrite) NSString *title;
+@property(readwrite) NSString *author;
+
+@property(readwrite) Quads *photoQuads;
+@property(readwrite) Quads *textQuads;
+
+@property(readwrite) Texture photoTexture;
+@property(readwrite) Texture textTexture;
+
+@property(readwrite) int photoIndex;
+@property(readwrite) int textIndex;
+
+@property(readwrite) bool frontFacing;
 
 @end

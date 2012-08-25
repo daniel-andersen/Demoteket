@@ -26,6 +26,9 @@
 #import "Exhibition.h"
 #import "Globals.h"
 
+#define NAVIGATION_BUTTON_BORDER 0.05f
+#define NAVIGATION_BUTTON_SIZE 0.1f
+
 @implementation Exhibition
 
 float countDown = 50;
@@ -43,30 +46,31 @@ float speed = 0.0f;
 }
 
 - (void) initialize {
+    CFURLRef soundUrl = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("tap"), CFSTR("aif"), NULL);
+    
+    AudioServicesCreateSystemSoundID(soundUrl, &clickSoundId);
+
     textures = [[Textures alloc] init];
     [textures load];
     
     floorPlan = [[FloorPlan alloc] init];
     
-    float border = 0.05f;
-    float size = 0.1f;
-    
     nextButton = [[Quads alloc] init];
     [nextButton beginWithTexture:nextButtonTexture];
     [nextButton setOrthoProjection];
-    [nextButton addQuadX1:1.0f - border y1:border z1:0.0f
-                       x2:1.0f - border y2:border + size z2:0.0f
-                       x3:1.0f - border - size y3:border + size z3:0.0f
-                       x4:1.0f - border - size y4:border z4:0.0f];
+    [nextButton addQuadX1:1.0f - NAVIGATION_BUTTON_BORDER y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                       x2:1.0f - NAVIGATION_BUTTON_BORDER y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                       x3:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                       x4:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [nextButton end];
 
     prevButton = [[Quads alloc] init];
     [prevButton beginWithTexture:prevButtonTexture];
     [prevButton setOrthoProjection];
-    [prevButton addQuadX1:border + size y1:border z1:0.0f
-                       x2:border + size y2:border + size z2:0.0f
-                       x3:border y3:border + size z3:0.0f
-                       x4:border y4:border z4:0.0f];
+    [prevButton addQuadX1:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                       x2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                       x3:NAVIGATION_BUTTON_BORDER y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                       x4:NAVIGATION_BUTTON_BORDER y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [prevButton end];
 }
 
@@ -75,7 +79,23 @@ float speed = 0.0f;
 }
 
 - (void) tap:(GLKVector2)p {
-    [floorPlan nextPhoto];
+    if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+	    [self playClickSound];
+	    [floorPlan nextPhoto];
+	} else if ([self clickedInRectX:p.x y:p.y rx:NAVIGATION_BUTTON_BORDER ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+	    [self playClickSound];
+	    [floorPlan prevPhoto];
+	} else {
+        [self animatePhoto:[floorPlan getPhoto]];
+    }
+}
+
+- (void) animatePhoto:(PhotoInfo*)photoInfo {
+    if (photoInfo == NULL) {
+        return;
+    }
+    NSLog(@"%@", photoInfo.title);
+	[photoInfo turnAround];
 }
 
 - (void) update {
@@ -84,10 +104,20 @@ float speed = 0.0f;
 
 - (void) render {
     [floorPlan render];
-    if ([floorPlan isBackNextButtonsVisible]) {
-	    [nextButton render];
+    if ([floorPlan isBackButtonVisible]) {
 	    [prevButton render];
     }
+    if ([floorPlan isNextButtonVisible]) {
+	    [nextButton render];
+    }
+}
+
+- (bool) clickedInRectX:(float)x y:(float)y rx:(float)rx ry:(float)ry width:(float)width height:(float)height {
+    return x >= rx && y >= ry && x <= rx + width && y <= ry + height;
+}
+
+- (void) playClickSound {
+    AudioServicesPlaySystemSound(clickSoundId);
 }
 
 @end

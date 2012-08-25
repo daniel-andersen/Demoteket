@@ -29,14 +29,21 @@
 #import <GLKit/GLKit.h>
 
 #import "Textures.h"
+#import "PhotoInfo.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i * sizeof(GLfloat)))
+
+PhotoInfo *userPhotos[USER_PHOTOS_MAX_COUNT];
+int userPhotosCount;
 
 Textures *textures;
 GLKBaseEffect *glkEffectNormal;
 GLKBaseEffect *glkEffectShader;
 
-GLKMatrix4 sceneModelViewMatrix;
+GLKVector3 worldPosition;
+GLKVector3 worldRotation;
+
+GLKMatrix4 sceneRotationMatrix;
 GLKMatrix4 sceneProjectionMatrix;
 
 GLKMatrix4 mirrorModelViewMatrix;
@@ -48,6 +55,7 @@ bool isRenderingMirror;
 
 float screenWidth;
 float screenHeight;
+float aspectRatio;
 
 GLuint glslProgram;
 GLuint uniformModelViewProjectionMatrix;

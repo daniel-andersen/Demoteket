@@ -24,6 +24,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "Globals.h"
+#import "Textures.h"
 
 #define MOVEMENT_MAX_POINTS 1024
 
@@ -48,6 +49,7 @@ typedef struct {
     float lookIn;
     float continueDist;
     bool pause;
+    int photosIndex;
 } MovementPoint;
 
 @interface Movement : NSObject {
@@ -55,8 +57,6 @@ typedef struct {
 @private
     MovementPoint points[MOVEMENT_MAX_POINTS];
     int pointsCount;
-
-    int pointIndex;
 
     GLKVector2 position;
     GLKVector2 velocity;
@@ -67,11 +67,19 @@ typedef struct {
     MovementPoint oldDestAnglePoint;
     
     bool paused;
+    
+    PhotoInfo *photos[USER_PHOTOS_MAX_COUNT];
+    int photosCount;
+
+    int pointIndex;
+    int photosIndex;
 }
 
 - (void) setAngle:(float)a;
 - (void) setPosition:(GLKVector2)p;
 - (void) setPositionToFirstPoint;
+
+- (void) addUserPhoto:(PhotoInfo*)photoInfo;
 
 - (void) addPoint:(GLKVector2)p pause:(bool)pause;
 - (void) addPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause;
@@ -90,9 +98,16 @@ typedef struct {
 - (void) lookAt:(GLKVector2)p continueDistance:(float)dist;
 
 - (void) move:(float)speed;
-- (void) resume;
+
+- (void) goBack;
+- (void) goForth;
+
+- (PhotoInfo*) getCurrentPhoto;
 
 - (bool) isPaused;
+
+- (bool) canGoBack;
+- (bool) canGoForth;
 
 - (GLKVector3) getPositionAndAngle;
 

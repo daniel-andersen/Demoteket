@@ -28,8 +28,8 @@
 
 @implementation Room
 
-static float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4 - WALL_DEPTH, 0, 0, 0};
-static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
+const float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4 - WALL_DEPTH, 0, 0, 0};
+const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
 - (id) init {
     if (self = [super init]) {
@@ -207,7 +207,7 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 }
 
 - (void) addDoorGridX:(int)j gridY:(int)i x:(float)centerX z:(float)centerZ {
-    float angle = [self getTileX:j - 1 y:i] == '+' || [self getTileX:j + 1 y:i] == '+' ? M_PI : 0.0f;
+    //float angle = [self getTileX:j - 1 y:i] == '+' || [self getTileX:j + 1 y:i] == '+' ? M_PI : 0.0f;
     
 }
 
@@ -219,6 +219,23 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     }
     tiles[gridY][gridX] = type;
     [self addWallType:type x:x z:z angle:angle];
+    PhotoInfo *photoInfo = [self userPhotoAtX:x z:z];
+    if (photoInfo == NULL) {
+        [self addPhotosType:type x:x z:z angle:angle];
+    } else {
+        [self addUserPhoto:photoInfo x:x z:z angle:angle scale:1.0f];
+    }
+}
+
+- (PhotoInfo*) userPhotoAtX:(float)x z:(float)z {
+    for (int i = 0; i < userPhotosCount; i++) {
+        if (userPhotos[i] != NULL) {
+            if (x == userPhotos[i].position.x && z == userPhotos[i].position.y) {
+                return userPhotos[i];
+            }
+        }
+    }
+    return NULL;
 }
 
 - (void) addWallType:(int)type x:(float)x z:(float)z angle:(float)angle {
@@ -227,19 +244,10 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float x2 = x + cos(angle) * (BLOCK_SIZE / 2.0f);
     float z2 = z + sin(angle) * (BLOCK_SIZE / 2.0f);
     [walls[type] addQuadVerticalX1:x1 y1:0.0f z1:z1 x2:x2 y2:ROOM_HEIGHT z2:z2];
-    [self addPhotosType:type x:x z:z angle:angle];
 }
 
 - (void) addPillarGridX:(int)gridX gridY:(int)gridY x:(float)x z:(float)z angle:(float)angle {
-    if (angle > 2.0f) {
-	    [self addPillarType:3 x:x z:z angle:angle];
-    } else if (angle > 0.74f && angle < 0.76f && roomNumber == 0) {
-	    [self addPillarType:4 x:x z:z angle:angle];
-    } else if (angle > 0.74f && angle < 0.76f && roomNumber == 1) {
-	    [self addPillarType:2 x:x z:z angle:angle];
-    } else {
-	    [self addPillarType:1 x:x z:z angle:angle];
-    }
+    [self addPillarType:1 x:x z:z angle:angle];
 }
 
 - (void) addPillarType:(int)type x:(float)x z:(float)z angle:(float)angle {
@@ -259,11 +267,21 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float backX2 = backX + cos(angle) * PILLAR_WIDTH;
     float backZ2 = backZ + sin(angle) * PILLAR_WIDTH;
 
+    PhotoInfo *photoInfo = [self userPhotoAtX:x z:z];
+    
     [pillars addQuadVerticalX1:frontX1 y1:0.0f z1:frontZ1 x2:frontX2 y2:ROOM_HEIGHT z2:frontZ2];
-    [self addPhotosType:type x:frontX z:frontZ angle:angle];
+    if (photoInfo != NULL && photoInfo.frontFacing) {
+	    [self addUserPhoto:photoInfo x:frontX z:frontZ angle:angle scale:1.5f];
+    } else {
+	    [self addPhotosType:type x:frontX z:frontZ angle:angle];
+    }
 
     [pillars addQuadVerticalX1:backX2 y1:0.0f z1:backZ2 x2:backX1 y2:ROOM_HEIGHT z2:backZ1];
-    [self addPhotosType:type x:backX z:backZ angle:angle + M_PI];
+    if (photoInfo != NULL && !photoInfo.frontFacing) {
+	    [self addUserPhoto:photoInfo x:backX z:backZ angle:angle + M_PI scale:1.5f];
+    } else {
+	    [self addPhotosType:type x:backX z:backZ angle:angle + M_PI];
+    }
     
     [pillarsBorder addQuadVerticalX1:backX1 y1:0.0f z1:backZ1 x2:frontX1 y2:ROOM_HEIGHT z2:frontZ1];
     [pillarsBorder addQuadVerticalX1:frontX2 y1:0.0f z1:frontZ2 x2:backX2 y2:ROOM_HEIGHT z2:backZ2];
@@ -271,29 +289,38 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
 - (void) addPhotosType:(int)type x:(float)x z:(float)z angle:(float)angle {
     if (type == 0) {
-	    [self addPhotoQuads:1 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset:-0.5f angle:angle];
-	    [self addPhotoQuads:2 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset: 0.5f angle:angle];
-    }
-    if (type == 1) {
-	    [self addPhotoQuads:0 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.5f height:1.0f horizontalOffset:-0.35f verticalOffset:0.0f angle:angle];
-	    [self addPhotoQuads:1 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.5f height:1.0f horizontalOffset: 0.35f verticalOffset:0.0f angle:angle];
-    }
-    if (type == 2) {
-	    [self addPhotoQuads:3 x:x y:ROOM_HEIGHT / 2.0f z:z width:1.5f height:1.5f * 0.7382f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
-    }
-    if (type == 3) {
-	    [self addPhotoQuads:4 x:x y:ROOM_HEIGHT / 2.0f z:z width:1.2f * 0.9062f height:1.2f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
-    }
-    if (type == 4) {
-	    [self addPhotoQuadsNoBorder:PHOTO_INDEX_DEMOTEKET_LOGO x:x y:ROOM_HEIGHT / 2.0f z:z width:1.2f height:1.2f horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
+	    [self addPhotoQuads:1 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset:-0.5f angle:angle border:true];
+	    [self addPhotoQuads:2 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.4f height:0.8f horizontalOffset:0.0f verticalOffset: 0.5f angle:angle border:true];
+    } else if (type == 1) {
+	    [self addPhotoQuads:0 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.5f height:1.0f horizontalOffset:-0.35f verticalOffset:0.0f angle:angle border:true];
+	    [self addPhotoQuads:1 x:x y:ROOM_HEIGHT / 2.0f z:z width:0.5f height:1.0f horizontalOffset: 0.35f verticalOffset:0.0f angle:angle border:true];
     }
 }
 
-- (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
+- (void) addUserPhoto:(PhotoInfo*)photoInfo x:(float)x z:(float)z angle:(float)angle scale:(float)scale {
+    float maxSize = MAX(photoInfo.photoTexture.width, photoInfo.photoTexture.height);
+    float width = scale * (photoInfo.photoTexture.width / maxSize);
+    float height = scale * (photoInfo.photoTexture.height / aspectRatio / maxSize);
+    [photoInfo beginQuads];
+    if (photoInfo.photoTexture.id != demoteketLogoTexture.id) {
+	    [self addPhotoToQuads:photoInfo.photoQuads x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:true];
+    } else {
+	    [self addPhotoToQuads:photoInfo.photoQuads x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:false];
+    }
+    [photoInfo endQuads];
+    photos[photoInfo.photoIndex] = photoInfo.photoQuads;
+    photos[photoInfo.textIndex] = photoInfo.textQuads;
+}
+
+- (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border {
     if (photos[index] == NULL) {
 	    photos[index] = [[Quads alloc] init];
 	    [photos[index] beginWithTexture:photosTexture[index]];
     }
+    [self addPhotoToQuads:photos[index] x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle border:border];
+}
+
+- (void) addPhotoToQuads:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border {
     width /= 2.0f;
     height /= 2.0f;
     y += offsetVert;
@@ -308,34 +335,14 @@ static float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float y1 = y - height;
     float y2 = y + height;
 
-	[photos[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
+	[quads addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
 	
-    [photosBorder addQuadVerticalX1:wallX1 y1:y1 z1:wallZ1 x2:photoX1 y2:y2 z2:photoZ1];
-	[photosBorder addQuadVerticalX1:photoX2 y1:y1 z1:photoZ2 x2:wallX2 y2:y2 z2:wallZ2];
-	[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:wallX2 z2:wallZ2 x3:photoX2 z3:photoZ2 x4:photoX1 z4:photoZ1 y:y1];
-	[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:photoX1 z2:photoZ1 x3:photoX2 z3:photoZ2 x4:wallX2 z4:wallZ2 y:y2];
-}
-
-- (void) addPhotoQuadsNoBorder:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
-    if (photos[index] == NULL) {
-	    photos[index] = [[Quads alloc] init];
-	    [photos[index] beginWithTexture:photosTexture[index]];
+    if (border) {
+	    [photosBorder addQuadVerticalX1:wallX1 y1:y1 z1:wallZ1 x2:photoX1 y2:y2 z2:photoZ1];
+		[photosBorder addQuadVerticalX1:photoX2 y1:y1 z1:photoZ2 x2:wallX2 y2:y2 z2:wallZ2];
+		[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:wallX2 z2:wallZ2 x3:photoX2 z3:photoZ2 x4:photoX1 z4:photoZ1 y:y1];
+		[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:photoX1 z2:photoZ1 x3:photoX2 z3:photoZ2 x4:wallX2 z4:wallZ2 y:y2];
     }
-    width /= 2.0f;
-    height /= 2.0f;
-    y += offsetVert;
-    float wallX1 = x - cos(angle) * (width + offsetHorz);
-    float wallZ1 = z - sin(angle) * (width + offsetHorz);
-    float wallX2 = x + cos(angle) * (width - offsetHorz);
-    float wallZ2 = z + sin(angle) * (width - offsetHorz);
-    float photoX1 = wallX1 + (cos(angle + M_PI_2) * PHOTO_DEPTH);
-    float photoZ1 = wallZ1 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
-    float photoX2 = wallX2 + (cos(angle + M_PI_2) * PHOTO_DEPTH);
-    float photoZ2 = wallZ2 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
-    float y1 = y - height;
-    float y2 = y + height;
-    
-	[photos[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
 }
 
 - (int) getDoorDirectionX:(int)x y:(int)y {
