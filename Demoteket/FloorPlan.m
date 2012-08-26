@@ -210,6 +210,7 @@ float t = 0.0f;
     mirrorModelViewMatrix = GLKMatrix4Identity;
     
     [self renderRooms];
+    [self renderFloors];
 
 	glDisable(GL_CULL_FACE);
 }
@@ -246,6 +247,14 @@ float t = 0.0f;
     for (int i = currentRoom - 1; i < currentRoom + 2; i++) {
         if (i >= 0 && i < ROOM_COUNT) {
             [rooms[i] render];
+        }
+    }
+}
+
+- (void) renderFloors {
+    for (int i = currentRoom - 1; i < currentRoom + 2; i++) {
+        if (i >= 0 && i < ROOM_COUNT) {
+            [rooms[i] renderFloor];
         }
     }
 }

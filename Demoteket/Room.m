@@ -414,7 +414,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
 		[photos[i] render];
     }
-    [self renderFloor];
 }
 
 - (void) renderFloor {

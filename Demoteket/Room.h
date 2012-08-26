@@ -72,5 +72,6 @@ extern const float ROOM_OFFSET_Z[];
 - (void) trashRoom;
 
 - (void) render;
+- (void) renderFloor;
 
 @end
