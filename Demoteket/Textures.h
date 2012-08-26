@@ -33,6 +33,8 @@
 #define PHOTO_INDEX_DEMOTEKET_LOGO 5
 
 #define TEXT_BORDER 10
+#define PHOTO_WHITE_BORDER_PCT 0.05f
+#define PHOTO_BLACK_BORDER_PCT 0.02f
 
 typedef struct {
     GLuint id;
@@ -77,5 +79,7 @@ extern void loadTextures();
 - (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture;
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height;
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color;
+
+- (Texture) photoFromFile:(NSString*)filename;
 
 @end

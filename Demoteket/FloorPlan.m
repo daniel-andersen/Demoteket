@@ -43,8 +43,8 @@ float t = 0.0f;
 }
 
 - (void) createMirrorFramebuffer {
-    offscreenTextureWidth = [self textureAtLeastSize:screenWidth];
-    offscreenTextureHeight = [self textureAtLeastSize:screenHeight];
+    offscreenTextureWidth = textureAtLeastSize(screenWidth);
+    offscreenTextureHeight = textureAtLeastSize(screenHeight);
     offscreenSizeInv[0] = 1.0f / offscreenTextureWidth;
     offscreenSizeInv[1] = 1.0f / offscreenTextureHeight;
 
@@ -82,15 +82,6 @@ float t = 0.0f;
     floorTexture = textureMake(mirrorTexture);
 }
 
-- (int) textureAtLeastSize:(int)size {
-    int l = (int) log2(size);
-    if ((int) pow(2, l) == size) {
-        return size;
-    } else {
-        return (int) pow(2, l + 1);
-    }
-}
-
 - (void) createFloorPlan {
     NSLog(@"Creating floor plan");
 
@@ -115,9 +106,9 @@ float t = 0.0f;
 
     userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:6.0f room:0] angle:0.0f photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] angle:0.0f photoTexture:[textures loadTexture:@"user_photo_1.png"] textTexture:[textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256] frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] angle:0.0f photoTexture:[textures photoFromFile:@"user_photo_1.png"] textTexture:[textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256] frontFacing:true];
     
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] angle:0.0f photoTexture:[textures loadTexture:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] angle:0.0f photoTexture:[textures photoFromFile:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
 }
 
 - (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture {

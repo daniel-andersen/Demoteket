@@ -28,3 +28,12 @@
 float letterToAngle(char ch) {
     return 2.0f * M_PI * (float) (((int) ch - (int) 'A') / (float) ((int) 'Z' - (int) 'A'));
 }
+
+int textureAtLeastSize(int size) {
+    int l = (int) log2(size);
+    if ((int) pow(2, l) == size) {
+        return size;
+    } else {
+        return (int) pow(2, l + 1);
+    }
+}

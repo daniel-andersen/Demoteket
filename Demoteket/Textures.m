@@ -25,6 +25,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "Textures.h"
+#import "Globals.h"
 
 Texture wallTexture[WALL_TEXTURE_COUNT];
 Texture wallBorderTexture;
@@ -164,6 +165,40 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     UIGraphicsEndImageContext();
     
     return [self loadTextureWithImage:image repeat:false];
+}
+
+- (Texture) photoFromFile:(NSString*)filename {
+    NSLog(@"Converting texture to photo: %@", filename);
+    return [self photoFromImage:[UIImage imageNamed:filename]];
+}
+
+- (Texture) photoFromImage:(UIImage*)image {
+    //int texWidth = textureAtLeastSize(image.size.width);
+    //int texHeight = textureAtLeastSize(image.size.height);
+    
+    float whiteBorderWidth = (float) image.size.width * PHOTO_WHITE_BORDER_PCT;
+    float whiteBorderHeight = (float) image.size.height * PHOTO_WHITE_BORDER_PCT;
+    
+    float blackBorderWidth = (float) image.size.width * PHOTO_BLACK_BORDER_PCT;
+    float blackBorderHeight = (float) image.size.height * PHOTO_BLACK_BORDER_PCT;
+
+    UIGraphicsBeginImageContext(CGSizeMake(image.size.width + (whiteBorderWidth * 2), image.size.height + (whiteBorderHeight * 2)));
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    UIGraphicsPushContext(context);
+
+    CGContextSetRGBFillColor(context, 0.0f, 0.0f, 0.0f, 1.0f);
+    UIRectFill(CGRectMake(0, 0, image.size.width + (whiteBorderWidth * 2), image.size.height + (whiteBorderHeight * 2)));
+
+    CGContextSetRGBFillColor(context, 1.0f, 1.0f, 1.0f, 1.0f);
+    UIRectFill(CGRectMake(blackBorderWidth, blackBorderHeight, image.size.width + ((whiteBorderWidth - blackBorderWidth) * 2), image.size.height + ((whiteBorderHeight - blackBorderWidth) * 2)));
+
+    [image drawInRect:CGRectMake(whiteBorderWidth, whiteBorderHeight, image.size.width, image.size.height)];
+
+    UIGraphicsPopContext();
+    UIImage *photoImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return [self loadTextureWithImage:photoImage repeat:false];
 }
 
 @end
