@@ -58,6 +58,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
             tiles[i][j] = 'X';
         }
     }
+    lightsCount = 0;
     floor = [[Quads alloc] init];
     [floor beginWithTexture:floorDistortionTexture];
     if (number == 0) {
@@ -74,6 +75,10 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
         [self addStrip:@"|   |"];
         [self addStrip:@"+---+"];
         [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
+        [self addLightType:0 x:4.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
+        [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:1 x:1.5f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:2 x:3.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
 	}
     if (number == 1) {
         [self addStrip:@"+---+"];
@@ -89,8 +94,31 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
         [self addStrip:@"|   |"];
         [self addStrip:@"+---+"];
         [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
+        [self addLightType:0 x:3.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
+        [self addLightType:0 x:5.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
+        [self addLightType:1 x:2.0f * BLOCK_SIZE z:5.0f * BLOCK_SIZE];
+        [self addLightType:2 x:1.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:0 x:3.0f * BLOCK_SIZE z:10.0f * BLOCK_SIZE];
+        [self addLightType:2 x:0.0f * BLOCK_SIZE z:12.0f * BLOCK_SIZE];
+        [self addLightType:1 x:4.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
 	}
     [floor end];
+    for (int i = 0; i < lightsCount; i++) {
+		[lights[i] end];
+    }
+}
+
+- (void) addLightType:(int)type x:(float)x z:(float)z {
+    x += ROOM_OFFSET_X[roomNumber];
+    z += ROOM_OFFSET_Z[roomNumber];
+    float lightSize = lightTexture[type].imageWidth / 32.0f;
+    lights[lightsCount] = [[Quads alloc] init];
+    [lights[lightsCount] beginWithTexture:lightTexture[type]];
+
+    [lights[lightsCount] addQuadVerticalX1:-(lightSize / 2.0f) y1:-(lightSize / 2.0f) z1:0.0f x2:lightSize / 2.0f y2:lightSize / 2.0f z2:0.0f];
+    [lights[lightsCount] setTranslation:GLKVector3Make(x, LIGHTS_HEIGHT, z)];
+    [lights[lightsCount] setFaceToCamera:true];
+    lightsCount++;
 }
 
 - (void) addFloorQuadX1:(float)x1 z1:(float)z1 x2:(float)x2 z2:(float)z2 {
@@ -411,6 +439,9 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 	[pillars render];
 	[pillarsBorder render];
     [photosBorder render];
+    for (int i = 0; i < lightsCount; i++) {
+		[lights[i] render];
+    }
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
 		[photos[i] render];
     }

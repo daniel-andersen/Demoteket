@@ -29,6 +29,7 @@
 
 #define WALL_TEXTURE_COUNT 6
 #define PHOTOS_TEXTURE_COUNT (3 + USER_PHOTOS_MAX_COUNT)
+#define LIGHT_TYPE_COUNT 3
 
 #define PHOTO_INDEX_DEMOTEKET_LOGO 5
 
@@ -63,6 +64,8 @@ extern Texture demoteketLogoTexture;
 
 extern Texture floorTexture;
 extern Texture floorDistortionTexture;
+
+extern Texture lightTexture[LIGHT_TYPE_COUNT];
 
 extern Texture nextButtonTexture;
 extern Texture prevButtonTexture;

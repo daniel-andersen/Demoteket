@@ -32,6 +32,7 @@
     if (self = [super init]) {
         isOrthoProjection = false;
         depthTestEnabled = true;
+        faceToCamera = false;
         translation = GLKVector3Make(0.0f, 0.0f, 0.0f);
         rotation = GLKVector3Make(0.0f, 0.0f, 0.0f);
         backgroundColor = GLKVector4Make(0.0f, 0.0f, 0.0f, 0.0f);
@@ -158,6 +159,10 @@
     backgroundColor = col;
 }
 
+- (void) setFaceToCamera:(bool)b {
+    faceToCamera = b;
+}
+
 - (void) refineTexCoordsX1:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 {
     textureSetTexCoords(&texture, x1, y1, x2, y2);
 }
@@ -258,17 +263,24 @@
     GLKMatrix4 modelViewMatrix = GLKMatrix4Identity;
     modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, sceneModelViewMatrix);
     modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, translation.x, translation.y, translation.z);
-    if (rotation.x != 0.0f) {
-        modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.x, 1.0f, 0.0f, 0.0f);
+    if (faceToCamera) {
+        modelViewMatrix.m00 = 1.0f; modelViewMatrix.m01 = 0.0f; modelViewMatrix.m02 = 0.0f;
+        modelViewMatrix.m10 = 0.0f; modelViewMatrix.m11 = 1.0f; modelViewMatrix.m12 = 0.0f;
+        modelViewMatrix.m20 = 0.0f; modelViewMatrix.m21 = 0.0f; modelViewMatrix.m22 = 1.0f;
+    } else {
+	    if (rotation.x != 0.0f) {
+    	    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.x, 1.0f, 0.0f, 0.0f);
+	    }
+    	if (rotation.y != 0.0f) {
+        	modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.y, 0.0f, 1.0f, 0.0f);
+	    }
+    	if (rotation.z != 0.0f) {
+        	modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.z, 0.0f, 0.0f, 1.0f);
+	    }
     }
-    if (rotation.y != 0.0f) {
-        modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.y, 0.0f, 1.0f, 0.0f);
-    }
-    if (rotation.z != 0.0f) {
-        modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.z, 0.0f, 0.0f, 1.0f);
-    }
+    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
     
-    glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
+    glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : modelViewMatrix;
     glkEffect.transform.projectionMatrix = isOrthoProjection ? orthoProjectionMatrix : sceneProjectionMatrix;
 
     [glkEffect prepareToDraw];

@@ -41,6 +41,8 @@ Texture demoteketLogoTexture;
 Texture floorTexture;
 Texture floorDistortionTexture;
 
+Texture lightTexture[LIGHT_TYPE_COUNT];
+
 Texture nextButtonTexture;
 Texture prevButtonTexture;
 
@@ -101,6 +103,10 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     photosTexture[photosTextureCount++] = [self loadTexture:@"photo2.png"];
     photosTexture[photosTextureCount++] = [self loadTexture:@"photo3.png"];
 
+    lightTexture[0] = [self loadTexture:@"light1.png"];
+    lightTexture[1] = [self loadTexture:@"light2.png"];
+    lightTexture[2] = [self loadTexture:@"light3.png"];
+    
     demoteketLogoTexture = [self loadTexture:@"demoteket_logo.png"]; textureSetBlend(&demoteketLogoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     floorDistortionTexture = [self loadTexture:@"floor_distortion.png" repeat:true]; textureSetTexCoords(&floorDistortionTexture, 0.0f, 0.0f, 55.0f, 55.0f);

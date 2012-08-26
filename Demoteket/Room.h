@@ -31,8 +31,11 @@
 
 #define PHOTOS_MAX_COUNT 32
 #define WALL_COUNT 6
+#define LIGHT_MAX_COUNT 32
 
 #define ROOM_HEIGHT 5.0f
+#define LIGHTS_HEIGHT (ROOM_HEIGHT * 1.5f)
+
 #define BLOCK_SIZE 1.5f
 
 #define WALL_DEPTH (BLOCK_SIZE * 0.05f)
@@ -55,6 +58,9 @@ extern const float ROOM_OFFSET_Z[];
     int roomNumber;
 
     Quads *floor;
+
+    Quads *lights[LIGHT_MAX_COUNT];
+    int lightsCount;
     
     Quads *walls[WALL_COUNT];
     Quads *wallsBorder;

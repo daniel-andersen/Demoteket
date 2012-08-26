@@ -208,8 +208,9 @@ float t = 0.0f;
 
 - (void) setupPosition {
     GLKVector3 v = [movement getPositionAndAngle];
+    worldPosition = GLKVector3Make(v.x, -2.5f, v.y);
     sceneModelViewMatrix = GLKMatrix4Rotate(GLKMatrix4Identity, v.z, 0.0f, 1.0f, 0.0f);
-    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, v.x, -2.5f, v.y);
+    sceneModelViewMatrix = GLKMatrix4Translate(sceneModelViewMatrix, worldPosition.x, worldPosition.y, worldPosition.z);
 }
 
 - (void) renderMirroredFloor {

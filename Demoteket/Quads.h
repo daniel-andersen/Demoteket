@@ -57,6 +57,8 @@ typedef struct {
     bool isOrthoProjection;
     bool depthTestEnabled;
     
+    bool faceToCamera;
+    
     GLKVector3 translation;
     GLKVector3 rotation;
 }
@@ -74,6 +76,8 @@ typedef struct {
 
 - (void) setDepthTestEnabled:(bool)enabled;
 - (void) setBackgroundWhenDepthTestDisabled:(GLKVector4)col;
+
+- (void) setFaceToCamera:(bool)b;
 
 - (void) setOrthoProjection;
 
