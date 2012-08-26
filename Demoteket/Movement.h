@@ -42,6 +42,9 @@
 #define MOVEMENT_TYPE_ANGLE_LOOK_IN         2
 #define MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE 3
 
+#define MOVEMENT_DIR_FORWARDS  0
+#define MOVEMENT_DIR_BACKWARDS 1
+
 typedef struct {
     int type;
     GLKVector2 position;
@@ -67,6 +70,8 @@ typedef struct {
     MovementPoint oldDestAnglePoint;
     
     bool paused;
+    bool tour;
+    int direction;
     
     PhotoInfo *photos[USER_PHOTOS_MAX_COUNT];
     int photosCount;
@@ -99,15 +104,18 @@ typedef struct {
 
 - (void) move:(float)speed;
 
-- (void) goBack;
-- (void) goForth;
+- (void) goBackwards;
+- (void) goForwards;
+
+- (void) startTour;
+- (void) stopTour;
 
 - (PhotoInfo*) getCurrentPhoto;
 
 - (bool) isPaused;
 
-- (bool) canGoBack;
-- (bool) canGoForth;
+- (bool) canGoBackwards;
+- (bool) canGoForwards;
 
 - (GLKVector3) getPositionAndAngle;
 

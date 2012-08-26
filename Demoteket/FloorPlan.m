@@ -173,11 +173,11 @@ float t = 0.0f;
 }
 
 - (void) prevPhoto {
-    [movement goBack];
+    [movement goBackwards];
 }
 
 - (void) nextPhoto {
-    [movement goForth];
+    [movement goForwards];
 }
 
 - (PhotoInfo*) getPhoto {
@@ -252,11 +252,11 @@ float t = 0.0f;
 }
 
 - (bool) isBackButtonVisible {
-    return [movement canGoBack];
+    return [movement canGoBackwards];
 }
 
 - (bool) isNextButtonVisible {
-    return [movement canGoForth];
+    return [movement canGoForwards];
 }
 
 @end

@@ -45,6 +45,7 @@ Texture lightTexture[LIGHT_TYPE_COUNT];
 
 Texture nextButtonTexture;
 Texture prevButtonTexture;
+Texture tourButtonTexture;
 
 Texture textureMake(GLuint id) {
     Texture texture;
@@ -85,7 +86,8 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 
 - (void) load {
     nextButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&nextButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    prevButtonTexture = [self loadTexture:@"prev_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    prevButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); textureSetTexCoords(&prevButtonTexture, 1.0f, 0.0f, 0.0f, 1.0f);
+    tourButtonTexture = [self loadTexture:@"tour_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     wallTexture[0] = [self loadTexture:@"wall1.png"];
     wallTexture[1] = [self loadTexture:@"wall2.png"];

@@ -43,6 +43,8 @@
     angle = 0.0f;
     angleTransition = 1.0f;
     paused = false;
+    tour = false;
+    direction = MOVEMENT_DIR_FORWARDS;
     for (int i = 0; i < MOVEMENT_MAX_POINTS; i++) {
         points[i].photosIndex = -1;
     }
@@ -151,20 +153,30 @@
     [self updatePath];
 }
 
-- (void) goForth {
+- (void) goForwards {
     if (!paused) {
         return;
     }
     paused = false;
+    direction = MOVEMENT_DIR_FORWARDS;
     [self nextPoint];
 }
 
-- (void) goBack {
+- (void) goBackwards {
     if (!paused) {
         return;
     }
     paused = false;
+    direction = MOVEMENT_DIR_BACKWARDS;
     [self prevPoint];
+}
+
+- (void) startTour {
+    tour = true;
+}
+
+- (void) stopTour {
+    tour = false;
 }
 
 - (PhotoInfo*) getCurrentPhoto {
@@ -261,7 +273,7 @@
     return paused;
 }
 
-- (bool) canGoBack {
+- (bool) canGoBackwards {
     if (!paused) {
         return false;
     }
@@ -273,7 +285,7 @@
     return false;
 }
 
-- (bool) canGoForth {
+- (bool) canGoForwards {
     return paused && pointIndex < pointsCount - 1;
 }
 

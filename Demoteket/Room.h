@@ -34,7 +34,7 @@
 #define LIGHT_MAX_COUNT 32
 
 #define ROOM_HEIGHT 5.0f
-#define LIGHTS_HEIGHT (ROOM_HEIGHT * 1.5f)
+#define LIGHTS_HEIGHT (ROOM_HEIGHT * 1.3f)
 
 #define BLOCK_SIZE 1.5f
 
