@@ -142,16 +142,20 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 }
 
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, height)];
+    return [self textToTexture:text width:width height:height color:[UIColor colorWithRed:248.0f / 255.0f green:230.0f / 255.0f blue:213.0f / 255.0f alpha:1.0f]];
+}
+
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color {
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(TEXT_BORDER, TEXT_BORDER, width - (TEXT_BORDER * 2), height - (TEXT_BORDER * 2))];
     label.text = text;
-    label.font = [UIFont fontWithName:@"Helvetica" size:18.0f];
-    label.textColor = [UIColor colorWithRed:248.0f / 255.0f green:230.0f / 255.0f blue:213.0f / 255.0f alpha:1.0f];
+    label.font = [UIFont fontWithName:@"Times New Roman" size:14.0f];
+    label.textColor = color;
     label.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
     label.numberOfLines = 0;
     
     UIGraphicsBeginImageContext(label.bounds.size);
     
-    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0.0f, 0.0f);
+    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), TEXT_BORDER, TEXT_BORDER);
     CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, 1.0);
     
     [label.layer renderInContext:UIGraphicsGetCurrentContext()];

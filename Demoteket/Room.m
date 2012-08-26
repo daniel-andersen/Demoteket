@@ -58,6 +58,8 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
             tiles[i][j] = 'X';
         }
     }
+    floor = [[Quads alloc] init];
+    [floor beginWithTexture:floorDistortionTexture];
     if (number == 0) {
         [self addStrip:@"+---+"];
         [self addStrip:@"d   |"];
@@ -71,6 +73,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"+---+"];
+        [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
 	}
     if (number == 1) {
         [self addStrip:@"+---+"];
@@ -85,7 +88,18 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"+---+"];
+        [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
 	}
+    [floor end];
+}
+
+- (void) addFloorQuadX1:(float)x1 z1:(float)z1 x2:(float)x2 z2:(float)z2 {
+    x1 += ROOM_OFFSET_X[roomNumber];
+    z1 += ROOM_OFFSET_Z[roomNumber];
+    x2 += ROOM_OFFSET_X[roomNumber];
+    z2 += ROOM_OFFSET_Z[roomNumber];
+    [floor addQuadHorizontalX1:x1 z1:z1 x2:x2 z2:z2 y:0.0f];
+    [floor refineTexCoordsX1:0.0f y1:0.0f x2:(30.0f / (x2 - x1)) * 55.0f y2:(30.0f / (z2 - z1)) * 55.0f];
 }
 
 - (void) addStrip:(NSString*)strip {
@@ -301,13 +315,19 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float maxSize = MAX(photoInfo.photoTexture.width, photoInfo.photoTexture.height);
     float width = scale * (photoInfo.photoTexture.width / maxSize);
     float height = scale * (photoInfo.photoTexture.height / aspectRatio / maxSize);
+    
     [photoInfo beginQuads];
-    if (photoInfo.photoTexture.id != demoteketLogoTexture.id) {
-	    [self addPhotoToQuads:photoInfo.photoQuads x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:true];
-    } else {
-	    [self addPhotoToQuads:photoInfo.photoQuads x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:false];
-    }
+    [self addPhotoToQuads:photoInfo.photoQuads x:0.0f y:ROOM_HEIGHT / 2.0f z:0.0f width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:false];
+    [self addPhotoToQuads:photoInfo.textQuads x:0.0f y:ROOM_HEIGHT / 2.0f z:0.0f width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:false];
     [photoInfo endQuads];
+    
+    if (photoInfo.photoTexture.id != demoteketLogoTexture.id) {
+        [self addPhotoBorderX:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
+    }
+    
+    [photoInfo.photoQuads setTranslation:GLKVector3Make(x, 0.0f, z)];
+    [photoInfo.textQuads setTranslation:GLKVector3Make(x, 0.0f, z)];
+
     photos[photoInfo.photoIndex] = photoInfo.photoQuads;
     photos[photoInfo.textIndex] = photoInfo.textQuads;
 }
@@ -321,6 +341,10 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 }
 
 - (void) addPhotoToQuads:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border {
+    if (border) {
+        [self addPhotoBorderX:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle];
+    }
+
     width /= 2.0f;
     height /= 2.0f;
     y += offsetVert;
@@ -336,13 +360,27 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float y2 = y + height;
 
 	[quads addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
-	
-    if (border) {
-	    [photosBorder addQuadVerticalX1:wallX1 y1:y1 z1:wallZ1 x2:photoX1 y2:y2 z2:photoZ1];
-		[photosBorder addQuadVerticalX1:photoX2 y1:y1 z1:photoZ2 x2:wallX2 y2:y2 z2:wallZ2];
-		[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:wallX2 z2:wallZ2 x3:photoX2 z3:photoZ2 x4:photoX1 z4:photoZ1 y:y1];
-		[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:photoX1 z2:photoZ1 x3:photoX2 z3:photoZ2 x4:wallX2 z4:wallZ2 y:y2];
-    }
+}
+
+- (void) addPhotoBorderX:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
+    width /= 2.0f;
+    height /= 2.0f;
+    y += offsetVert;
+    float wallX1 = x - cos(angle) * (width + offsetHorz);
+    float wallZ1 = z - sin(angle) * (width + offsetHorz);
+    float wallX2 = x + cos(angle) * (width - offsetHorz);
+    float wallZ2 = z + sin(angle) * (width - offsetHorz);
+    float photoX1 = wallX1 + (cos(angle + M_PI_2) * PHOTO_DEPTH);
+    float photoZ1 = wallZ1 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
+    float photoX2 = wallX2 + (cos(angle + M_PI_2) * PHOTO_DEPTH);
+    float photoZ2 = wallZ2 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
+    float y1 = y - height;
+    float y2 = y + height;
+    
+    [photosBorder addQuadVerticalX1:wallX1 y1:y1 z1:wallZ1 x2:photoX1 y2:y2 z2:photoZ1];
+	[photosBorder addQuadVerticalX1:photoX2 y1:y1 z1:photoZ2 x2:wallX2 y2:y2 z2:wallZ2];
+	[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:wallX2 z2:wallZ2 x3:photoX2 z3:photoZ2 x4:photoX1 z4:photoZ1 y:y1];
+	[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:photoX1 z2:photoZ1 x3:photoX2 z3:photoZ2 x4:wallX2 z4:wallZ2 y:y2];
 }
 
 - (int) getDoorDirectionX:(int)x y:(int)y {
@@ -372,10 +410,19 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     [wallsBorder render];
 	[pillars render];
 	[pillarsBorder render];
+    [photosBorder render];
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
 		[photos[i] render];
     }
-    [photosBorder render];
+    [self renderFloor];
+}
+
+- (void) renderFloor {
+    currentShaderProgram = glslProgram;
+    
+    [floor render];
+    
+    currentShaderProgram = 0;
 }
 
 @end

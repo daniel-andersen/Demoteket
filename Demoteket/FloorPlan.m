@@ -96,11 +96,6 @@ float t = 0.0f;
 
     [self addPhotos];
 
-    floor = [[Quads alloc] init];
-    [floor beginWithTexture:floorDistortionTexture];
-    [floor addQuadHorizontalX1:-15.0f z1:-15.0f x2:15.0f z2:15.0f y:0.0f];
-    [floor end];
-
     currentRoom = 0;
 
     for (int i = 0; i < ROOM_COUNT; i++) {
@@ -115,11 +110,13 @@ float t = 0.0f;
 - (void) addPhotos {
     userPhotosCount = 0;
 
-    Texture demoteketTextTexture = [textures textToTexture:@"DEMOTEKET AARHUS\n\niOS version af:\nDaniel Andersen" withSizeOf:demoteketLogoTexture];
+    Texture demoteketTextTexture = [textures textToTexture:@"DEMOTEKET AARHUS\n\niOS version af:\nDaniel Andersen" width:256 height:256 color:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f]];
     textureSetBlend(&demoteketTextTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:6.0f room:0] angle:0.0f photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] angle:0.0f photoTexture:[textures loadTexture:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] angle:0.0f photoTexture:[textures loadTexture:@"user_photo_1.png"] textTexture:[textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256] frontFacing:true];
+    
     userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] angle:0.0f photoTexture:[textures loadTexture:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
 }
 
@@ -156,19 +153,23 @@ float t = 0.0f;
     [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:false];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 6.0f) angle:letterToAngle('D')] lookAt:GLKVector2Make(0.5f, 7.0f) pause:true];
 
+    [movement addUserPhoto:userPhotos[1]];
     [movement addOffsetPoint:GLKVector2Make(-2.0f, -1.5f) lookAt:GLKVector2Make(4.0f, 13.0f)];
     [movement addOffsetPoint:GLKVector2Make(-1.5f,  0.0f)];
     [movement addOffsetPoint:GLKVector2Make(-1.0f,  1.5f)];
     [movement addOffsetPoint:GLKVector2Make( 2.0f,  4.5f)];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(2.6f, 7.0f) angle:-0.3f] lookAt:GLKVector2Make(2.4f, 7.0f) pause:true];
 
+    [movement addUserPhoto:userPhotos[2]];
     [movement lookAt:GLKVector2Make(5.0f, 0.0f) continueDistance:0.7f];
     [movement addOffsetPoint:GLKVector2Make(3.5f, 3.5f)];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, -1.0f) angle:letterToAngle('H')] pause:true];
     
+    //[movement addUserPhoto:userPhotos[3]];
     [movement addOffsetPoint:GLKVector2Make(2.5f, -5.0f) lookAt:GLKVector2Make(-6.0f, -9.0f)];
     [movement addOffsetPoint:GLKVector2Make(-5.0f, -3.0f) pause:true];
 
+    //[movement addUserPhoto:userPhotos[4]];
     [movement addOffsetPoint:GLKVector2Make(1.5f, -4.0f) lookAt:GLKVector2Make(1.0f, -3.0f) pause:true];
 
     [movement setAngle:0.0f];
@@ -194,6 +195,9 @@ float t = 0.0f;
 
 - (void) update {
     [movement move:0.015f];
+    for (int i = 0; i < userPhotosCount; i++) {
+        [userPhotos[i] update];
+    }
 }
 
 - (void) render {
@@ -205,7 +209,6 @@ float t = 0.0f;
     isRenderingMirror = false;
     mirrorModelViewMatrix = GLKMatrix4Identity;
     
-    [self renderFloor];
     [self renderRooms];
 
 	glDisable(GL_CULL_FACE);
@@ -245,20 +248,6 @@ float t = 0.0f;
             [rooms[i] render];
         }
     }
-}
-
-- (void) renderFloor {
-    currentShaderProgram = glslProgram;
-
-    glDisable(GL_DEPTH_TEST);
-    glDepthMask(false);
-
-    [floor render];
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(true);
-
-    currentShaderProgram = 0;
 }
 
 - (bool) isBackButtonVisible {

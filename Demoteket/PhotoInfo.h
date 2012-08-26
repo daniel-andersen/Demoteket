@@ -25,6 +25,8 @@
 
 #import "Quads.h"
 
+#define PHOTO_ANIMATION_SPEED 0.02f
+
 @interface PhotoInfo : NSObject {
 
 @private
@@ -45,10 +47,15 @@
     int textIndex;
     
     bool frontFacing;
+    
+    float animation;
+    bool showText;
 }
 
 - (void) beginQuads;
 - (void) endQuads;
+
+- (void) update;
 
 - (void) turnAround;
 

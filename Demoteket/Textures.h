@@ -32,6 +32,8 @@
 
 #define PHOTO_INDEX_DEMOTEKET_LOGO 5
 
+#define TEXT_BORDER 10
+
 typedef struct {
     GLuint id;
     int width, height;
@@ -74,5 +76,6 @@ extern void loadTextures();
 
 - (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture;
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height;
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color;
 
 @end

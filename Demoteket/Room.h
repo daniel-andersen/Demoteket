@@ -54,6 +54,8 @@ extern const float ROOM_OFFSET_Z[];
     
     int roomNumber;
 
+    Quads *floor;
+    
     Quads *walls[WALL_COUNT];
     Quads *wallsBorder;
 

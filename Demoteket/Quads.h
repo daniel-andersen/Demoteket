@@ -47,6 +47,7 @@ typedef struct {
     bool textureToggled;
 
     GLKVector4 color;
+    GLKVector4 backgroundColor;
     
     GLfloat vertices[VERTICES_MAX_COUNT];
     
@@ -54,8 +55,10 @@ typedef struct {
     GLuint vertexBuffer;
     
     bool isOrthoProjection;
+    bool depthTestEnabled;
     
-    float rotateY;
+    GLKVector3 translation;
+    GLKVector3 rotation;
 }
 
 - (id) init;
@@ -66,11 +69,15 @@ typedef struct {
 - (void) beginWithTexture:(Texture)texture color:(GLKVector4)col;
 - (void) end;
 
-- (void) rotateY:(float)angle;
+- (void) setTranslation:(GLKVector3)t;
+- (void) setRotation:(GLKVector3)r;
+
+- (void) setDepthTestEnabled:(bool)enabled;
+- (void) setBackgroundWhenDepthTestDisabled:(GLKVector4)col;
 
 - (void) setOrthoProjection;
 
-- (void) calculateNormals;
+- (void) refineTexCoordsX1:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2;
 
 - (void) addQuadVerticalX1:(float)x1 y1:(float)y1 z1:(float)z1 x2:(float)x2 y2:(float)y2 z2:(float)z2;
 - (void) addQuadHorizontalX1:(float)x1 z1:(float)z1 x2:(float)x2 z2:(float)z2 y:(float)y;

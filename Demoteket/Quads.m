@@ -31,7 +31,10 @@
 - (id) init {
     if (self = [super init]) {
         isOrthoProjection = false;
-        rotateY = 0.0f;
+        depthTestEnabled = true;
+        translation = GLKVector3Make(0.0f, 0.0f, 0.0f);
+        rotation = GLKVector3Make(0.0f, 0.0f, 0.0f);
+        backgroundColor = GLKVector4Make(0.0f, 0.0f, 0.0f, 0.0f);
     }
     return self;
 }
@@ -136,12 +139,27 @@
     glBindVertexArrayOES(0);
 }
 
-- (void) rotateY:(float)angle {
-    rotateY = angle;
+- (void) setTranslation:(GLKVector3)t {
+    translation = t;
+}
+- (void) setRotation:(GLKVector3)r {
+    rotation = r;
 }
 
 - (void) setOrthoProjection {
     isOrthoProjection = true;
+}
+
+- (void) setDepthTestEnabled:(bool)enabled {
+    depthTestEnabled = enabled;
+}
+
+- (void) setBackgroundWhenDepthTestDisabled:(GLKVector4)col {
+    backgroundColor = col;
+}
+
+- (void) refineTexCoordsX1:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 {
+    textureSetTexCoords(&texture, x1, y1, x2, y2);
 }
 
 - (void) calculateNormals {
@@ -206,11 +224,19 @@
 }
 
 - (void) render {
+    if (!depthTestEnabled) {
+        [self renderBackground];
+    }
+    
     if (texture.blendEnabled) {
         glEnable(GL_BLEND);
         glBlendFunc(texture.blendSrc, texture.blendDst);
     } else {
         glDisable(GL_BLEND);
+    }
+
+    if (!depthTestEnabled) {
+        glDisable(GL_DEPTH_TEST);
     }
 
     glEnable(GL_CULL_FACE);
@@ -229,9 +255,17 @@
     glkEffect.useConstantColor = YES;
     glkEffect.constantColor = color;
 
-    GLKMatrix4 modelViewMatrix = sceneModelViewMatrix;
-    if (rotateY != 0.0f) {
-        modelViewMatrix = GLKMatrix4Multiply(GLKMatrix4Rotate(GLKMatrix4Identity, rotateY, 0.0f, 1.0f, 0.0f), modelViewMatrix);
+    GLKMatrix4 modelViewMatrix = GLKMatrix4Identity;
+    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, sceneModelViewMatrix);
+    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, translation.x, translation.y, translation.z);
+    if (rotation.x != 0.0f) {
+        modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.x, 1.0f, 0.0f, 0.0f);
+    }
+    if (rotation.y != 0.0f) {
+        modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.y, 0.0f, 1.0f, 0.0f);
+    }
+    if (rotation.z != 0.0f) {
+        modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.z, 0.0f, 0.0f, 1.0f);
     }
     
     glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
@@ -262,6 +296,37 @@
         glDisable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE0);
     }
+
+    if (!depthTestEnabled) {
+        glEnable(GL_DEPTH_TEST);
+    }
+}
+
+- (void) renderBackground {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+	glDisable(GL_CULL_FACE);
+
+    GLKBaseEffect *glkEffect = glkEffectNormal;
+
+    glkEffect.useConstantColor = YES;
+    glkEffect.constantColor = backgroundColor;
+
+    GLKMatrix4 modelViewMatrix = GLKMatrix4Identity;
+    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, sceneModelViewMatrix);
+    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, translation.x, translation.y, translation.z);
+    
+    glkEffect.transform.modelviewMatrix = GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
+    glkEffect.transform.projectionMatrix = sceneProjectionMatrix;
+    
+    glkEffect.texture2d0.name = 0;
+    glkEffect.texture2d0.enabled = GL_FALSE;
+
+    [glkEffect prepareToDraw];
+
+    glBindVertexArrayOES(vertexArray);
+    glDrawArrays(GL_TRIANGLES, 0, quadCount * 6);
 }
 
 @end

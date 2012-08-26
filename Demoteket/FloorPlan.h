@@ -35,7 +35,6 @@
 @private
 
     Room *rooms[ROOM_COUNT];
-    Quads *floor;
 
     GLKVector3 position;
 
