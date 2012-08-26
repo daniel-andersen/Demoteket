@@ -78,7 +78,7 @@ extern void loadTextures();
 
 - (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture;
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height;
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color;
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor;
 
 - (Texture) photoFromFile:(NSString*)filename;
 

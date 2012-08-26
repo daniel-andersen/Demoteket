@@ -94,7 +94,6 @@ float speed = 0.0f;
     if (photoInfo == NULL) {
         return;
     }
-    NSLog(@"%@", photoInfo.title);
 	[photoInfo turnAround];
 }
 

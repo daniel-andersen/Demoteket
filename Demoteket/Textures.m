@@ -143,15 +143,15 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 }
 
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height {
-    return [self textToTexture:text width:width height:height color:[UIColor colorWithRed:248.0f / 255.0f green:230.0f / 255.0f blue:213.0f / 255.0f alpha:1.0f]];
+    return [self textToTexture:text width:width height:height color:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f]];
 }
 
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color {
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(TEXT_BORDER, TEXT_BORDER, width - (TEXT_BORDER * 2), height - (TEXT_BORDER * 2))];
     label.text = text;
     label.font = [UIFont fontWithName:@"Times New Roman" size:14.0f];
     label.textColor = color;
-    label.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
+    label.backgroundColor = bgColor;
     label.numberOfLines = 0;
     
     UIGraphicsBeginImageContext(label.bounds.size);
@@ -164,7 +164,7 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    return [self loadTextureWithImage:image repeat:false];
+    return [self photoFromImage:image];
 }
 
 - (Texture) photoFromFile:(NSString*)filename {
