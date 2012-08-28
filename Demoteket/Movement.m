@@ -175,9 +175,10 @@
     if (direction == MOVEMENT_DIR_BACKWARDS) {
         points = forwardPoints;
         pointsCount = &forwardPointsCount;
+        angleTransition = 0.0f;
         for (int i = 0; i < *pointsCount; i++) {
             if (points[i].photosIndex == photosIndex + 1) {
-                pointIndex = i;
+                pointIndex = i - 1;
                 break;
             }
         }
@@ -194,9 +195,9 @@
     if (direction == MOVEMENT_DIR_FORWARDS) {
         points = backwardPoints;
         pointsCount = &backwardPointsCount;
-        for (int i = *pointsCount - 1; i >= 0; i--) {
+        for (int i = 0; i < *pointsCount; i++) {
             if (points[i].photosIndex == photosIndex - 1) {
-                pointIndex = i;
+                pointIndex = i - 1;
                 break;
             }
         }

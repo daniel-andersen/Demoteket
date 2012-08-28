@@ -63,6 +63,8 @@ typedef struct {
     GLKVector3 rotation;
 }
 
+@property (readwrite) GLKVector4 color;
+
 - (id) init;
 - (void) dealloc;
 

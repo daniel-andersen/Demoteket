@@ -27,6 +27,8 @@
 
 #import "FloorPlan.h"
 
+#define APPEAR_SPEED 0.05f
+
 @interface Exhibition : NSObject {
 
 @private
@@ -38,7 +40,11 @@
     Quads *startTourButton;
     Quads *stopTourButton;
 
+    Quads *screenOverlay;
+
     SystemSoundID clickSoundId;
+    
+    float appearAnimation;
 }
 
 - (id) init;

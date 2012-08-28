@@ -28,6 +28,8 @@
 
 @implementation Quads
 
+@synthesize color;
+
 - (id) init {
     if (self = [super init]) {
         isOrthoProjection = false;
@@ -233,7 +235,10 @@
         [self renderBackground];
     }
     
-    if (texture.blendEnabled) {
+	if (!textureToggled) {
+    	glEnable(GL_BLEND);
+    	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    } else if (texture.blendEnabled) {
         glEnable(GL_BLEND);
         glBlendFunc(texture.blendSrc, texture.blendDst);
     } else {

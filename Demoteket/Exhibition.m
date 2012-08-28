@@ -90,6 +90,15 @@ float speed = 0.0f;
                        		x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
                        		x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [stopTourButton end];
+
+    screenOverlay = [[Quads alloc] init];
+    [screenOverlay beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
+    [screenOverlay setOrthoProjection];
+    [screenOverlay addQuadX1:0.0f y1:0.0f z1:0.0f
+                          x2:1.0f y2:0.0f z2:0.0f
+                       	  x3:1.0f y3:1.0f z3:0.0f
+                       	  x4:0.0f y4:1.0f z4:0.0f];
+    [screenOverlay end];
 }
 
 - (void) createExhibition {
@@ -119,7 +128,11 @@ float speed = 0.0f;
 }
 
 - (void) update {
-    [floorPlan update];
+    if (appearAnimation <= 0.0f || appearAnimation > 0.5f) {
+	    [floorPlan update];
+    }
+    appearAnimation += APPEAR_SPEED;
+    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - appearAnimation)];
 }
 
 - (void) render {
@@ -135,6 +148,9 @@ float speed = 0.0f;
     }
     if ([floorPlan isOnTour]) {
 	    [stopTourButton render];
+    }
+    if (appearAnimation < 1.0f) {
+        [screenOverlay render];
     }
 }
 
