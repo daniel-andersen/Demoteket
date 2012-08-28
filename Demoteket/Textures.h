@@ -70,6 +70,7 @@ extern Texture lightTexture[LIGHT_TYPE_COUNT];
 extern Texture nextButtonTexture;
 extern Texture prevButtonTexture;
 extern Texture tourButtonTexture;
+extern Texture cameraButtonTexture;
 
 extern void loadTextures();
 

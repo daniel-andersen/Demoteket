@@ -40,6 +40,8 @@
     Quads *photoQuads;
     Quads *textQuads;
     
+    UIImage *photoImage;
+
     Texture photoTexture;
     Texture textTexture;
 
@@ -67,6 +69,8 @@
 
 @property(readwrite) Quads *photoQuads;
 @property(readwrite) Quads *textQuads;
+
+@property(readwrite) UIImage *photoImage;
 
 @property(readwrite) Texture photoTexture;
 @property(readwrite) Texture textTexture;

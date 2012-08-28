@@ -29,6 +29,16 @@
 @implementation Quads
 
 @synthesize color;
+@synthesize backgroundColor;
+
+@synthesize texture;
+
+@synthesize isOrthoProjection;
+@synthesize depthTestEnabled;
+@synthesize faceToCamera;
+
+@synthesize translation;
+@synthesize rotation;
 
 - (id) init {
     if (self = [super init]) {
@@ -142,29 +152,6 @@
     glBindVertexArrayOES(0);
 }
 
-- (void) setTranslation:(GLKVector3)t {
-    translation = t;
-}
-- (void) setRotation:(GLKVector3)r {
-    rotation = r;
-}
-
-- (void) setOrthoProjection {
-    isOrthoProjection = true;
-}
-
-- (void) setDepthTestEnabled:(bool)enabled {
-    depthTestEnabled = enabled;
-}
-
-- (void) setBackgroundWhenDepthTestDisabled:(GLKVector4)col {
-    backgroundColor = col;
-}
-
-- (void) setFaceToCamera:(bool)b {
-    faceToCamera = b;
-}
-
 - (void) refineTexCoordsX1:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 {
     textureSetTexCoords(&texture, x1, y1, x2, y2);
 }
@@ -245,7 +232,7 @@
         glDisable(GL_BLEND);
     }
 
-    if (!depthTestEnabled) {
+    if (!depthTestEnabled || isOrthoProjection) {
         glDisable(GL_DEPTH_TEST);
     }
 
@@ -314,7 +301,7 @@
         glActiveTexture(GL_TEXTURE0);
     }
 
-    if (!depthTestEnabled) {
+    if (!depthTestEnabled || isOrthoProjection) {
         glEnable(GL_DEPTH_TEST);
     }
 }

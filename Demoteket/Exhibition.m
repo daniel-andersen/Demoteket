@@ -31,13 +31,6 @@
 
 @implementation Exhibition
 
-float countDown = 50;
-
-float anim = 0.0f;
-float z = 0.0f;
-float x = 1.0f;
-float speed = 0.0f;
-
 - (id) init {
     if (self = [super init]) {
         [self initialize];
@@ -57,7 +50,7 @@ float speed = 0.0f;
     
     nextButton = [[Quads alloc] init];
     [nextButton beginWithTexture:nextButtonTexture];
-    [nextButton setOrthoProjection];
+    [nextButton setIsOrthoProjection:true];
     [nextButton addQuadX1:1.0f - NAVIGATION_BUTTON_BORDER y1:NAVIGATION_BUTTON_BORDER z1:0.0f
                        x2:1.0f - NAVIGATION_BUTTON_BORDER y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
                        x3:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
@@ -66,7 +59,7 @@ float speed = 0.0f;
 
     prevButton = [[Quads alloc] init];
     [prevButton beginWithTexture:prevButtonTexture];
-    [prevButton setOrthoProjection];
+    [prevButton setIsOrthoProjection:true];
     [prevButton addQuadX1:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y1:NAVIGATION_BUTTON_BORDER z1:0.0f
                        x2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
                        x3:NAVIGATION_BUTTON_BORDER y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
@@ -75,7 +68,7 @@ float speed = 0.0f;
 
     startTourButton = [[Quads alloc] init];
     [startTourButton beginWithTexture:tourButtonTexture];
-    [startTourButton setOrthoProjection];
+    [startTourButton setIsOrthoProjection:true];
     [startTourButton addQuadX1:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y1:NAVIGATION_BUTTON_BORDER z1:0.0f
                        		x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
                        		x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
@@ -84,21 +77,42 @@ float speed = 0.0f;
 
     stopTourButton = [[Quads alloc] init];
     [stopTourButton beginWithTexture:nextButtonTexture];
-    [stopTourButton setOrthoProjection];
+    [stopTourButton setIsOrthoProjection:true];
     [stopTourButton addQuadX1:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y1:NAVIGATION_BUTTON_BORDER z1:0.0f
-                       		x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
-                       		x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
-                       		x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
+                           x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                           x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                           x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [stopTourButton end];
+
+    cameraButton = [[Quads alloc] init];
+    [cameraButton beginWithTexture:cameraButtonTexture];
+    [cameraButton setIsOrthoProjection:true];
+    [cameraButton addQuadX1:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                         x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                         x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                         x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
+    [cameraButton end];
 
     screenOverlay = [[Quads alloc] init];
     [screenOverlay beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
-    [screenOverlay setOrthoProjection];
+    [screenOverlay setIsOrthoProjection:true];
     [screenOverlay addQuadX1:0.0f y1:0.0f z1:0.0f
                           x2:1.0f y2:0.0f z2:0.0f
                        	  x3:1.0f y3:1.0f z3:0.0f
                        	  x4:0.0f y4:1.0f z4:0.0f];
     [screenOverlay end];
+
+    photoOverlay = [[Quads alloc] init];
+    [photoOverlay beginWithTexture:wallTexture[0]];
+    [photoOverlay setIsOrthoProjection:true];
+    [photoOverlay addQuadX1:1.0f y1:0.0f z1:0.0f
+                         x2:1.0f y2:1.0f z2:0.0f
+                       	 x3:0.0f y3:1.0f z3:0.0f
+                       	 x4:0.0f y4:0.0f z4:0.0f];
+    [photoOverlay end];
+
+    overlayAnimation = 0.0f;
+    mode = EXHIBITION_MODE_NORMAL;
 }
 
 - (void) createExhibition {
@@ -106,50 +120,102 @@ float speed = 0.0f;
 }
 
 - (void) tap:(GLKVector2)p {
-    if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
-	    [self playClickSound];
-	    [floorPlan nextPhoto];
-	} else if ([self clickedInRectX:p.x y:p.y rx:NAVIGATION_BUTTON_BORDER ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
-	    [self playClickSound];
-	    [floorPlan prevPhoto];
-	} else if ([self clickedInRectX:p.x y:p.y rx:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
-	    [self playClickSound];
-        [floorPlan toggleTour];
-	} else {
-        [self animatePhoto:[floorPlan getPhoto]];
+    if (mode == EXHIBITION_MODE_NORMAL) {
+	    if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+		    [self playClickSound];
+		    [floorPlan nextPhoto];
+		} else if ([self clickedInRectX:p.x y:p.y rx:NAVIGATION_BUTTON_BORDER ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+		    [self playClickSound];
+		    [floorPlan prevPhoto];
+		} else if ([self clickedInRectX:p.x y:p.y rx:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+		    [self playClickSound];
+	        [floorPlan toggleTour];
+		} else {
+	        [self clickPhoto];
+	    }
+    } else {
+    	if ([self clickedInRectX:p.x y:p.y rx:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+            [self takeScreenshot];
+		} else {
+	        [self clickPhoto];
+            
+        }
     }
 }
 
-- (void) animatePhoto:(PhotoInfo*)photoInfo {
+- (void) takeScreenshot {
+    UIImageWriteToSavedPhotosAlbum(userPhoto.photoImage, NULL, NULL, NULL);
+    overlayAnimation = 0.0f;
+}
+
+- (void) clickPhoto {
+    PhotoInfo *photoInfo = [floorPlan getPhoto];
     if (photoInfo == NULL) {
         return;
     }
-	[photoInfo turnAround];
+    if (mode == EXHIBITION_MODE_NORMAL) {
+        [self viewPhoto:photoInfo];
+    } else {
+        [self hidePhoto];
+    }
+}
+
+- (void) viewPhoto:(PhotoInfo*)photoInfo {
+    if (photoInfo.photoImage == NULL) {
+        return;
+    }
+    mode = EXHIBITION_MODE_VIEWING_PHOTO;
+    userPhoto = photoInfo;
+    photoTexture = photoInfo.photoTexture;
+    textureSetBlend(&photoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    [photoOverlay setTexture:photoTexture];
+    photoAnimation = 0.0f;
+}
+
+- (void) hidePhoto {
+    mode = EXHIBITION_MODE_NORMAL;
 }
 
 - (void) update {
-    if (appearAnimation <= 0.0f || appearAnimation > 0.5f) {
+    if (overlayAnimation <= 0.0f || overlayAnimation > 0.5f) {
 	    [floorPlan update];
     }
-    appearAnimation += APPEAR_SPEED;
-    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - appearAnimation)];
+    overlayAnimation = MIN(1.0f, overlayAnimation + APPEAR_SPEED);
+    if (mode == EXHIBITION_MODE_NORMAL) {
+	    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - overlayAnimation)];
+    } else {
+	    [screenOverlay setColor:GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f - overlayAnimation)];
+    }
+    if (mode == EXHIBITION_MODE_VIEWING_PHOTO || mode == EXHIBITION_MODE_VIEWING_TEXT) {
+	    photoAnimation = MIN(1.0f, photoAnimation + PHOTO_APPEAR_SPEED);
+    } else {
+	    photoAnimation = MAX(0.0f, photoAnimation - PHOTO_APPEAR_SPEED);
+    }
+    [photoOverlay setColor:GLKVector4Make(1.0f, 1.0f, 1.0f, photoAnimation)];
 }
 
 - (void) render {
     [floorPlan render];
-    if ([floorPlan isBackButtonVisible]) {
-	    [prevButton render];
+    if (photoAnimation > 0.0f) {
+        [photoOverlay render];
+        if (photoAnimation == 1.0f && mode == EXHIBITION_MODE_VIEWING_PHOTO) {
+            [cameraButton render];
+        }
+    } else {
+        if ([floorPlan isBackButtonVisible]) {
+            [prevButton render];
+        }
+	    if ([floorPlan isNextButtonVisible]) {
+		    [nextButton render];
+	    }
+	    if ([floorPlan isPaused]) {
+		    [startTourButton render];
+	    }
+	    if ([floorPlan isOnTour]) {
+		    [stopTourButton render];
+	    }
     }
-    if ([floorPlan isNextButtonVisible]) {
-	    [nextButton render];
-    }
-    if ([floorPlan isPaused]) {
-	    [startTourButton render];
-    }
-    if ([floorPlan isOnTour]) {
-	    [stopTourButton render];
-    }
-    if (appearAnimation < 1.0f) {
+    if (overlayAnimation < 1.0f) {
         [screenOverlay render];
     }
 }

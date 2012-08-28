@@ -43,6 +43,7 @@
 		65CC8DA815ECFD02008BA000 /* user_photo_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CC8DA515ECFD02008BA000 /* user_photo_2.png */; };
 		65CC8DA915ECFD02008BA000 /* user_photo_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CC8DA615ECFD02008BA000 /* user_photo_3.png */; };
 		65CC8DAA15ECFD02008BA000 /* user_photo_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CC8DA715ECFD02008BA000 /* user_photo_4.png */; };
+		65CC8DAD15ED2D0F008BA000 /* camera_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CC8DAC15ED2D0F008BA000 /* camera_button.png */; };
 		65CDFEE815EA56D6009CC3BB /* light1.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CDFEE715EA56D6009CC3BB /* light1.png */; };
 		65CDFEEB15EA74DA009CC3BB /* light2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CDFEEA15EA74DA009CC3BB /* light2.png */; };
 		65CDFEED15EA758B009CC3BB /* light3.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CDFEEC15EA758B009CC3BB /* light3.png */; };
@@ -103,6 +104,7 @@
 		65CC8DA515ECFD02008BA000 /* user_photo_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_photo_2.png; sourceTree = "<group>"; };
 		65CC8DA615ECFD02008BA000 /* user_photo_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_photo_3.png; sourceTree = "<group>"; };
 		65CC8DA715ECFD02008BA000 /* user_photo_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_photo_4.png; sourceTree = "<group>"; };
+		65CC8DAC15ED2D0F008BA000 /* camera_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_button.png; sourceTree = "<group>"; };
 		65CDFEE715EA56D6009CC3BB /* light1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light1.png; sourceTree = "<group>"; };
 		65CDFEEA15EA74DA009CC3BB /* light2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light2.png; sourceTree = "<group>"; };
 		65CDFEEC15EA758B009CC3BB /* light3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light3.png; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 		6573203415D506AC002562E9 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				65CC8DAC15ED2D0F008BA000 /* camera_button.png */,
 				65CC8DA515ECFD02008BA000 /* user_photo_2.png */,
 				65CC8DA615ECFD02008BA000 /* user_photo_3.png */,
 				65CC8DA715ECFD02008BA000 /* user_photo_4.png */,
@@ -310,6 +313,7 @@
 				65CC8DA815ECFD02008BA000 /* user_photo_2.png in Resources */,
 				65CC8DA915ECFD02008BA000 /* user_photo_3.png in Resources */,
 				65CC8DAA15ECFD02008BA000 /* user_photo_4.png in Resources */,
+				65CC8DAD15ED2D0F008BA000 /* camera_button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +422,7 @@
 				GCC_PREFIX_HEADER = "Demoteket/Demoteket-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = "Demoteket/Demoteket-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -430,6 +435,7 @@
 				GCC_PREFIX_HEADER = "Demoteket/Demoteket-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = "Demoteket/Demoteket-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

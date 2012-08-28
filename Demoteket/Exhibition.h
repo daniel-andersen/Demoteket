@@ -27,7 +27,13 @@
 
 #import "FloorPlan.h"
 
-#define APPEAR_SPEED 0.05f
+#define APPEAR_SPEED 0.025f
+#define SCREENSHOT_SPEED 0.1f
+#define PHOTO_APPEAR_SPEED 0.05f
+
+#define EXHIBITION_MODE_NORMAL 0
+#define EXHIBITION_MODE_VIEWING_PHOTO 1
+#define EXHIBITION_MODE_VIEWING_TEXT 2
 
 @interface Exhibition : NSObject {
 
@@ -39,12 +45,21 @@
     Quads *prevButton;
     Quads *startTourButton;
     Quads *stopTourButton;
+    Quads *cameraButton;
 
     Quads *screenOverlay;
+    Quads *photoOverlay;
 
     SystemSoundID clickSoundId;
     
-    float appearAnimation;
+    float overlayAnimation;
+
+    int mode;
+    float photoAnimation;
+    
+    PhotoInfo *userPhoto;
+    Texture photoTexture;
+    Texture textTexture;
 }
 
 - (id) init;

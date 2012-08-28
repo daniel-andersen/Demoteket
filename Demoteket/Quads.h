@@ -64,6 +64,16 @@ typedef struct {
 }
 
 @property (readwrite) GLKVector4 color;
+@property (readwrite) GLKVector4 backgroundColor;
+
+@property (readwrite) Texture texture;
+
+@property (readwrite) bool isOrthoProjection;
+@property (readwrite) bool depthTestEnabled;
+@property (readwrite) bool faceToCamera;
+
+@property (readwrite) GLKVector3 translation;
+@property (readwrite) GLKVector3 rotation;
 
 - (id) init;
 - (void) dealloc;
@@ -72,16 +82,6 @@ typedef struct {
 - (void) beginWithTexture:(Texture)texture;
 - (void) beginWithTexture:(Texture)texture color:(GLKVector4)col;
 - (void) end;
-
-- (void) setTranslation:(GLKVector3)t;
-- (void) setRotation:(GLKVector3)r;
-
-- (void) setDepthTestEnabled:(bool)enabled;
-- (void) setBackgroundWhenDepthTestDisabled:(GLKVector4)col;
-
-- (void) setFaceToCamera:(bool)b;
-
-- (void) setOrthoProjection;
 
 - (void) refineTexCoordsX1:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2;
 

@@ -53,8 +53,7 @@ enum
 @synthesize context = _context;
 @synthesize effect = _effect;
 
-- (void) viewDidLoad
-{
+- (void) viewDidLoad {
     [super viewDidLoad];
     
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -94,13 +93,8 @@ enum
     // Release any cached data, images, etc. that aren't in use.
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	return interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight;
 }
 
 - (void)setupGL
@@ -133,6 +127,9 @@ enum
 - (void) getScreenSize {
     screenWidth = [UIScreen mainScreen].bounds.size.width * [UIScreen mainScreen].scale;
     screenHeight = [UIScreen mainScreen].bounds.size.height * [UIScreen mainScreen].scale;
+
+    screenWidthNoScale = [UIScreen mainScreen].bounds.size.width;
+    screenHeightNoScale = [UIScreen mainScreen].bounds.size.height;
     
     aspectRatio = fabsf(screenWidth / screenHeight);
     
@@ -146,7 +143,7 @@ enum
 
 - (void) handleTapFrom:(UITapGestureRecognizer*)recognizer {
     CGPoint touchLocation = [recognizer locationInView:recognizer.view];
-    [exhibition tap:GLKVector2Make(touchLocation.x / screenHeight, touchLocation.y / screenWidth)];
+    [exhibition tap:GLKVector2Make(touchLocation.x / screenHeightNoScale, touchLocation.y / screenWidthNoScale)];
 }
 
 #pragma mark - GLKView and GLKViewController delegate methods

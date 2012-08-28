@@ -54,6 +54,8 @@ bool isRenderingMirror;
 
 float screenWidth;
 float screenHeight;
+float screenWidthNoScale;
+float screenHeightNoScale;
 float aspectRatio;
 
 GLuint glslProgram;

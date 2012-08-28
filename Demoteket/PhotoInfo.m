@@ -36,6 +36,8 @@
 @synthesize photoQuads;
 @synthesize textQuads;
 
+@synthesize photoImage;
+
 @synthesize photoTexture;
 @synthesize textTexture;
 
@@ -55,7 +57,7 @@
 - (void) beginQuads {
     photoQuads = [[Quads alloc] init];
     [photoQuads beginWithTexture:photoTexture];
-	[photoQuads setBackgroundWhenDepthTestDisabled:GLKVector4Make(0.0f, 0.0f, 0.0f, photoTexture.id != demoteketLogoTexture.id ? 1.0f : 0.0f)];
+	[photoQuads setBackgroundColor:GLKVector4Make(0.0f, 0.0f, 0.0f, photoTexture.id != demoteketLogoTexture.id ? 1.0f : 0.0f)];
     
     textQuads = [[Quads alloc] init];
     [textQuads beginWithTexture:textTexture];
