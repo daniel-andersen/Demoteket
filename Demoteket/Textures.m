@@ -202,7 +202,7 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     UIRectFill(CGRectMake(0, 0, image.size.width + (whiteBorderWidth * 2), image.size.height + (whiteBorderHeight * 2)));
 
     CGContextSetRGBFillColor(context, 1.0f, 1.0f, 1.0f, 1.0f);
-    UIRectFill(CGRectMake(blackBorderWidth, blackBorderHeight, image.size.width + ((whiteBorderWidth - blackBorderWidth) * 2), image.size.height + ((whiteBorderHeight - blackBorderWidth) * 2)));
+    UIRectFill(CGRectMake(blackBorderWidth, blackBorderHeight, image.size.width + (whiteBorderWidth * 2) - (blackBorderWidth * 2), image.size.height + (whiteBorderHeight * 2) - (blackBorderHeight) * 2));
 
     [image drawInRect:CGRectMake(whiteBorderWidth, whiteBorderHeight, image.size.width, image.size.height)];
 
