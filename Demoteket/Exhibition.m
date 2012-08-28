@@ -72,6 +72,24 @@ float speed = 0.0f;
                        x3:NAVIGATION_BUTTON_BORDER y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
                        x4:NAVIGATION_BUTTON_BORDER y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [prevButton end];
+
+    startTourButton = [[Quads alloc] init];
+    [startTourButton beginWithTexture:tourButtonTexture];
+    [startTourButton setOrthoProjection];
+    [startTourButton addQuadX1:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                       		x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                       		x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                       		x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
+    [startTourButton end];
+
+    stopTourButton = [[Quads alloc] init];
+    [stopTourButton beginWithTexture:nextButtonTexture];
+    [stopTourButton setOrthoProjection];
+    [stopTourButton addQuadX1:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                       		x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                       		x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                       		x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
+    [stopTourButton end];
 }
 
 - (void) createExhibition {
@@ -85,6 +103,9 @@ float speed = 0.0f;
 	} else if ([self clickedInRectX:p.x y:p.y rx:NAVIGATION_BUTTON_BORDER ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
 	    [self playClickSound];
 	    [floorPlan prevPhoto];
+	} else if ([self clickedInRectX:p.x y:p.y rx:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+	    [self playClickSound];
+        [floorPlan toggleTour];
 	} else {
         [self animatePhoto:[floorPlan getPhoto]];
     }
@@ -108,6 +129,12 @@ float speed = 0.0f;
     }
     if ([floorPlan isNextButtonVisible]) {
 	    [nextButton render];
+    }
+    if ([floorPlan isPaused]) {
+	    [startTourButton render];
+    }
+    if ([floorPlan isOnTour]) {
+	    [stopTourButton render];
     }
 }
 

@@ -101,14 +101,18 @@ float t = 0.0f;
 - (void) addPhotos {
     userPhotosCount = 0;
 
-    Texture demoteketTextTexture = [textures textToTexture:@"DEMOTEKET AARHUS\n\niOS version af:\nDaniel Andersen" width:256 height:256 color:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f]];
+    Texture demoteketTextTexture = [textures textToTexture:@"DEMOTEKET AARHUS\n\niOS version af:\nDaniel Andersen" width:256 height:256 color:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f] asPhoto:false];
     textureSetBlend(&demoteketTextTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:6.0f room:0] angle:0.0f photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] angle:0.0f photoTexture:[textures photoFromFile:@"user_photo_1.png"] textTexture:[textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256] frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] angle:0.0f photoTexture:[textures photoFromFile:@"user_photo_1.png"] textTexture:[textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256 asPhoto:false] frontFacing:true];
     
     userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] angle:0.0f photoTexture:[textures photoFromFile:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] angle:0.0f photoTexture:[textures photoFromFile:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] angle:0.0f photoTexture:[textures photoFromFile:@"user_photo_1.png"] textTexture:photosTexture[0] frontFacing:true];
 }
 
 - (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture {
@@ -141,28 +145,67 @@ float t = 0.0f;
     movement = [[Movement alloc] init];
 
     [movement addUserPhoto:userPhotos[0]];
+    [movement addUserPhoto:userPhotos[1]];
+    [movement addUserPhoto:userPhotos[2]];
+    [movement addUserPhoto:userPhotos[3]];
+    [movement addUserPhoto:userPhotos[4]];
+
+    // Forward movement
+    [movement setForwardsMovementForAddingPoints];
+    
+    [movement setUserPhoto:0];
     [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:false];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 6.0f) angle:letterToAngle('D')] lookAt:GLKVector2Make(0.5f, 7.0f) pause:true];
 
-    [movement addUserPhoto:userPhotos[1]];
+    [movement setUserPhoto:1];
     [movement addOffsetPoint:GLKVector2Make(-2.0f, -1.5f) lookAt:GLKVector2Make(4.0f, 13.0f)];
     [movement addOffsetPoint:GLKVector2Make(-1.5f,  0.0f)];
     [movement addOffsetPoint:GLKVector2Make(-1.0f,  1.5f)];
     [movement addOffsetPoint:GLKVector2Make( 2.0f,  4.5f)];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(2.6f, 7.0f) angle:-0.3f] lookAt:GLKVector2Make(2.4f, 7.0f) pause:true];
 
-    [movement addUserPhoto:userPhotos[2]];
+    [movement setUserPhoto:2];
     [movement lookAt:GLKVector2Make(5.0f, 0.0f) continueDistance:0.7f];
     [movement addOffsetPoint:GLKVector2Make(3.5f, 3.5f)];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, -1.0f) angle:letterToAngle('H')] pause:true];
     
-    //[movement addUserPhoto:userPhotos[3]];
-    [movement addOffsetPoint:GLKVector2Make(2.5f, -5.0f) lookAt:GLKVector2Make(-6.0f, -9.0f)];
-    [movement addOffsetPoint:GLKVector2Make(-5.0f, -3.0f) pause:true];
+    [movement setUserPhoto:3];
+    [movement lookAt:GLKVector2Make(-6.0f, -8.5f) continueDistance:0.25f];
+    [movement addOffsetPoint:GLKVector2Make(2.0f, -4.0f)];
+    [movement addOffsetPoint:GLKVector2Make(-4.0f, -4.0f) pause:true];
 
-    //[movement addUserPhoto:userPhotos[4]];
-    [movement addOffsetPoint:GLKVector2Make(1.5f, -4.0f) lookAt:GLKVector2Make(1.0f, -3.0f) pause:true];
+    [movement setUserPhoto:4];
+    [movement lookAt:GLKVector2Make(0.75f, -5.0f) continueDistance:0.5f];
+    [movement addOffsetPoint:GLKVector2Make(-0.5f, -3.0f)];
+    [movement addOffsetPoint:GLKVector2Make(1.0f, -1.0f) pause:true];
 
+    // Backward movement
+    GLKVector2 endPoint = [movement getOffsetPoint:GLKVector2Make(0.0f, 0.0f)];
+    [movement setBackwardsMovementForAddingPoints];
+
+    [movement setUserPhoto:4];
+    [movement addPoint:endPoint pause:false];
+
+    [movement setUserPhoto:3];
+    [movement lookAt:GLKVector2Make(-3.0f, 4.0f) continueDistance:0.50f];
+    [movement addOffsetPoint:GLKVector2Make(-1.0f, 0.5f)];
+    [movement addOffsetPoint:GLKVector2Make(0.0f, 2.5f) pause:true];
+    
+    [movement setUserPhoto:2];
+    [movement lookAt:GLKVector2Make(2.5f, 6.5f) continueDistance:0.50f];
+    [movement addOffsetPoint:GLKVector2Make(4.0f, 4.0f)];
+    [movement addOffsetPoint:GLKVector2Make(0.0f, 2.0f) pause:true];
+
+    [movement setUserPhoto:1];
+    [movement lookAt:GLKVector2Make(-7.0f, 3.0f) continueDistance:0.10f];
+    [movement addOffsetPoint:GLKVector2Make(0.0f, -2.0f)];
+    [movement addOffsetPoint:GLKVector2Make(-7.0f, 2.5f) pause:true];
+    
+    [movement setUserPhoto:0];
+    [movement addOffsetPoint:GLKVector2Make(0.0f, -11.0f) lookAt:GLKVector2Make(-2.5f, 5.0f)];
+    [movement addOffsetPoint:GLKVector2Make(0.0f, 0.0f) lookAt:GLKVector2Make(-0.5f, 1.0f) pause:true];
+
+    // Start
     [movement setAngle:0.0f];
     [movement setPositionToFirstPoint];
 }
@@ -178,6 +221,16 @@ float t = 0.0f;
 
 - (void) nextPhoto {
     [movement goForwards];
+}
+
+- (void) toggleTour {
+    if (![movement isOnTour]) {
+	    if ([movement isPaused]) {
+        	[movement startTour];
+    	}
+    } else {
+        [movement stopTour];
+    }
 }
 
 - (PhotoInfo*) getPhoto {
@@ -257,6 +310,14 @@ float t = 0.0f;
 
 - (bool) isNextButtonVisible {
     return [movement canGoForwards];
+}
+
+- (bool) isPaused {
+    return [movement isPaused];
+}
+
+- (bool) isOnTour {
+    return [movement isOnTour];
 }
 
 @end

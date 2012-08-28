@@ -87,14 +87,14 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 - (void) load {
     nextButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&nextButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     prevButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); textureSetTexCoords(&prevButtonTexture, 1.0f, 0.0f, 0.0f, 1.0f);
-    tourButtonTexture = [self loadTexture:@"tour_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    tourButtonTexture = [self loadTexture:@"tour_button.png"]; textureSetBlend(&tourButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     wallTexture[0] = [self loadTexture:@"wall1.png"];
     wallTexture[1] = [self loadTexture:@"wall2.png"];
-    wallTexture[2] = wallTexture[0]; textureSetTexCoords(&wallTexture[2], 0.0f, 0.0f, 0.25f, 1.0f);
-    wallTexture[3] = wallTexture[0]; textureSetTexCoords(&wallTexture[3], 1.0f, 0.0f, 0.75f, 1.0f);
-    wallTexture[4] = wallTexture[1]; textureSetTexCoords(&wallTexture[4], 0.0f, 0.0f, 0.25f, 1.0f);
-    wallTexture[5] = wallTexture[1]; textureSetTexCoords(&wallTexture[5], 0.75f, 0.0f, 1.0f, 1.0f);
+    wallTexture[2] = wallTexture[0]; textureSetTexCoords(&wallTexture[2], 0.5f, 0.0f, 1.0f, 1.0f);
+    wallTexture[3] = wallTexture[0]; textureSetTexCoords(&wallTexture[3], 0.0f, 0.0f, 0.5f, 1.0f);
+    wallTexture[4] = wallTexture[1]; textureSetTexCoords(&wallTexture[4], 0.5f, 0.0f, 1.0f, 1.0f);
+    wallTexture[5] = wallTexture[1]; textureSetTexCoords(&wallTexture[5], 0.0f, 0.0f, 0.5f, 1.0f);
 
     wallBorderTexture = textureCopy(wallTexture[2], 0.0f, 0.0f, 0.1f, 1.0f);
 
@@ -146,15 +146,15 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     return texture;
 }
 
-- (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture {
-    return [self textToTexture:text width:texture.width height:texture.height];
+- (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture asPhoto:(bool)asPhoto {
+    return [self textToTexture:text width:texture.width height:texture.height asPhoto:asPhoto];
 }
 
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height {
-    return [self textToTexture:text width:width height:height color:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f]];
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height asPhoto:(bool)asPhoto {
+    return [self textToTexture:text width:width height:height color:[UIColor colorWithRed:248.0f / 255.0f green:230.0f / 255.0f blue:213.0f / 255.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] asPhoto:asPhoto];
 }
 
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor {
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor asPhoto:(bool)asPhoto {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(TEXT_BORDER, TEXT_BORDER, width - (TEXT_BORDER * 2), height - (TEXT_BORDER * 2))];
     label.text = text;
     label.font = [UIFont fontWithName:@"Times New Roman" size:14.0f];
@@ -172,7 +172,11 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    return [self photoFromImage:image];
+    if (asPhoto) {
+	    return [self photoFromImage:image];
+    } else {
+	    return [self loadTextureWithImage:image repeat:false];
+    }
 }
 
 - (Texture) photoFromFile:(NSString*)filename {

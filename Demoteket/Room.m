@@ -94,6 +94,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
         [self addStrip:@"|   |"];
         [self addStrip:@"+---+"];
         [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
+        [self addLightType:1 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
         [self addLightType:0 x:3.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
         [self addLightType:0 x:5.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
         [self addLightType:1 x:2.0f * BLOCK_SIZE z:5.0f * BLOCK_SIZE];
@@ -172,8 +173,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
             }
             float x1 = ROOM_OFFSET_X[roomNumber] + ((float) j * BLOCK_SIZE);
             float z1 = ROOM_OFFSET_Z[roomNumber] + ((float) i * BLOCK_SIZE);
-            float x2 = x1 + BLOCK_SIZE;
-            float z2 = z1 + BLOCK_SIZE;
             float centerX = x1 + (BLOCK_SIZE / 2);
             float centerZ = z1 + (BLOCK_SIZE / 2);
             if (tiles[i][j] == '-') {
@@ -190,14 +189,24 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 	                [self addWallGridX:j gridY:i x:centerX z:centerZ angle: M_PI_2];
                 }
             }
-            if (tiles[i][j] == '+') {
-                [self addCornerGridX:j gridY:i x1:x1 z1:z1 centerX:centerX centerZ:centerZ x2:x2 z2:z2];
-            }
             if (tiles[i][j] == 'd') {
                 [self addDoorGridX:j gridY:i x:centerX z:centerZ];
             }
             if (tiles[i][j] >= 'A' && tiles[i][j] <= 'Z') {
                 [self addPillarGridX:j gridY:i x:centerX z:centerZ angle:letterToAngle(tiles[i][j])];
+            }
+        }
+    }
+    for (int i = 0; i < ROOM_MAX_SIZE; i++) {
+        for (int j = 0; j < ROOM_MAX_SIZE; j++) {
+            float x1 = ROOM_OFFSET_X[roomNumber] + ((float) j * BLOCK_SIZE);
+            float z1 = ROOM_OFFSET_Z[roomNumber] + ((float) i * BLOCK_SIZE);
+            float x2 = x1 + BLOCK_SIZE;
+            float z2 = z1 + BLOCK_SIZE;
+            float centerX = x1 + (BLOCK_SIZE / 2);
+            float centerZ = z1 + (BLOCK_SIZE / 2);
+            if (tiles[i][j] == '+') {
+                [self addCornerGridX:j gridY:i x1:x1 z1:z1 centerX:centerX centerZ:centerZ x2:x2 z2:z2];
             }
         }
     }
@@ -215,33 +224,33 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
 - (void) addCornerGridX:(int)gridX gridY:(int)gridY x1:(float)x1 z1:(float)z1 centerX:(float)centerX centerZ:(float)centerZ x2:(float)x2 z2:(float)z2 {
     if ([self isWallX:gridX - 1 y:gridY]) {
-        int wallType = [self isWallX:gridX - 1 y:gridY] == 0 ? 4 : 2;
+        int wallType = [self getTileX:gridX - 1 y:gridY] == 0 ? 4 : 2;
         if ([self isOutsideRoomX:gridX y:gridY - 1]) {
-	        [walls[wallType] addQuadVerticalX1:x1 y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+	        [walls[wallType + 1] addQuadVerticalX1:x1 y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:centerZ];
         } else {
 	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:x1 y2:ROOM_HEIGHT z2:centerZ];
         }
     }
     if ([self isWallX:gridX + 1 y:gridY]) {
-        int wallType = [self isWallX:gridX + 1 y:gridY] == 0 ? 5 : 3;
+        int wallType = [self getTileX:gridX + 1 y:gridY] == 0 ? 4 : 2;
         if ([self isOutsideRoomX:gridX y:gridY - 1]) {
 	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:x2 y2:ROOM_HEIGHT z2:centerZ];
         } else {
-	        [walls[wallType] addQuadVerticalX1:x2 y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+	        [walls[wallType + 1] addQuadVerticalX1:x2 y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:centerZ];
         }
     }
     if ([self isWallX:gridX y:gridY - 1]) {
-        int wallType = [self isWallX:gridX y:gridY - 1] == 0 ? 4 : 2;
+        int wallType = [self getTileX:gridX y:gridY - 1] == 0 ? 4 : 2;
         if ([self isOutsideRoomX:gridX - 1 y:gridY]) {
 	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:z1];
         } else {
-	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:z1 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+	        [walls[wallType + 1] addQuadVerticalX1:centerX y1:0.0f z1:z1 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
         }
     }
     if ([self isWallX:gridX y:gridY + 1]) {
-        int wallType = [self isWallX:gridX y:gridY - 1] == 0 ? 5 : 3;
+        int wallType = [self getTileX:gridX y:gridY + 1] == 0 ? 4 : 2;
         if ([self isOutsideRoomX:gridX - 1 y:gridY]) {
-	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:z2 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
+	        [walls[wallType + 1] addQuadVerticalX1:centerX y1:0.0f z1:z2 x2:centerX y2:ROOM_HEIGHT z2:centerZ];
         } else {
 	        [walls[wallType] addQuadVerticalX1:centerX y1:0.0f z1:centerZ x2:centerX y2:ROOM_HEIGHT z2:z2];
         }

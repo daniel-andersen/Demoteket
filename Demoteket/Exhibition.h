@@ -35,6 +35,8 @@
 
     Quads *nextButton;
     Quads *prevButton;
+    Quads *startTourButton;
+    Quads *stopTourButton;
 
     SystemSoundID clickSoundId;
 }

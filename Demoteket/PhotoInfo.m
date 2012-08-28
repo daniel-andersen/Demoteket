@@ -77,10 +77,10 @@
     [photoQuads setDepthTestEnabled:animation <= 0.0f || animation >= 1.0f];
     [textQuads setDepthTestEnabled:animation <= 0.0f || animation >= 1.0f];
 
-    float rot = ((2.0f - (cos(M_PI * animation) + 1.0f)) / 2.0f) * M_PI;
+    float rot = ((2.0f - (cos(M_PI * (1.0f - animation)) + 1.0f)) / 2.0f) * M_PI;
     
-    [photoQuads setRotation:GLKVector3Make(0.0f, rot, 0.0f)];
-    [textQuads setRotation:GLKVector3Make(0.0f, rot + M_PI, 0.0f)];
+    [photoQuads setRotation:GLKVector3Make(0.0f, rot + M_PI, 0.0f)];
+    [textQuads setRotation:GLKVector3Make(0.0f, rot, 0.0f)];
 }
 
 - (void) turnAround {

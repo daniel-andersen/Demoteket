@@ -28,7 +28,7 @@
 
 #define MOVEMENT_MAX_POINTS 1024
 
-#define MOVEMENT_POINT_DISTANCE_NEXT 1.0f
+#define MOVEMENT_POINT_DISTANCE_NEXT 0.75f
 #define MOVEMENT_POINT_DISTANCE_PAUSE 0.75f
 
 #define MOVEMENT_MAX_SPEED 0.1f
@@ -58,8 +58,14 @@ typedef struct {
 @interface Movement : NSObject {
 
 @private
-    MovementPoint points[MOVEMENT_MAX_POINTS];
-    int pointsCount;
+    MovementPoint *points;
+    int *pointsCount;
+
+    MovementPoint forwardPoints[MOVEMENT_MAX_POINTS];
+    int forwardPointsCount;
+
+    MovementPoint backwardPoints[MOVEMENT_MAX_POINTS];
+    int backwardPointsCount;
 
     GLKVector2 position;
     GLKVector2 velocity;
@@ -85,6 +91,10 @@ typedef struct {
 - (void) setPositionToFirstPoint;
 
 - (void) addUserPhoto:(PhotoInfo*)photoInfo;
+- (void) setUserPhoto:(int)index;
+
+- (void) setForwardsMovementForAddingPoints;
+- (void) setBackwardsMovementForAddingPoints;
 
 - (void) addPoint:(GLKVector2)p pause:(bool)pause;
 - (void) addPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause;
@@ -100,6 +110,8 @@ typedef struct {
 - (void) addOffsetPoint:(GLKVector2)p lookIn:(float)a;
 - (void) addOffsetPointInMovingDirection:(GLKVector2)p;
 
+- (GLKVector2) getOffsetPoint:(GLKVector2)p;
+
 - (void) lookAt:(GLKVector2)p continueDistance:(float)dist;
 
 - (void) move:(float)speed;
@@ -113,6 +125,7 @@ typedef struct {
 - (PhotoInfo*) getCurrentPhoto;
 
 - (bool) isPaused;
+- (bool) isOnTour;
 
 - (bool) canGoBackwards;
 - (bool) canGoForwards;

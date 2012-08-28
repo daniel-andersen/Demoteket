@@ -57,11 +57,14 @@
 
 - (void) prevPhoto;
 - (void) nextPhoto;
+- (void) toggleTour;
 
 - (PhotoInfo*) getPhoto;
 
 - (bool) isBackButtonVisible;
 - (bool) isNextButtonVisible;
+- (bool) isPaused;
+- (bool) isOnTour;
 
 - (void) update;
 - (void) render;

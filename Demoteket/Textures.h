@@ -80,9 +80,9 @@ extern void loadTextures();
 - (Texture) loadTexture:(NSString*)filename;
 - (Texture) loadTexture:(NSString*)filename repeat:(bool)repeat;
 
-- (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture;
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height;
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor;
+- (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture asPhoto:(bool)asPhoto;
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height asPhoto:(bool)asPhoto;
+- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor asPhoto:(bool)asPhoto;
 
 - (Texture) photoFromFile:(NSString*)filename;
 
