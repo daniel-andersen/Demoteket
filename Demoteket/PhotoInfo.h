@@ -25,14 +25,11 @@
 
 #import "Quads.h"
 
-#define PHOTO_ANIMATION_SPEED 0.02f
-
 @interface PhotoInfo : NSObject {
 
 @private
     
     GLKVector2 position;
-    float angle;
     
     NSString *title;
     NSString *author;
@@ -43,26 +40,16 @@
     UIImage *photoImage;
 
     Texture photoTexture;
+    Texture photoThumbTexture;
+
     Texture textTexture;
 
-    int photoIndex;
-    int textIndex;
-    
     bool frontFacing;
     
-    float animation;
-    bool showText;
+    void (^callbackHandler)();
 }
 
-- (void) beginQuads;
-- (void) endQuads;
-
-- (void) update;
-
-- (void) turnAround;
-
 @property(readwrite) GLKVector2 position;
-@property(readwrite) float angle;
 
 @property(readwrite) NSString *title;
 @property(readwrite) NSString *author;
@@ -72,12 +59,15 @@
 
 @property(readwrite) UIImage *photoImage;
 
-@property(readwrite) Texture photoTexture;
 @property(readwrite) Texture textTexture;
 
-@property(readwrite) int photoIndex;
-@property(readwrite) int textIndex;
-
 @property(readwrite) bool frontFacing;
+
+- (void) setPhotoTexture:(Texture)texture;
+- (Texture) getPhotoTexture;
+- (Texture) getFullSizePhotoTexture;
+- (void) loadPhotoAsynchronously:(NSString*)filename;
+
+- (void) setFinishedLoadingCallback:(void(^)())callback;
 
 @end

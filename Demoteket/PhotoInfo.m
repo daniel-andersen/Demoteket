@@ -24,11 +24,11 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "PhotoInfo.h"
+#import "Globals.h"
 
 @implementation PhotoInfo
 
 @synthesize position;
-@synthesize angle;
 
 @synthesize title;
 @synthesize author;
@@ -38,55 +38,50 @@
 
 @synthesize photoImage;
 
-@synthesize photoTexture;
 @synthesize textTexture;
-
-@synthesize photoIndex;
-@synthesize textIndex;
 
 @synthesize frontFacing;
 
 - (id) init {
     if (self = [super init]) {
-        showText = false;
-        animation = 0.0f;
+        callbackHandler = nil;
+        photoImage = NULL;
+        photoTexture.isReadyForRendering = false;
+        photoThumbTexture.isReadyForRendering = false;
     }
     return self;
 }
 
-- (void) beginQuads {
-    photoQuads = [[Quads alloc] init];
-    [photoQuads beginWithTexture:photoTexture];
-	[photoQuads setBackgroundColor:GLKVector4Make(0.0f, 0.0f, 0.0f, photoTexture.id != demoteketLogoTexture.id ? 1.0f : 0.0f)];
-    
-    textQuads = [[Quads alloc] init];
-    [textQuads beginWithTexture:textTexture];
+- (void) setPhotoTexture:(Texture)texture {
+    photoTexture = texture;
+    photoTexture.isReadyForRendering = true;
 }
 
-- (void) endQuads {
-    [photoQuads end];
-    [textQuads end];
-}
-
-- (void) update {
-    if (showText && animation < 1.0f) {
-        animation = MIN(animation + PHOTO_ANIMATION_SPEED, 1.0f);
+- (Texture) getPhotoTexture {
+    if (photoTexture.isReadyForRendering) {
+        return photoTexture;
     }
-    if (!showText && animation > 0.0f) {
-        animation = MAX(animation - PHOTO_ANIMATION_SPEED, 0.0f);
+    if (photoThumbTexture.isReadyForRendering) {
+        return photoThumbTexture;
     }
-
-    [photoQuads setDepthTestEnabled:animation <= 0.0f || animation >= 1.0f];
-    [textQuads setDepthTestEnabled:animation <= 0.0f || animation >= 1.0f];
-
-    float rot = ((2.0f - (cos(M_PI * (1.0f - animation)) + 1.0f)) / 2.0f) * M_PI;
-    
-    [photoQuads setRotation:GLKVector3Make(0.0f, rot + M_PI, 0.0f)];
-    [textQuads setRotation:GLKVector3Make(0.0f, rot, 0.0f)];
+    return photoLoadingTexture;
 }
 
-- (void) turnAround {
-    showText = !showText;
+- (Texture) getFullSizePhotoTexture {
+    return photoTexture;
+}
+
+- (void) loadPhotoAsynchronously:(NSString*)filename {
+	photoImage = [UIImage imageNamed:[filename stringByAppendingString:@".png"]];
+    photoTexture = [textures photoFromImage:photoImage];
+    photoTexture.isReadyForRendering = true;
+    if (callbackHandler != nil) {
+	    callbackHandler();
+    }
+}
+
+- (void) setFinishedLoadingCallback:(void(^)())callback {
+    callbackHandler = [callback copy];
 }
 
 @end

@@ -39,6 +39,8 @@
 }
 
 - (void) initialize {
+    [self setupTextureLoader];
+    
     CFURLRef soundUrl = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("tap"), CFSTR("aif"), NULL);
     
     AudioServicesCreateSystemSoundID(soundUrl, &clickSoundId);
@@ -115,6 +117,10 @@
     mode = EXHIBITION_MODE_NORMAL;
 }
 
+- (void) setupTextureLoader {
+    textureLoaderQueue = [[NSOperationQueue alloc] init];
+}
+
 - (void) createExhibition {
     [floorPlan createFloorPlan];
 }
@@ -166,7 +172,7 @@
     }
     mode = EXHIBITION_MODE_VIEWING_PHOTO;
     userPhoto = photoInfo;
-    photoTexture = photoInfo.photoTexture;
+    photoTexture = [photoInfo getPhotoTexture];
     textureSetBlend(&photoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     [photoOverlay setTexture:photoTexture];
     photoAnimation = 0.0f;

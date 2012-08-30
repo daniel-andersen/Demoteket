@@ -104,58 +104,43 @@ float t = 0.0f;
     Texture demoteketTextTexture = [textures textToTexture:@"DEMOTEKET AARHUS\n\niOS version af:\nDaniel Andersen" width:256 height:256 color:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f] asPhoto:false];
     textureSetBlend(&demoteketTextTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:6.0f room:0] angle:0.0f photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:6.0f room:0] photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
 
     Texture userTextTexture = [textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256 asPhoto:false];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] angle:0.0f photoFilename:@"user_photo_1.png" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"user_photo_1" textTexture:userTextTexture frontFacing:true];
     
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] angle:0.0f photoFilename:@"user_photo_2.png" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"user_photo_2" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] angle:0.0f photoFilename:@"user_photo_3.png" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] photoFilename:@"user_photo_3" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] angle:0.0f photoFilename:@"user_photo_4.png" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] photoFilename:@"user_photo_4" textTexture:userTextTexture frontFacing:true];
 }
 
 - (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture {
-    return [self newPhotoWithTitle:title author:author position:p angle:angle photoTexture:photoTexture textTexture:textTexture frontFacing:true];
+    return [self newPhotoWithTitle:title author:author position:p photoTexture:photoTexture textTexture:textTexture frontFacing:true];
 }
 
-- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoFilename:(NSString*)photoFilename textTexture:(Texture)textTexture frontFacing:(bool)frontFacing {
-	UIImage *photoImage = [UIImage imageNamed:photoFilename];
-    Texture photoTexture = [textures photoFromFile:photoFilename];
+- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p photoFilename:(NSString*)photoFilename textTexture:(Texture)textTexture frontFacing:(bool)frontFacing {
     PhotoInfo *info = [[PhotoInfo alloc] init];
     [info setTitle:title];
     [info setAuthor:author];
     [info setPosition:p];
-    [info setAngle:angle];
-    [info setPhotoImage:photoImage];
-    [info setPhotoTexture:photoTexture];
     [info setTextTexture:textTexture];
-    [info setPhotoIndex:photosTextureCount + 0];
-    [info setTextIndex:photosTextureCount + 1];
     [info setFrontFacing:frontFacing];
-    photosTexture[photosTextureCount + 0] = photoTexture;
-    photosTexture[photosTextureCount + 1] = textTexture;
-    photosTextureCount += 2;
+    [info loadPhotoAsynchronously:photoFilename];
     return info;
 }
 
-- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture frontFacing:(bool)frontFacing {
+- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture frontFacing:(bool)frontFacing {
     PhotoInfo *info = [[PhotoInfo alloc] init];
     [info setTitle:title];
     [info setAuthor:author];
     [info setPosition:p];
-    [info setAngle:angle];
     [info setPhotoImage:NULL];
     [info setPhotoTexture:photoTexture];
     [info setTextTexture:textTexture];
-    [info setPhotoIndex:photosTextureCount + 0];
-    [info setTextIndex:photosTextureCount + 1];
     [info setFrontFacing:frontFacing];
-    photosTexture[photosTextureCount + 0] = photoTexture;
-    photosTexture[photosTextureCount + 1] = textTexture;
-    photosTextureCount += 2;
     return info;
 }
 
@@ -262,9 +247,6 @@ float t = 0.0f;
 
 - (void) update {
     [movement move:0.015f];
-    for (int i = 0; i < userPhotosCount; i++) {
-        [userPhotos[i] update];
-    }
 }
 
 - (void) render {

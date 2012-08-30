@@ -48,6 +48,8 @@ Texture prevButtonTexture;
 Texture tourButtonTexture;
 Texture cameraButtonTexture;
 
+Texture photoLoadingTexture;
+
 Texture textureMake(GLuint id) {
     Texture texture;
     texture.texCoordX1 = 0.0f;
@@ -110,6 +112,8 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     lightTexture[0] = [self loadTexture:@"light1.png"];
     lightTexture[1] = [self loadTexture:@"light2.png"];
     lightTexture[2] = [self loadTexture:@"light3.png"];
+    
+    photoLoadingTexture = [self loadTexture:@"loading_photo.png"];
     
     demoteketLogoTexture = [self loadTexture:@"demoteket_logo.png"]; textureSetBlend(&demoteketLogoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -187,9 +191,6 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 }
 
 - (Texture) photoFromImage:(UIImage*)image {
-    //int texWidth = textureAtLeastSize(image.size.width);
-    //int texHeight = textureAtLeastSize(image.size.height);
-    
     float whiteBorderWidth = (float) image.size.width * PHOTO_WHITE_BORDER_PCT;
     float whiteBorderHeight = (float) image.size.height * PHOTO_WHITE_BORDER_PCT;
     

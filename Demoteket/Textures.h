@@ -44,6 +44,7 @@ typedef struct {
     float texCoordX1, texCoordY1, texCoordX2, texCoordY2;
     bool blendEnabled;
     GLenum blendSrc, blendDst;
+    bool isReadyForRendering;
 } Texture;
 
 extern Texture textureMake(GLuint id);
@@ -72,6 +73,8 @@ extern Texture prevButtonTexture;
 extern Texture tourButtonTexture;
 extern Texture cameraButtonTexture;
 
+extern Texture photoLoadingTexture;
+
 extern void loadTextures();
 
 @interface Textures : NSObject
@@ -86,5 +89,6 @@ extern void loadTextures();
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor asPhoto:(bool)asPhoto;
 
 - (Texture) photoFromFile:(NSString*)filename;
+- (Texture) photoFromImage:(UIImage*)image;
 
 @end

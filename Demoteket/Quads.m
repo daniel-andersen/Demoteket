@@ -218,10 +218,6 @@
 }
 
 - (void) render {
-    if (!depthTestEnabled) {
-        [self renderBackground];
-    }
-    
 	if (!textureToggled) {
     	glEnable(GL_BLEND);
     	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -304,33 +300,6 @@
     if (!depthTestEnabled || isOrthoProjection) {
         glEnable(GL_DEPTH_TEST);
     }
-}
-
-- (void) renderBackground {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-	glDisable(GL_CULL_FACE);
-
-    GLKBaseEffect *glkEffect = glkEffectNormal;
-
-    glkEffect.useConstantColor = YES;
-    glkEffect.constantColor = backgroundColor;
-
-    GLKMatrix4 modelViewMatrix = GLKMatrix4Identity;
-    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, sceneModelViewMatrix);
-    modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, translation.x, translation.y, translation.z);
-    
-    glkEffect.transform.modelviewMatrix = GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
-    glkEffect.transform.projectionMatrix = sceneProjectionMatrix;
-    
-    glkEffect.texture2d0.name = 0;
-    glkEffect.texture2d0.enabled = GL_FALSE;
-
-    [glkEffect prepareToDraw];
-
-    glBindVertexArrayOES(vertexArray);
-    glDrawArrays(GL_TRIANGLES, 0, quadCount * 6);
 }
 
 @end

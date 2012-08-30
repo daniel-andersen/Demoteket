@@ -139,7 +139,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 }
 
 - (void) createGeometrics {
-    photosCount = 0;
+    photosCount = 3;
 
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
         photos[i] = NULL;
@@ -349,24 +349,18 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 }
 
 - (void) addUserPhoto:(PhotoInfo*)photoInfo x:(float)x z:(float)z angle:(float)angle scale:(float)scale {
-    float maxSize = MAX(photoInfo.photoTexture.width, photoInfo.photoTexture.height);
-    float width = scale * (photoInfo.photoTexture.width / maxSize);
-    float height = scale * (photoInfo.photoTexture.height / aspectRatio / maxSize);
-    
-    [photoInfo beginQuads];
-    [self addPhotoToQuads:photoInfo.photoQuads x:0.0f y:ROOM_HEIGHT / 2.0f z:0.0f width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:false];
-    [self addPhotoToQuads:photoInfo.textQuads x:0.0f y:ROOM_HEIGHT / 2.0f z:0.0f width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:false];
-    [photoInfo endQuads];
-    
-    if (photoInfo.photoTexture.id != demoteketLogoTexture.id) {
-        [self addPhotoBorderX:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
+    if (![photoInfo getFullSizePhotoTexture].isReadyForRendering) {
+        [photoInfo setFinishedLoadingCallback:^() {
+            [self addUserPhoto:photoInfo x:x z:z angle:angle scale:scale]; // Warning doesn't matter since the objects are supposed to life in all of the applications lifetime
+        }];
+        return;
     }
-    
-    [photoInfo.photoQuads setTranslation:GLKVector3Make(x, 0.0f, z)];
-    [photoInfo.textQuads setTranslation:GLKVector3Make(x, 0.0f, z)];
-
-    photos[photoInfo.photoIndex] = photoInfo.photoQuads;
-    photos[photoInfo.textIndex] = photoInfo.textQuads;
+    float maxSize = MAX([photoInfo getPhotoTexture].width, [photoInfo getPhotoTexture].height);
+    float width = scale * ([photoInfo getPhotoTexture].width / maxSize);
+    float height = scale * ([photoInfo getPhotoTexture].height / aspectRatio / maxSize);
+    photosTexture[photosCount] = [photoInfo getPhotoTexture];
+    [self addPhotoQuads:photosCount x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:false];
+    photosCount++;
 }
 
 - (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border {
