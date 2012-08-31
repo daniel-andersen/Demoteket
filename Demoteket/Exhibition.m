@@ -87,10 +87,10 @@
     turnAroundPhotoButton = [[Quads alloc] init];
     [turnAroundPhotoButton beginWithTexture:turnAroundPhotoButtonTexture];
     [turnAroundPhotoButton setIsOrthoProjection:true];
-    [turnAroundPhotoButton addQuadX1:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y1:NAVIGATION_BUTTON_BORDER z1:0.0f
-                                  x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
-                                  x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
-                         		  x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
+    [turnAroundPhotoButton addQuadX1:1.0f - NAVIGATION_BUTTON_BORDER y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                       			  x2:1.0f - NAVIGATION_BUTTON_BORDER y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                       			  x3:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                       			  x4:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [turnAroundPhotoButton end];
 
     screenOverlay = [[Quads alloc] init];
@@ -136,18 +136,12 @@
 	        [self clickPhoto];
 	    }
     } else {
-    	if ([self clickedInRectX:p.x y:p.y rx:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
-            [self takeScreenshot];
+	    if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+            // TODO!
 		} else {
 	        [self clickPhoto];
-            
         }
     }
-}
-
-- (void) takeScreenshot {
-    UIImageWriteToSavedPhotosAlbum(userPhoto.photoImage, NULL, NULL, NULL);
-    overlayAnimation = 0.0f;
 }
 
 - (void) clickPhoto {
@@ -183,11 +177,7 @@
 	    [floorPlan update];
     }
     overlayAnimation = MIN(1.0f, overlayAnimation + APPEAR_SPEED);
-    if (mode == EXHIBITION_MODE_NORMAL) {
-	    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - overlayAnimation)];
-    } else {
-	    [screenOverlay setColor:GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f - overlayAnimation)];
-    }
+    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - overlayAnimation)];
     if (mode == EXHIBITION_MODE_VIEWING_PHOTO || mode == EXHIBITION_MODE_VIEWING_TEXT) {
 	    photoAnimation = MIN(1.0f, photoAnimation + PHOTO_APPEAR_SPEED);
     } else {
@@ -200,7 +190,7 @@
     [floorPlan render];
     if (photoAnimation > 0.0f) {
         [photoOverlay render];
-        if (photoAnimation == 1.0f && mode == EXHIBITION_MODE_VIEWING_PHOTO) {
+        if (photoAnimation == 1.0f && mode != EXHIBITION_MODE_NORMAL) {
             [turnAroundPhotoButton render];
         }
     } else {
