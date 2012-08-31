@@ -45,11 +45,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     isVisible = true;
 }
 
-- (void) trashRoom {
-    NSLog(@"TODO!");
-    isVisible = false;
-}
-
 - (void) createRoomNumber:(int)number {
     roomNumber = number;
     stripNumber = 0;
@@ -143,6 +138,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
         photos[i] = NULL;
+        photosBorder[i] = NULL;
     }
 
     for (int i = 0; i < WALL_COUNT; i++) {
@@ -356,25 +352,20 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 }
 
 - (void) addUserPhotoAsync:(PhotoInfo*)photoInfo x:(float)x z:(float)z angle:(float)angle scale:(float)scale {
+    int index = photosCount++;
     float maxSize = MAX([photoInfo getPhotoTexture].width, [photoInfo getPhotoTexture].height);
     float width = scale * ([photoInfo getPhotoTexture].width / maxSize);
     float height = scale * ([photoInfo getPhotoTexture].height / aspectRatio / maxSize);
-    photosTexture[photosCount] = [photoInfo getPhotoTexture];
-    [self addPhotoQuads:photosCount x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:true];
-    [photos[photosCount] end];
-    [photosBorder[photosCount] end];
-    photosCount++;
+    photosTexture[index] = [photoInfo getPhotoTexture];
+    [self addPhotoQuads:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:[photoInfo getPhotoTexture].id != demoteketLogoTexture.id];
+    [photos[index] end];
+    [photosBorder[index] end];
 }
 
 - (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border {
-    if (photos[index] == NULL) {
-	    photos[index] = [[Quads alloc] init];
-	    [photos[index] beginWithTexture:photosTexture[index]];
-    }
     if (border) {
         [self addPhotoBorderIndex:index x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle];
     }
-
     width /= 2.0f;
     height /= 2.0f;
     y += offsetVert;
@@ -388,6 +379,11 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float photoZ2 = wallZ2 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
     float y1 = y - height;
     float y2 = y + height;
+
+    if (photos[index] == NULL) {
+	    photos[index] = [[Quads alloc] init];
+	    [photos[index] beginWithTexture:photosTexture[index]];
+    }
 
 	[photos[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
 }
