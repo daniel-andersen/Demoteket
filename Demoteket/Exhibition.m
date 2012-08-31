@@ -84,14 +84,14 @@
                            x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [stopTourButton end];
 
-    cameraButton = [[Quads alloc] init];
-    [cameraButton beginWithTexture:cameraButtonTexture];
-    [cameraButton setIsOrthoProjection:true];
-    [cameraButton addQuadX1:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y1:NAVIGATION_BUTTON_BORDER z1:0.0f
-                         x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
-                         x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
-                         x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
-    [cameraButton end];
+    turnAroundPhotoButton = [[Quads alloc] init];
+    [turnAroundPhotoButton beginWithTexture:turnAroundPhotoButtonTexture];
+    [turnAroundPhotoButton setIsOrthoProjection:true];
+    [turnAroundPhotoButton addQuadX1:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                                  x2:0.5f + (NAVIGATION_BUTTON_SIZE / 2.0f) y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                                  x3:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                         		  x4:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
+    [turnAroundPhotoButton end];
 
     screenOverlay = [[Quads alloc] init];
     [screenOverlay beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
@@ -201,7 +201,7 @@
     if (photoAnimation > 0.0f) {
         [photoOverlay render];
         if (photoAnimation == 1.0f && mode == EXHIBITION_MODE_VIEWING_PHOTO) {
-            [cameraButton render];
+            [turnAroundPhotoButton render];
         }
     } else {
         if ([floorPlan isBackButtonVisible]) {

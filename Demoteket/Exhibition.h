@@ -45,7 +45,7 @@
     Quads *prevButton;
     Quads *startTourButton;
     Quads *stopTourButton;
-    Quads *cameraButton;
+    Quads *turnAroundPhotoButton;
 
     Quads *screenOverlay;
     Quads *photoOverlay;

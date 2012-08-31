@@ -45,6 +45,8 @@
 
 #define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
 
+#define PHOTO_BORDER_WIDTH 0.1f
+
 extern const float ROOM_OFFSET_X[];
 extern const float ROOM_OFFSET_Z[];
 
@@ -66,6 +68,7 @@ extern const float ROOM_OFFSET_Z[];
     Quads *wallsBorder;
 
     Quads *photos[PHOTOS_MAX_COUNT];
+    Quads *photosBackground[PHOTOS_MAX_COUNT];
     Quads *photoNotLoaded[PHOTOS_MAX_COUNT];
     Quads *photosBorder[PHOTOS_MAX_COUNT];
     int photosCount;

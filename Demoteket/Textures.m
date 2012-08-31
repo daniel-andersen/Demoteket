@@ -46,9 +46,10 @@ Texture lightTexture[LIGHT_TYPE_COUNT];
 Texture nextButtonTexture;
 Texture prevButtonTexture;
 Texture tourButtonTexture;
-Texture cameraButtonTexture;
+Texture turnAroundPhotoButtonTexture;
 
 Texture photoLoadingTexture;
+Texture photoBackgroundTexture;
 
 Texture textureMake(GLuint id) {
     Texture texture;
@@ -91,7 +92,7 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     nextButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&nextButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     prevButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); textureSetTexCoords(&prevButtonTexture, 1.0f, 0.0f, 0.0f, 1.0f);
     tourButtonTexture = [self loadTexture:@"tour_button.png"]; textureSetBlend(&tourButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    cameraButtonTexture = [self loadTexture:@"camera_button.png"]; textureSetBlend(&cameraButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    turnAroundPhotoButtonTexture = [self loadTexture:@"turn_around_button.png"]; textureSetBlend(&turnAroundPhotoButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     wallTexture[0] = [self loadTexture:@"wall1.png"];
     wallTexture[1] = [self loadTexture:@"wall2.png"];
@@ -116,6 +117,7 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     demoteketLogoTexture = [self loadTexture:@"demoteket_logo.png"]; textureSetBlend(&demoteketLogoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     photoLoadingTexture = [self loadTexture:@"loading_photo.png"]; textureSetBlend(&photoLoadingTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    photoBackgroundTexture = [self loadTexture:@"photo_background.png"];
 
     floorDistortionTexture = [self loadTexture:@"floor_distortion.png" repeat:true]; textureSetTexCoords(&floorDistortionTexture, 0.0f, 0.0f, 55.0f, 55.0f);
 }

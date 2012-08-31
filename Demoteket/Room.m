@@ -140,6 +140,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
         photos[i] = NULL;
         photoNotLoaded[i] = NULL;
         photosBorder[i] = NULL;
+        photosBackground[i] = NULL;
     }
 
     for (int i = 0; i < WALL_COUNT; i++) {
@@ -378,18 +379,30 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float maxSize = MAX(photoInfo.photoTexture.width, photoInfo.photoTexture.height);
     float width = scale * (photoInfo.photoTexture.width / maxSize);
     float height = scale * (photoInfo.photoTexture.height / aspectRatio / maxSize);
+	bool hasBorder = photoInfo.photoTexture.id != demoteketLogoTexture.id;
+    
     photosTexture[index] = photoInfo.photoTexture;
-    [self addPhotoQuads:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:photoInfo.photoTexture.id != demoteketLogoTexture.id];
+    
+    [self addPhotoQuads:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:hasBorder borderSize:PHOTO_BORDER_WIDTH];
+    
+    if (hasBorder) {
+        [self addFrontBorder:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height angle:angle];
+    }
+    
     [photos[index] end];
     [photosBorder[index] end];
 }
 
 - (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border {
+    [self addPhotoQuads:index x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle border:border borderSize:0.0f];
+}
+
+- (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border borderSize:(float)borderSize {
     if (border) {
-        [self addPhotoBorderIndex:index x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle];
+        [self addPhotoBorder:index x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle];
     }
-    width /= 2.0f;
-    height /= 2.0f;
+    width = (width - borderSize) / 2.0f;
+    height = (height - borderSize) / 2.0f;
     y += offsetVert;
     float wallX1 = x - cos(angle) * (width + offsetHorz);
     float wallZ1 = z - sin(angle) * (width + offsetHorz);
@@ -410,7 +423,27 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     photoNotLoaded[index] = NULL;
 }
 
-- (void) addPhotoBorderIndex:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
+- (void) addFrontBorder:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height angle:(float)angle {
+    width /= 2.0f;
+    height /= 2.0f;
+    float wallX1 = x - cos(angle) * width;
+    float wallZ1 = z - sin(angle) * width;
+    float wallX2 = x + cos(angle) * width;
+    float wallZ2 = z + sin(angle) * width;
+    float photoX1 = wallX1 + (cos(angle + M_PI_2) * PHOTO_DEPTH);
+    float photoZ1 = wallZ1 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
+    float photoX2 = wallX2 + (cos(angle + M_PI_2) * PHOTO_DEPTH);
+    float photoZ2 = wallZ2 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
+    float y1 = y - height;
+    float y2 = y + height;
+    
+    photosBackground[index] = [[Quads alloc] init];
+	[photosBackground[index] beginWithTexture:photoBackgroundTexture];
+	[photosBackground[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
+    [photosBackground[index] end];
+}
+
+- (void) addPhotoBorder:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
     width /= 2.0f;
     height /= 2.0f;
     y += offsetVert;
@@ -468,7 +501,12 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     }
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
         [photosBorder[i] render];
-		[photoNotLoaded[i] render];
+
+        glDepthMask(GL_FALSE);
+        [photosBackground[i] render];
+        glDepthMask(GL_TRUE);
+		
+        [photoNotLoaded[i] render];
 		[photos[i] render];
     }
 }
