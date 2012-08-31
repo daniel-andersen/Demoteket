@@ -105,8 +105,6 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     pillarTexture = [self loadTexture:@"pillar.png"];
     pillarBorderTexture = textureCopy(pillarTexture, 0.0f, 0.0f, 0.1f, 1.0f);
     
-    photoLoadingTexture = [self loadTexture:@"loading_photo.png"]; textureSetBlend(&photoLoadingTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     photosTexture[photosTextureCount++] = [self loadTexture:@"photo1.png"];
     photosTexture[photosTextureCount++] = [self loadTexture:@"photo2.png"];
     photosTexture[photosTextureCount++] = [self loadTexture:@"photo3.png"];
@@ -115,9 +113,9 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     lightTexture[1] = [self loadTexture:@"light2.png"];
     lightTexture[2] = [self loadTexture:@"light3.png"];
     
-    photoLoadingTexture = [self loadTexture:@"loading_photo.png"];
-    
     demoteketLogoTexture = [self loadTexture:@"demoteket_logo.png"]; textureSetBlend(&demoteketLogoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    photoLoadingTexture = [self loadTexture:@"loading_photo.png"]; textureSetBlend(&photoLoadingTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     floorDistortionTexture = [self loadTexture:@"floor_distortion.png" repeat:true]; textureSetTexCoords(&floorDistortionTexture, 0.0f, 0.0f, 55.0f, 55.0f);
 }
@@ -191,13 +189,13 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 }
 
 - (void) loadPhotoAsyncFromUrl:(NSURL*)url callback:(void(^)(Texture))callback {
-    /*[textureLoader textureWithContentsOfURL:url options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
+    [textureLoader textureWithContentsOfURL:url options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
         if (error) {
             NSLog(@"Error loading texture asynchronously: %@", error);
         }
         Texture texture = [self textureFromTextureInfo:textureInfo repeat:false];
         callback(texture);
-    }];*/
+    }];
 }
 
 - (Texture) photoFromFile:(NSString*)filename {
