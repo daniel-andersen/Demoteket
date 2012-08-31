@@ -138,7 +138,7 @@ float t = 0.0f;
     [info setAuthor:author];
     [info setPosition:p];
     [info setPhotoImage:NULL];
-    [info setPhotoTexture:photoTexture];
+    [info definePhotoTexture:photoTexture];
     [info setTextTexture:textTexture];
     [info setFrontFacing:frontFacing];
     return info;

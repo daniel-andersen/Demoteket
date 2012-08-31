@@ -41,8 +41,6 @@
     UIImage *photoImage;
 
     Texture photoTexture;
-    Texture photoThumbTexture;
-
     Texture textTexture;
 
     bool frontFacing;
@@ -60,13 +58,12 @@
 
 @property(readwrite) UIImage *photoImage;
 
+@property(readwrite) Texture photoTexture;
 @property(readwrite) Texture textTexture;
 
 @property(readwrite) bool frontFacing;
 
-- (void) setPhotoTexture:(Texture)texture;
-- (Texture) getPhotoTexture;
-- (Texture) getFullSizePhotoTexture;
+- (void) definePhotoTexture:(Texture)texture;
 - (void) loadPhotoAsynchronously:(NSString*)filename;
 
 - (void) setFinishedLoadingCallback:(void(^)())callback;

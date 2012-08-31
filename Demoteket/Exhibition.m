@@ -163,12 +163,12 @@
 }
 
 - (void) viewPhoto:(PhotoInfo*)photoInfo {
-    if ([photoInfo getPhotoTexture].id == demoteketLogoTexture.id) {
+    if (photoInfo.photoTexture.id == demoteketLogoTexture.id) {
         return;
     }
     mode = EXHIBITION_MODE_VIEWING_PHOTO;
     userPhoto = photoInfo;
-    photoTexture = [photoInfo getPhotoTexture];
+    photoTexture = photoInfo.photoTexture;
     textureSetBlend(&photoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     [photoOverlay setTexture:photoTexture];
     photoAnimation = 0.0f;

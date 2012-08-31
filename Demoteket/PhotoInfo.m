@@ -38,6 +38,7 @@
 
 @synthesize photoImage;
 
+@synthesize photoTexture;
 @synthesize textTexture;
 
 @synthesize frontFacing;
@@ -47,28 +48,13 @@
         callbackHandler = nil;
         photoImage = NULL;
         photoTexture.isReadyForRendering = false;
-        photoThumbTexture.isReadyForRendering = false;
     }
     return self;
 }
 
-- (void) setPhotoTexture:(Texture)texture {
+- (void) definePhotoTexture:(Texture)texture {
     photoTexture = texture;
     photoTexture.isReadyForRendering = true;
-}
-
-- (Texture) getPhotoTexture {
-    if (photoTexture.isReadyForRendering) {
-        return photoTexture;
-    }
-    if (photoThumbTexture.isReadyForRendering) {
-        return photoThumbTexture;
-    }
-    return photoLoadingTexture;
-}
-
-- (Texture) getFullSizePhotoTexture {
-    return photoTexture;
 }
 
 - (void) loadPhotoAsynchronously:(NSString*)filename {

@@ -66,6 +66,7 @@ extern const float ROOM_OFFSET_Z[];
     Quads *wallsBorder;
 
     Quads *photos[PHOTOS_MAX_COUNT];
+    Quads *photoNotLoaded[PHOTOS_MAX_COUNT];
     Quads *photosBorder[PHOTOS_MAX_COUNT];
     int photosCount;
     

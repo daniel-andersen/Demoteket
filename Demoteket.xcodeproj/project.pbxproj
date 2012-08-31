@@ -24,7 +24,6 @@
 		65083EA815D43C6A003108B5 /* Exhibition.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083EA715D43C6A003108B5 /* Exhibition.m */; };
 		65083EAB15D43CFC003108B5 /* FloorPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083EAA15D43CFC003108B5 /* FloorPlan.m */; };
 		65083EAE15D4FACE003108B5 /* Quads.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083EAD15D4FACE003108B5 /* Quads.m */; };
-		652CF33D15D8FE8100F4F07F /* photosLight1.png in Resources */ = {isa = PBXBuildFile; fileRef = 652CF33C15D8FE8100F4F07F /* photosLight1.png */; };
 		652CF34015D98F5A00F4F07F /* photo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 652CF33F15D98F5A00F4F07F /* photo1.png */; };
 		6544839E15E618CF008132FC /* demoteket_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6544839D15E618CF008132FC /* demoteket_logo.png */; };
 		654942C715E265380029C1E2 /* Movement.m in Sources */ = {isa = PBXBuildFile; fileRef = 654942C615E265380029C1E2 /* Movement.m */; };
@@ -37,12 +36,8 @@
 		65880BF015E955C20055F33D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65880BEF15E955C20055F33D /* QuartzCore.framework */; };
 		658AE91B15E4CAA5009B12D9 /* photo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 658AE91915E4CAA5009B12D9 /* photo2.png */; };
 		658AE91C15E4CAA5009B12D9 /* photo3.png in Resources */ = {isa = PBXBuildFile; fileRef = 658AE91A15E4CAA5009B12D9 /* photo3.png */; };
-		658AE91F15E4DD5C009B12D9 /* user_photo_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 658AE91E15E4DD5C009B12D9 /* user_photo_1.png */; };
 		659F9C2E15D6DB8700EF7825 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 659F9C2D15D6DB8700EF7825 /* Room.m */; };
-		65CB999415DA5C8C00174CDC /* photosLight2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CB999315DA5C8C00174CDC /* photosLight2.png */; };
-		65CC8DA815ECFD02008BA000 /* user_photo_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CC8DA515ECFD02008BA000 /* user_photo_2.png */; };
-		65CC8DA915ECFD02008BA000 /* user_photo_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CC8DA615ECFD02008BA000 /* user_photo_3.png */; };
-		65CC8DAA15ECFD02008BA000 /* user_photo_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CC8DA715ECFD02008BA000 /* user_photo_4.png */; };
+		65BD9D5715F0D7310091ED8F /* loading_photo.png in Resources */ = {isa = PBXBuildFile; fileRef = 65BD9D5615F0D7310091ED8F /* loading_photo.png */; };
 		65CC8DAD15ED2D0F008BA000 /* camera_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CC8DAC15ED2D0F008BA000 /* camera_button.png */; };
 		65CDFEE815EA56D6009CC3BB /* light1.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CDFEE715EA56D6009CC3BB /* light1.png */; };
 		65CDFEEB15EA74DA009CC3BB /* light2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CDFEEA15EA74DA009CC3BB /* light2.png */; };
@@ -81,7 +76,6 @@
 		65083EAC15D4FACD003108B5 /* Quads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quads.h; sourceTree = "<group>"; };
 		65083EAD15D4FACE003108B5 /* Quads.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Quads.m; sourceTree = "<group>"; };
 		65083EAF15D4FD52003108B5 /* Globals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
-		652CF33C15D8FE8100F4F07F /* photosLight1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photosLight1.png; sourceTree = "<group>"; };
 		652CF33F15D98F5A00F4F07F /* photo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo1.png; sourceTree = "<group>"; };
 		6544839D15E618CF008132FC /* demoteket_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demoteket_logo.png; sourceTree = "<group>"; };
 		654942C515E265380029C1E2 /* Movement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movement.h; sourceTree = "<group>"; };
@@ -97,13 +91,9 @@
 		65880BEF15E955C20055F33D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		658AE91915E4CAA5009B12D9 /* photo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo2.png; sourceTree = "<group>"; };
 		658AE91A15E4CAA5009B12D9 /* photo3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo3.png; sourceTree = "<group>"; };
-		658AE91E15E4DD5C009B12D9 /* user_photo_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_photo_1.png; sourceTree = "<group>"; };
 		659F9C2C15D6DB8700EF7825 /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		659F9C2D15D6DB8700EF7825 /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
-		65CB999315DA5C8C00174CDC /* photosLight2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photosLight2.png; sourceTree = "<group>"; };
-		65CC8DA515ECFD02008BA000 /* user_photo_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_photo_2.png; sourceTree = "<group>"; };
-		65CC8DA615ECFD02008BA000 /* user_photo_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_photo_3.png; sourceTree = "<group>"; };
-		65CC8DA715ECFD02008BA000 /* user_photo_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_photo_4.png; sourceTree = "<group>"; };
+		65BD9D5615F0D7310091ED8F /* loading_photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_photo.png; sourceTree = "<group>"; };
 		65CC8DAC15ED2D0F008BA000 /* camera_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_button.png; sourceTree = "<group>"; };
 		65CDFEE715EA56D6009CC3BB /* light1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light1.png; sourceTree = "<group>"; };
 		65CDFEEA15EA74DA009CC3BB /* light2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light2.png; sourceTree = "<group>"; };
@@ -211,10 +201,8 @@
 		6573203415D506AC002562E9 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				65BD9D5615F0D7310091ED8F /* loading_photo.png */,
 				65CC8DAC15ED2D0F008BA000 /* camera_button.png */,
-				65CC8DA515ECFD02008BA000 /* user_photo_2.png */,
-				65CC8DA615ECFD02008BA000 /* user_photo_3.png */,
-				65CC8DA715ECFD02008BA000 /* user_photo_4.png */,
 				65CDFEEE15EA950D009CC3BB /* next_button.png */,
 				65CDFEEC15EA758B009CC3BB /* light3.png */,
 				65CDFEEA15EA74DA009CC3BB /* light2.png */,
@@ -225,14 +213,11 @@
 				65E128EE15E77F2900DCBAE9 /* wall2.png */,
 				65E128EF15E77F2900DCBAE9 /* wall3.png */,
 				6544839D15E618CF008132FC /* demoteket_logo.png */,
-				658AE91E15E4DD5C009B12D9 /* user_photo_1.png */,
 				658AE91915E4CAA5009B12D9 /* photo2.png */,
 				658AE91A15E4CAA5009B12D9 /* photo3.png */,
 				65009C7215E0353C00046FAE /* pillar.png */,
 				6570FC7915DD70F8003A2003 /* floor_distortion.png */,
-				65CB999315DA5C8C00174CDC /* photosLight2.png */,
 				652CF33F15D98F5A00F4F07F /* photo1.png */,
-				652CF33C15D8FE8100F4F07F /* photosLight1.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -292,14 +277,11 @@
 				65083E9715D43C3B003108B5 /* Shader.vsh in Resources */,
 				65083E9D15D43C3B003108B5 /* ViewController_iPhone.xib in Resources */,
 				65083EA015D43C3B003108B5 /* ViewController_iPad.xib in Resources */,
-				652CF33D15D8FE8100F4F07F /* photosLight1.png in Resources */,
 				652CF34015D98F5A00F4F07F /* photo1.png in Resources */,
-				65CB999415DA5C8C00174CDC /* photosLight2.png in Resources */,
 				6570FC7A15DD70F8003A2003 /* floor_distortion.png in Resources */,
 				65009C7315E0353C00046FAE /* pillar.png in Resources */,
 				658AE91B15E4CAA5009B12D9 /* photo2.png in Resources */,
 				658AE91C15E4CAA5009B12D9 /* photo3.png in Resources */,
-				658AE91F15E4DD5C009B12D9 /* user_photo_1.png in Resources */,
 				6544839E15E618CF008132FC /* demoteket_logo.png in Resources */,
 				65E128F015E77F2900DCBAE9 /* wall1.png in Resources */,
 				65E128F115E77F2900DCBAE9 /* wall2.png in Resources */,
@@ -310,10 +292,8 @@
 				65CDFEEB15EA74DA009CC3BB /* light2.png in Resources */,
 				65CDFEED15EA758B009CC3BB /* light3.png in Resources */,
 				65CDFEEF15EA950D009CC3BB /* next_button.png in Resources */,
-				65CC8DA815ECFD02008BA000 /* user_photo_2.png in Resources */,
-				65CC8DA915ECFD02008BA000 /* user_photo_3.png in Resources */,
-				65CC8DAA15ECFD02008BA000 /* user_photo_4.png in Resources */,
 				65CC8DAD15ED2D0F008BA000 /* camera_button.png in Resources */,
+				65BD9D5715F0D7310091ED8F /* loading_photo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
