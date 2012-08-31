@@ -37,6 +37,7 @@
     Quads *photoQuads;
     Quads *textQuads;
     
+    NSString *photoFilename;
     UIImage *photoImage;
 
     Texture photoTexture;

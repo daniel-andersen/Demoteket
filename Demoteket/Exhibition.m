@@ -39,8 +39,6 @@
 }
 
 - (void) initialize {
-    [self setupTextureLoader];
-    
     CFURLRef soundUrl = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("tap"), CFSTR("aif"), NULL);
     
     AudioServicesCreateSystemSoundID(soundUrl, &clickSoundId);
@@ -117,12 +115,10 @@
     mode = EXHIBITION_MODE_NORMAL;
 }
 
-- (void) setupTextureLoader {
-    textureLoaderQueue = [[NSOperationQueue alloc] init];
-}
-
 - (void) createExhibition {
     [floorPlan createFloorPlan];
+
+    NSLog(@"Exhibition initialized!");
 }
 
 - (void) tap:(GLKVector2)p {
@@ -167,7 +163,7 @@
 }
 
 - (void) viewPhoto:(PhotoInfo*)photoInfo {
-    if (photoInfo.photoImage == NULL) {
+    if ([photoInfo getPhotoTexture].id == demoteketLogoTexture.id) {
         return;
     }
     mode = EXHIBITION_MODE_VIEWING_PHOTO;

@@ -108,7 +108,7 @@ float t = 0.0f;
 
     Texture userTextTexture = [textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256 asPhoto:false];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"user_photo_1" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
     
     userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"user_photo_2" textTexture:userTextTexture frontFacing:true];
 

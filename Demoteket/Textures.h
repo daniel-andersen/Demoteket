@@ -88,6 +88,8 @@ extern void loadTextures();
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height asPhoto:(bool)asPhoto;
 - (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor asPhoto:(bool)asPhoto;
 
+- (void) loadPhotoAsyncFromUrl:(NSURL*)url callback:(void(^)(Texture))callback;
+
 - (Texture) photoFromFile:(NSString*)filename;
 - (Texture) photoFromImage:(UIImage*)image;
 

@@ -42,6 +42,7 @@
 
 - (id) init {
     if (self = [super init]) {
+        isFixed = false;
         isOrthoProjection = false;
         depthTestEnabled = true;
         faceToCamera = false;
@@ -77,9 +78,10 @@
 }
 
 - (void) end {
-    if (quadCount == 0) {
+    if (quadCount == 0 || isFixed) {
         return;
     }
+    isFixed = true;
     int v = 0;
     for (int i = 0; i < quadCount; i++) {
         

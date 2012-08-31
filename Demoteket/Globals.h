@@ -72,7 +72,7 @@ GLfloat refractionConstant;
 
 GLuint currentShaderProgram;
 
-NSOperationQueue *textureLoaderQueue;
+GLKTextureLoader *textureLoader;
 
 extern float letterToAngle(char ch);
 extern int textureAtLeastSize(int size);

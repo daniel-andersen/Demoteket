@@ -61,6 +61,8 @@ typedef struct {
     
     GLKVector3 translation;
     GLKVector3 rotation;
+    
+    bool isFixed;
 }
 
 @property (readwrite) GLKVector4 color;

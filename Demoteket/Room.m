@@ -163,9 +163,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     pillarsBorder = [[Quads alloc] init];
     [pillarsBorder beginWithTexture:pillarBorderTexture color:GLKVector4Make(0.7f, 0.7f, 0.7f, 1.0f)];
 
-    photosBorder = [[Quads alloc] init];
-    [photosBorder beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
-
     for (int i = 0; i < ROOM_MAX_SIZE; i++) {
         for (int j = 0; j < ROOM_MAX_SIZE; j++) {
             if (tiles[i][j] == 'X' || tiles[i][j] == ' ') {
@@ -213,11 +210,11 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     [wallsBorder end];
     [pillars end];
     [pillarsBorder end];
-    [photosBorder end];
     for (int i = 0; i < WALL_COUNT; i++) {
         [walls[i] end];
     }
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
+        [photosBorder[i] end];
 		[photos[i] end];
     }
 }
@@ -351,15 +348,21 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 - (void) addUserPhoto:(PhotoInfo*)photoInfo x:(float)x z:(float)z angle:(float)angle scale:(float)scale {
     if (![photoInfo getFullSizePhotoTexture].isReadyForRendering) {
         [photoInfo setFinishedLoadingCallback:^() {
-            [self addUserPhoto:photoInfo x:x z:z angle:angle scale:scale]; // Warning doesn't matter since the objects are supposed to life in all of the applications lifetime
+            [self addUserPhotoAsync:photoInfo x:x z:z angle:angle scale:scale]; // Nevermind
         }];
-        return;
+    } else {
+	    [self addUserPhotoAsync:photoInfo x:x z:z angle:angle scale:scale];
     }
+}
+
+- (void) addUserPhotoAsync:(PhotoInfo*)photoInfo x:(float)x z:(float)z angle:(float)angle scale:(float)scale {
     float maxSize = MAX([photoInfo getPhotoTexture].width, [photoInfo getPhotoTexture].height);
     float width = scale * ([photoInfo getPhotoTexture].width / maxSize);
     float height = scale * ([photoInfo getPhotoTexture].height / aspectRatio / maxSize);
     photosTexture[photosCount] = [photoInfo getPhotoTexture];
-    [self addPhotoQuads:photosCount x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:false];
+    [self addPhotoQuads:photosCount x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:true];
+    [photos[photosCount] end];
+    [photosBorder[photosCount] end];
     photosCount++;
 }
 
@@ -368,12 +371,8 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
 	    photos[index] = [[Quads alloc] init];
 	    [photos[index] beginWithTexture:photosTexture[index]];
     }
-    [self addPhotoToQuads:photos[index] x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle border:border];
-}
-
-- (void) addPhotoToQuads:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border {
     if (border) {
-        [self addPhotoBorderX:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle];
+        [self addPhotoBorderIndex:index x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle];
     }
 
     width /= 2.0f;
@@ -390,10 +389,10 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float y1 = y - height;
     float y2 = y + height;
 
-	[quads addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
+	[photos[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
 }
 
-- (void) addPhotoBorderX:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
+- (void) addPhotoBorderIndex:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
     width /= 2.0f;
     height /= 2.0f;
     y += offsetVert;
@@ -408,10 +407,15 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     float y1 = y - height;
     float y2 = y + height;
     
-    [photosBorder addQuadVerticalX1:wallX1 y1:y1 z1:wallZ1 x2:photoX1 y2:y2 z2:photoZ1];
-	[photosBorder addQuadVerticalX1:photoX2 y1:y1 z1:photoZ2 x2:wallX2 y2:y2 z2:wallZ2];
-	[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:wallX2 z2:wallZ2 x3:photoX2 z3:photoZ2 x4:photoX1 z4:photoZ1 y:y1];
-	[photosBorder addQuadHorizontalX1:wallX1 z1:wallZ1 x2:photoX1 z2:photoZ1 x3:photoX2 z3:photoZ2 x4:wallX2 z4:wallZ2 y:y2];
+    if (photosBorder[index] == NULL) {
+	    photosBorder[index] = [[Quads alloc] init];
+	    [photosBorder[index] beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
+    }
+
+    [photosBorder[index] addQuadVerticalX1:wallX1 y1:y1 z1:wallZ1 x2:photoX1 y2:y2 z2:photoZ1];
+	[photosBorder[index] addQuadVerticalX1:photoX2 y1:y1 z1:photoZ2 x2:wallX2 y2:y2 z2:wallZ2];
+	[photosBorder[index] addQuadHorizontalX1:wallX1 z1:wallZ1 x2:wallX2 z2:wallZ2 x3:photoX2 z3:photoZ2 x4:photoX1 z4:photoZ1 y:y1];
+	[photosBorder[index] addQuadHorizontalX1:wallX1 z1:wallZ1 x2:photoX1 z2:photoZ1 x3:photoX2 z3:photoZ2 x4:wallX2 z4:wallZ2 y:y2];
 }
 
 - (int) getDoorDirectionX:(int)x y:(int)y {
@@ -441,11 +445,11 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              0, 0, 0};
     [wallsBorder render];
 	[pillars render];
 	[pillarsBorder render];
-    [photosBorder render];
     for (int i = 0; i < lightsCount; i++) {
 		[lights[i] render];
     }
     for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
+        [photosBorder[i] render];
 		[photos[i] render];
     }
 }

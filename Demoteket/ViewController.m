@@ -26,8 +26,7 @@
 #import "ViewController.h"
 #import "Globals.h"
 
-enum
-{
+enum {
     ATTRIB_VERTEX,
     ATTRIB_TEXCOORD,
 };
@@ -75,8 +74,7 @@ enum
     [self.view addGestureRecognizer:tapRecognizer];
 }
 
-- (void)viewDidUnload
-{    
+- (void)viewDidUnload {
     [super viewDidUnload];
     
     [self tearDownGL];
@@ -87,8 +85,7 @@ enum
 	self.context = nil;
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc. that aren't in use.
 }
@@ -97,9 +94,9 @@ enum
 	return interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight;
 }
 
-- (void)setupGL
-{
+- (void)setupGL {
     [EAGLContext setCurrentContext:self.context];
+    textureLoader = [[GLKTextureLoader alloc] initWithSharegroup:self.context.sharegroup];
     
     [self loadShaders];
     
@@ -112,8 +109,7 @@ enum
     [self getScreenSize];
 }
 
-- (void)tearDownGL
-{
+- (void)tearDownGL {
     [EAGLContext setCurrentContext:self.context];
     
     self.effect = nil;
@@ -148,8 +144,7 @@ enum
 
 #pragma mark - GLKView and GLKViewController delegate methods
 
-- (void)update
-{
+- (void)update {
     sceneProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspectRatio, 0.1f, ROOM_MAX_SIZE * BLOCK_SIZE);
 
     orthoProjectionMatrix = GLKMatrix4MakeOrtho(0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 1.0f);
@@ -168,8 +163,7 @@ enum
 
 #pragma mark -  OpenGL ES 2 shader compilation
 
-- (BOOL)loadShaders
-{
+- (BOOL)loadShaders {
     GLuint vertShader, fragShader;
     NSString *vertShaderPathname, *fragShaderPathname;
     
@@ -242,8 +236,7 @@ enum
     return YES;
 }
 
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file
-{
+- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file {
     GLint status;
     const GLchar *source;
     
@@ -277,8 +270,7 @@ enum
     return YES;
 }
 
-- (BOOL)linkProgram:(GLuint)prog
-{
+- (BOOL)linkProgram:(GLuint)prog {
     GLint status;
     glLinkProgram(prog);
     
@@ -301,8 +293,7 @@ enum
     return YES;
 }
 
-- (BOOL)validateProgram:(GLuint)prog
-{
+- (BOOL)validateProgram:(GLuint)prog {
     GLint logLength, status;
     
     glValidateProgram(prog);

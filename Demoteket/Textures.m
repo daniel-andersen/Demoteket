@@ -132,10 +132,13 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 - (Texture) loadTextureWithImage:(UIImage*)image repeat:(bool)repeat {
     NSError *error = nil;
     GLKTextureInfo *textureInfo = [GLKTextureLoader textureWithCGImage:image.CGImage options:nil error:&error];
-    
     if (error) {
         NSLog(@"Error loading texture: %@", error);
     }
+    return [self textureFromTextureInfo:textureInfo repeat:repeat];
+}
+
+- (Texture) textureFromTextureInfo:(GLKTextureInfo*)textureInfo repeat:(bool)repeat {
     glBindTexture(GL_TEXTURE_2D, textureInfo.name);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -183,6 +186,16 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     } else {
 	    return [self loadTextureWithImage:image repeat:false];
     }
+}
+
+- (void) loadPhotoAsyncFromUrl:(NSURL*)url callback:(void(^)(Texture))callback {
+    [textureLoader textureWithContentsOfURL:url options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
+        if (error) {
+            NSLog(@"Error loading texture asynchronously: %@", error);
+        }
+        Texture texture = [self textureFromTextureInfo:textureInfo repeat:false];
+        callback(texture);
+    }];
 }
 
 - (Texture) photoFromFile:(NSString*)filename {

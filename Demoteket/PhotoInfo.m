@@ -72,8 +72,22 @@
 }
 
 - (void) loadPhotoAsynchronously:(NSString*)filename {
-	photoImage = [UIImage imageNamed:[filename stringByAppendingString:@".png"]];
-    photoTexture = [textures photoFromImage:photoImage];
+    photoFilename = filename;
+    if ([filename hasPrefix:@"http"]) {
+        NSLog(@"Loading asynchronously: %@", filename);
+        [textures loadPhotoAsyncFromUrl:[NSURL URLWithString:filename] callback:^(Texture t) {
+            [self photoLoaded:t];
+        }];
+    } else {
+        NSLog(@"Loading synchronously: %@", filename);
+        photoImage = [UIImage imageNamed:photoFilename];
+        [self photoLoaded:[textures photoFromImage:photoImage]];
+    }
+}
+
+- (void) photoLoaded:(Texture)texture {
+    NSLog(@"Asynchronous loaded photo: %@", photoFilename);
+    photoTexture = texture;
     photoTexture.isReadyForRendering = true;
     if (callbackHandler != nil) {
 	    callbackHandler();
