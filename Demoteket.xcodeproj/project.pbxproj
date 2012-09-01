@@ -45,8 +45,6 @@
 		65CDFEEF15EA950D009CC3BB /* next_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 65CDFEEE15EA950D009CC3BB /* next_button.png */; };
 		65E128F015E77F2900DCBAE9 /* wall1.png in Resources */ = {isa = PBXBuildFile; fileRef = 65E128ED15E77F2900DCBAE9 /* wall1.png */; };
 		65E128F115E77F2900DCBAE9 /* wall2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65E128EE15E77F2900DCBAE9 /* wall2.png */; };
-		65E128F215E77F2900DCBAE9 /* wall3.png in Resources */ = {isa = PBXBuildFile; fileRef = 65E128EF15E77F2900DCBAE9 /* wall3.png */; };
-		65E128F415E7986100DCBAE9 /* wall4.png in Resources */ = {isa = PBXBuildFile; fileRef = 65E128F315E7986100DCBAE9 /* wall4.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,8 +99,6 @@
 		65CDFEEE15EA950D009CC3BB /* next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next_button.png; sourceTree = "<group>"; };
 		65E128ED15E77F2900DCBAE9 /* wall1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall1.png; sourceTree = "<group>"; };
 		65E128EE15E77F2900DCBAE9 /* wall2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall2.png; sourceTree = "<group>"; };
-		65E128EF15E77F2900DCBAE9 /* wall3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall3.png; sourceTree = "<group>"; };
-		65E128F315E7986100DCBAE9 /* wall4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall4.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,10 +204,8 @@
 				65CDFEEA15EA74DA009CC3BB /* light2.png */,
 				65CDFEE715EA56D6009CC3BB /* light1.png */,
 				654E9C9315E8021D00570F64 /* tour_button.png */,
-				65E128F315E7986100DCBAE9 /* wall4.png */,
 				65E128ED15E77F2900DCBAE9 /* wall1.png */,
 				65E128EE15E77F2900DCBAE9 /* wall2.png */,
-				65E128EF15E77F2900DCBAE9 /* wall3.png */,
 				6544839D15E618CF008132FC /* demoteket_logo.png */,
 				658AE91915E4CAA5009B12D9 /* photo2.png */,
 				658AE91A15E4CAA5009B12D9 /* photo3.png */,
@@ -285,8 +279,6 @@
 				6544839E15E618CF008132FC /* demoteket_logo.png in Resources */,
 				65E128F015E77F2900DCBAE9 /* wall1.png in Resources */,
 				65E128F115E77F2900DCBAE9 /* wall2.png in Resources */,
-				65E128F215E77F2900DCBAE9 /* wall3.png in Resources */,
-				65E128F415E7986100DCBAE9 /* wall4.png in Resources */,
 				654E9C9515E8021D00570F64 /* tour_button.png in Resources */,
 				65CDFEE815EA56D6009CC3BB /* light1.png in Resources */,
 				65CDFEEB15EA74DA009CC3BB /* light2.png in Resources */,

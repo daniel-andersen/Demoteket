@@ -163,12 +163,13 @@ float t = 0.0f;
     
     [movement setUserPhoto:0];
     [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:false];
-    [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 6.0f) angle:letterToAngle('D')] lookAt:GLKVector2Make(0.5f, 7.0f) pause:true];
+    [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:true];
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 5.5f) angle:letterToAngle('D')] lookAt:GLKVector2Make(-0.0f, 8.0f) pause:true];
 
     [movement setUserPhoto:1];
-    [movement addOffsetPoint:GLKVector2Make(-2.0f, -1.5f) lookAt:GLKVector2Make(4.0f, 13.0f)];
-    [movement addOffsetPoint:GLKVector2Make(-1.5f,  0.0f)];
-    [movement addOffsetPoint:GLKVector2Make(-1.0f,  1.5f)];
+    [movement addOffsetPoint:GLKVector2Make(-2.0f, -1.0f) lookAt:GLKVector2Make(4.0f, 13.0f)];
+    [movement addOffsetPoint:GLKVector2Make(-1.5f,  0.5f)];
+    [movement addOffsetPoint:GLKVector2Make(-1.0f,  1.0f)];
     [movement addOffsetPoint:GLKVector2Make( 2.0f,  4.5f)];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(2.6f, 7.0f) angle:-0.3f] lookAt:GLKVector2Make(2.4f, 7.0f) pause:true];
 

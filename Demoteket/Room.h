@@ -40,7 +40,7 @@
 
 #define WALL_DEPTH (BLOCK_SIZE * 0.05f)
 
-#define PILLAR_WIDTH (BLOCK_SIZE * 1.0f)
+#define PILLAR_WIDTH (BLOCK_SIZE * 0.9f)
 #define PILLAR_DEPTH (BLOCK_SIZE * 0.03f)
 
 #define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
