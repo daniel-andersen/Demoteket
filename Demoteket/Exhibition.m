@@ -113,7 +113,7 @@
 
     overlayAnimation = 0.0f;
     mode = EXHIBITION_MODE_NORMAL;
-    startCountdown = START_COUNTDOWN;
+    startTime = CFAbsoluteTimeGetCurrent();
 }
 
 - (void) createExhibition {
@@ -174,13 +174,13 @@
 }
 
 - (void) update {
-    if (startCountdown == 0 || startCountdown == START_COUNTDOWN) {
+    if (CFAbsoluteTimeGetCurrent() > startTime + MOVEMENT_START_DELAY) {
 	    [floorPlan update];
     }
-    startCountdown = MAX(0, startCountdown - 1);
-    
+
     overlayAnimation = MIN(1.0f, overlayAnimation + APPEAR_SPEED);
     [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - overlayAnimation)];
+
     if (mode == EXHIBITION_MODE_VIEWING_PHOTO || mode == EXHIBITION_MODE_VIEWING_TEXT) {
 	    photoAnimation = MIN(1.0f, photoAnimation + PHOTO_APPEAR_SPEED);
     } else {

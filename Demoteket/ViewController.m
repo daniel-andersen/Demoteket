@@ -32,7 +32,12 @@ enum {
 };
 
 @interface ViewController () {
+
+@private
+
     Exhibition *exhibition;
+    float frameSeconds;
+    double startTime;
 }
 
 @property (strong, nonatomic) EAGLContext *context;
@@ -64,6 +69,9 @@ enum {
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+
+    self.preferredFramesPerSecond = 60;
+    frameSeconds = FRAME_RATE;
     
     [self setupGL];
 
@@ -72,6 +80,8 @@ enum {
 
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
     [self.view addGestureRecognizer:tapRecognizer];
+    
+    startTime = CFAbsoluteTimeGetCurrent();
 }
 
 - (void)viewDidUnload {
@@ -150,8 +160,18 @@ enum {
     orthoProjectionMatrix = GLKMatrix4MakeOrtho(0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 1.0f);
     orthoModelViewMatrix = GLKMatrix4Identity;
 
-    [exhibition update];
-    //_rotation += self.timeSinceLastUpdate * 0.5f;
+    if (CFAbsoluteTimeGetCurrent() < startTime + START_DELAY) {
+        [exhibition update];
+    } else {
+	    frameSeconds += self.timeSinceLastUpdate;
+        if (frameSeconds / FRAME_RATE > 2.0f) {
+            frameSeconds = FRAME_RATE * 2.0f;
+        }
+	    while (frameSeconds >= FRAME_RATE) {
+		    [exhibition update];
+        	frameSeconds -= FRAME_RATE;
+        }
+    }
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {

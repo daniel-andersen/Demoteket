@@ -28,6 +28,10 @@
 
 #import "Exhibition.h"
 
+#define FRAME_RATE ((1000.0f / 60.0f) / 1000.0f)
+
+#define START_DELAY 1.0f
+
 @interface ViewController : GLKViewController
 
 @end
