@@ -35,6 +35,8 @@
 #define EXHIBITION_MODE_VIEWING_PHOTO 1
 #define EXHIBITION_MODE_VIEWING_TEXT 2
 
+#define START_COUNTDOWN 50
+
 @interface Exhibition : NSObject {
 
 @private
@@ -53,6 +55,7 @@
     SystemSoundID clickSoundId;
     
     float overlayAnimation;
+    int startCountdown;
 
     int mode;
     float photoAnimation;

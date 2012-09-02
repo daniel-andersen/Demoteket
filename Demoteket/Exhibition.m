@@ -113,6 +113,7 @@
 
     overlayAnimation = 0.0f;
     mode = EXHIBITION_MODE_NORMAL;
+    startCountdown = START_COUNTDOWN;
 }
 
 - (void) createExhibition {
@@ -173,9 +174,11 @@
 }
 
 - (void) update {
-    if (overlayAnimation <= 0.0f || overlayAnimation > 0.5f) {
+    if (startCountdown == 0 || startCountdown == START_COUNTDOWN) {
 	    [floorPlan update];
     }
+    startCountdown = MAX(0, startCountdown - 1);
+    
     overlayAnimation = MIN(1.0f, overlayAnimation + APPEAR_SPEED);
     [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - overlayAnimation)];
     if (mode == EXHIBITION_MODE_VIEWING_PHOTO || mode == EXHIBITION_MODE_VIEWING_TEXT) {
@@ -188,6 +191,7 @@
 
 - (void) render {
     [floorPlan render];
+    glDisable(GL_CULL_FACE);
     if (photoAnimation > 0.0f) {
         [photoOverlay render];
         if (photoAnimation == 1.0f && mode != EXHIBITION_MODE_NORMAL) {

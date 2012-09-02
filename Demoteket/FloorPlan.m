@@ -163,7 +163,6 @@ float t = 0.0f;
     
     [movement setUserPhoto:0];
     [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:false];
-    [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:true];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 5.5f) angle:letterToAngle('D')] lookAt:GLKVector2Make(-0.0f, 8.0f) pause:true];
 
     [movement setUserPhoto:1];
@@ -260,9 +259,7 @@ float t = 0.0f;
     mirrorModelViewMatrix = GLKMatrix4Identity;
     
     [self renderRooms];
-    [self renderFloors];
-
-	glDisable(GL_CULL_FACE);
+    [self renderFloor];
 }
 
 - (void) setupPosition {
@@ -302,7 +299,7 @@ float t = 0.0f;
     }
 }
 
-- (void) renderFloors {
+- (void) renderFloor {
     for (int i = currentRoom - 1; i < currentRoom + 2; i++) {
         if (i >= 0 && i < ROOM_COUNT) {
             [rooms[i] renderFloor];
