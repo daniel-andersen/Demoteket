@@ -185,27 +185,34 @@
     if (!paused) {
         return;
     }
+    paused = false;
     if (direction == MOVEMENT_DIR_BACKWARDS) {
+        direction = MOVEMENT_DIR_FORWARDS;
+        MovementPoint oldPoint = points[pointIndex];
         points = forwardPoints;
         pointsCount = &forwardPointsCount;
-        angleTransition = 0.0f;
         for (int i = 0; i < *pointsCount; i++) {
             if (points[i].photosIndex == photosIndex + 1) {
                 pointIndex = i - 1;
                 break;
             }
         }
+	    [self nextPoint];
+        oldDestAnglePoint = oldPoint;
+        angleTransition = 0.0f;
+    } else {
+	    [self nextPoint];
     }
-    paused = false;
-    direction = MOVEMENT_DIR_FORWARDS;
-    [self nextPoint];
 }
 
 - (void) goBackwards {
     if (!paused) {
         return;
     }
+    paused = false;
     if (direction == MOVEMENT_DIR_FORWARDS) {
+        direction = MOVEMENT_DIR_BACKWARDS;
+        MovementPoint oldPoint = points[pointIndex];
         points = backwardPoints;
         pointsCount = &backwardPointsCount;
         for (int i = 0; i < *pointsCount; i++) {
@@ -214,10 +221,12 @@
                 break;
             }
         }
+	    [self nextPoint];
+        oldDestAnglePoint = oldPoint;
+        angleTransition = 0.0f;
+    } else {
+	    [self nextPoint];
     }
-    paused = false;
-    direction = MOVEMENT_DIR_BACKWARDS;
-    [self nextPoint];
 }
 
 - (void) startTour {

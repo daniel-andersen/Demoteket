@@ -165,8 +165,9 @@ float t = 0.0f;
     // Forward movement
     [movement setForwardsMovementForAddingPoints];
     
+    [movement addPoint:GLKVector2Make(-4.0f, -17.0f) lookAt:GLKVector2Make(-4.0f, -10.0f) pause:false];
+
     [movement setUserPhoto:0];
-    [movement addPoint:GLKVector2Make(-4.0f, -17.0f) pause:false];
     [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 5.5f) angle:letterToAngle('D')] lookAt:GLKVector2Make(-0.0f, 8.0f) pause:true];
 
     [movement setUserPhoto:1];
@@ -192,7 +193,7 @@ float t = 0.0f;
     [movement addOffsetPoint:GLKVector2Make(1.0f, -1.0f) pause:true];
 
     [movement setUserPhoto:5];
-	[movement lookAt:GLKVector2Make(10.0f, -3.0f) continueDistance:0.75f];
+	[movement lookAt:GLKVector2Make(11.0f, -3.8f) continueDistance:0.75f];
 	[movement addOffsetPoint:GLKVector2Make(3.0f, -1.0f)];
 	[movement addOffsetPoint:GLKVector2Make(3.0f, -3.0f)];
 	[movement addOffsetPoint:GLKVector2Make(4.0f, 0.0f) pause:true];
@@ -207,8 +208,8 @@ float t = 0.0f;
     [movement setUserPhoto:4];
 	[movement lookAt:GLKVector2Make(-10.0f, 3.0f) continueDistance:0.75f];
 	[movement addOffsetPoint:GLKVector2Make(-3.0f, 1.0f)];
-	[movement addOffsetPoint:GLKVector2Make(-3.0f, 3.0f)];
-	[movement addOffsetPoint:GLKVector2Make(-4.0f, 0.0f) lookAt:GLKVector2Make(-4.0f, -1.0f) pause:true];
+	[movement addOffsetPoint:GLKVector2Make(-3.0f, 3.0f) lookAt:GLKVector2Make(-7.0f, 2.0f)];
+	[movement addOffsetPoint:GLKVector2Make(-4.0f, 0.0f) pause:true];
 
     [movement setUserPhoto:3];
     [movement lookAt:GLKVector2Make(-3.0f, 4.0f) continueDistance:0.50f];
