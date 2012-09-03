@@ -63,6 +63,19 @@
 - (void) setPositionToFirstPoint {
     [self setForwardsMovementForAddingPoints];
     position = points[0].position;
+    /*[self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];
+    [self nextPoint];*/
     [self nextPoint];
 }
 
@@ -291,12 +304,16 @@
 }
 
 - (void) changePoint:(MovementPoint)newPoint oldPoint:(MovementPoint)oldPoint {
-    if ((newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT || newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE) &&
+    /*if ((newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT || newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE) &&
         (oldPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT || oldPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE)) {
         if (!GLKVector2AllEqualToVector2(newPoint.lookAt, oldPoint.lookAt)) {
 	        oldDestAnglePoint = oldPoint;
 	        angleTransition = 0.0f;
         }
+    }*/
+    if (!GLKVector2AllEqualToVector2(newPoint.lookAt, oldPoint.lookAt)) {
+        oldDestAnglePoint = oldPoint;
+        angleTransition = 0.0f;
     }
     if (newPoint.photosIndex != -1) {
         photosIndex = newPoint.photosIndex;

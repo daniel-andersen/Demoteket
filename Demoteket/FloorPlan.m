@@ -94,6 +94,7 @@ float t = 0.0f;
     }
     [rooms[0] initializeRoomNumber:0];
     [rooms[1] initializeRoomNumber:1];
+    [rooms[2] initializeRoomNumber:2];
 
     [self createPath];
 }
@@ -110,11 +111,13 @@ float t = 0.0f;
 
     userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
     
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb4.jpg" textTexture:userTextTexture frontFacing:true];
 }
 
 - (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture {
@@ -157,6 +160,7 @@ float t = 0.0f;
     [movement addUserPhoto:userPhotos[2]];
     [movement addUserPhoto:userPhotos[3]];
     [movement addUserPhoto:userPhotos[4]];
+    [movement addUserPhoto:userPhotos[5]];
 
     // Forward movement
     [movement setForwardsMovementForAddingPoints];
@@ -187,12 +191,24 @@ float t = 0.0f;
     [movement addOffsetPoint:GLKVector2Make(-0.5f, -3.0f)];
     [movement addOffsetPoint:GLKVector2Make(1.0f, -1.0f) pause:true];
 
+    [movement setUserPhoto:5];
+	[movement lookAt:GLKVector2Make(10.0f, -3.0f) continueDistance:0.75f];
+	[movement addOffsetPoint:GLKVector2Make(3.0f, -1.0f)];
+	[movement addOffsetPoint:GLKVector2Make(3.0f, -3.0f)];
+	[movement addOffsetPoint:GLKVector2Make(4.0f, 0.0f) pause:true];
+
     // Backward movement
     GLKVector2 endPoint = [movement getOffsetPoint:GLKVector2Make(0.0f, 0.0f)];
     [movement setBackwardsMovementForAddingPoints];
 
-    [movement setUserPhoto:4];
+    [movement setUserPhoto:5];
     [movement addPoint:endPoint pause:false];
+
+    [movement setUserPhoto:4];
+	[movement lookAt:GLKVector2Make(-10.0f, 3.0f) continueDistance:0.75f];
+	[movement addOffsetPoint:GLKVector2Make(-3.0f, 1.0f)];
+	[movement addOffsetPoint:GLKVector2Make(-3.0f, 3.0f)];
+	[movement addOffsetPoint:GLKVector2Make(-4.0f, 0.0f) lookAt:GLKVector2Make(-4.0f, -1.0f) pause:true];
 
     [movement setUserPhoto:3];
     [movement lookAt:GLKVector2Make(-3.0f, 4.0f) continueDistance:0.50f];
@@ -292,15 +308,17 @@ float t = 0.0f;
 }
 
 - (void) renderRooms {
-    for (int i = currentRoom - 1; i < currentRoom + 2; i++) {
+    for (int i = currentRoom - 1; i < currentRoom + 3; i++) {
         if (i >= 0 && i < ROOM_COUNT) {
+            if (i == 2) {
+            }
             [rooms[i] render];
         }
     }
 }
 
 - (void) renderFloor {
-    for (int i = currentRoom - 1; i < currentRoom + 2; i++) {
+    for (int i = currentRoom - 1; i < currentRoom + 3; i++) {
         if (i >= 0 && i < ROOM_COUNT) {
             [rooms[i] renderFloor];
         }

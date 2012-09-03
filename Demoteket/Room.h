@@ -27,7 +27,7 @@
 #import "Globals.h"
 #import "Movement.h"
 
-#define ROOM_MAX_SIZE 16
+#define ROOM_MAX_SIZE 20
 
 #define PHOTOS_MAX_COUNT 32
 #define WALL_COUNT 6

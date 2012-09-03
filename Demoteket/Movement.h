@@ -53,6 +53,7 @@ typedef struct {
     float continueDist;
     bool pause;
     int photosIndex;
+    float angleSpeed;
 } MovementPoint;
 
 @interface Movement : NSObject {
@@ -72,9 +73,9 @@ typedef struct {
     
 	float angle;
     float angleTransition;
-
-    MovementPoint oldDestAnglePoint;
     
+    MovementPoint oldDestAnglePoint;
+
     bool paused;
     bool tour;
     int direction;
