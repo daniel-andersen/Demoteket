@@ -25,73 +25,62 @@
 
 #import "Globals.h"
 #import "Textures.h"
-
-#define MOVEMENT_MAX_POINTS 1024
+#import "CubicSpline.h"
 
 #define MOVEMENT_POINT_DISTANCE_NEXT 0.75f
 #define MOVEMENT_POINT_DISTANCE_PAUSE 0.75f
 
-#define MOVEMENT_MAX_SPEED 0.04f
+#define MOVEMENT_POINT_DISTANCE_SPLINE 0.5f
+#define MOVEMENT_POINT_SPLINE_INCREASE 0.01f
+
+#define MOVEMENT_MAX_SPEED 0.03f
 #define MOVEMENT_SLOWING_DISTANCE 2.0f
-#define MOVEMENT_STEERING_SPEED 0.002f
+#define MOVEMENT_STEERING_SPEED 0.001f
 
-#define ANGLE_TRANSITION_SPEED 0.005f
+#define ANGLE_POINTS_MAX_COUNT 16
+#define ANGLE_TRANSITION_SPEED 0.0075f
 
-#define MOVEMENT_TYPE_ANGLE_IN_MOVING_DIR   0
-#define MOVEMENT_TYPE_ANGLE_LOOK_AT         1
-#define MOVEMENT_TYPE_ANGLE_LOOK_IN         2
-#define MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE 3
+#define ANGLE_TYPE_LOOK_AT 1
+#define ANGLE_TYPE_LOOK_IN 2
 
-#define MOVEMENT_DIR_FORWARDS        0
-#define MOVEMENT_DIR_BACKWARDS       1
-#define MOVEMENT_DIR_FORWARDS_FLYBY  2
-#define MOVEMENT_DIR_BACKWARDS_FLYBY 3
+#define MOVEMENT_DIR_FORWARD        0
+#define MOVEMENT_DIR_BACKWARD       1
+#define MOVEMENT_DIR_FORWARD_TOUR   2
+#define MOVEMENT_DIR_BACKWARDS_TOUR 3
 
 typedef struct {
     int type;
-    GLKVector2 position;
+    float splineOffset;
     GLKVector2 lookAt;
     float lookIn;
-    float continueDist;
-    bool pause;
-    int photosIndex;
     float angleSpeed;
-} MovementPoint;
+} AnglePoint;
 
 @interface Movement : NSObject {
 
 @private
-    MovementPoint *points;
-    int *pointsCount;
+    CubicSpline *walkSplines[USER_PHOTOS_MAX_COUNT];
+    CubicSpline *tourSplines;
 
-    MovementPoint forwardPoints[MOVEMENT_MAX_POINTS];
-    int forwardPointsCount;
+    float splineOffset;
 
-    MovementPoint backwardPoints[MOVEMENT_MAX_POINTS];
-    int backwardPointsCount;
-
-    MovementPoint forwardTourPoints[MOVEMENT_MAX_POINTS];
-    int forwardTourPointsCount;
-
-    MovementPoint backwardTourPoints[MOVEMENT_MAX_POINTS];
-    int backwardTourPointsCount;
-
+    PhotoInfo *userPhotos[USER_PHOTOS_MAX_COUNT];
+    int photosCount;
+    int userPhotoIndex;
+    
     GLKVector2 position;
     GLKVector2 velocity;
+
+    AnglePoint anglePoints[4][USER_PHOTOS_MAX_COUNT][ANGLE_POINTS_MAX_COUNT];
+    AnglePoint oldDestAnglePoint;
+    int anglePointCount[4][USER_PHOTOS_MAX_COUNT];
+    int anglePointIndex;
     
 	float angle;
     float angleTransition;
     
-    MovementPoint oldDestAnglePoint;
-
     bool paused;
-    int direction;
-    
-    PhotoInfo *photos[USER_PHOTOS_MAX_COUNT];
-    int photosCount;
-
-    int pointIndex;
-    int photosIndex;
+    int movementType;
 }
 
 - (void) setAngle:(float)a;
@@ -101,36 +90,20 @@ typedef struct {
 - (void) addUserPhoto:(PhotoInfo*)photoInfo;
 - (void) setUserPhoto:(int)index;
 
-- (void) setForwardsMovementForAddingPoints;
-- (void) setBackwardsMovementForAddingPoints;
-- (void) setForwardsTourMovementForAddingPoints;
-- (void) setBackwardsTourMovementForAddingPoints;
+- (void) setWalkPointToLastPoint;
 
-- (void) addPoint:(GLKVector2)p pause:(bool)pause;
-- (void) addPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause;
-- (void) addPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed pause:(bool)pause;
-- (void) addPoint:(GLKVector2)p lookIn:(float)a pause:(bool)pause;
-- (void) addPointInMovingDirection:(GLKVector2)p pause:(bool)pause;
+- (void) addWalkPointAbsolute:(GLKVector2)p;
+- (void) addWalkPointRelative:(GLKVector2)p;
+- (void) addTourPointAbsolute:(GLKVector2)p;
+- (void) addTourPointRelative:(GLKVector2)p;
 
-- (void) addOffsetPoint:(GLKVector2)p pause:(bool)pause;
-- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause;
-- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed pause:(bool)pause;
-- (void) addOffsetPointInMovingDirection:(GLKVector2)p pause:(bool)pause;
+- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t;
+- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t;
+- (void) lookIn:(float)a beginningAt:(float)t;
 
-- (void) addOffsetPoint:(GLKVector2)p;
-- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt;
-- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed;
-- (void) addOffsetPoint:(GLKVector2)p lookIn:(float)a;
-- (void) addOffsetPointInMovingDirection:(GLKVector2)p;
+- (void) move:(float)t;
 
-- (GLKVector2) getOffsetPoint:(GLKVector2)p;
-
-- (void) lookAt:(GLKVector2)p continueDistance:(float)dist;
-
-- (void) move:(float)speed;
-
-- (void) goBackwards;
-- (void) goForwards;
+- (void) setMovement:(int)type;
 
 - (void) startTour;
 - (void) stopTour;
@@ -139,6 +112,8 @@ typedef struct {
 
 - (bool) isPaused;
 - (bool) isOnTour;
+
+- (void) resume;
 
 - (bool) canGoBackwards;
 - (bool) canGoForwards;

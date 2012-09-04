@@ -44,5 +44,11 @@ typedef struct {
 }
 
 - (void) addPoint:(GLKVector2)p;
+- (void) addOffsetPoint:(GLKVector2)p;
+
+- (GLKVector2) getPosition:(float)t;
+- (GLKVector2) getEndPosition;
+
+- (float) getEndOffset;
 
 @end

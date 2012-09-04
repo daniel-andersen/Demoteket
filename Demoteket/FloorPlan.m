@@ -106,7 +106,7 @@ float t = 0.0f;
     Texture demoteketTextTexture = [textures textToTexture:@"DEMOTEKET AARHUS\n\niOS version af:\nDaniel Andersen" width:256 height:256 color:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f] asPhoto:false];
     textureSetBlend(&demoteketTextTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:6.0f room:0] photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Demotek Aarhus" author:@"Hovedbiblioteket Aarhus" position:[self photoPositionX:2.0f z:6.0f room:0] photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
 
     Texture userTextTexture = [textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256 asPhoto:false];
 
@@ -175,7 +175,7 @@ float t = 0.0f;
     [movement addUserPhoto:userPhotos[10]];
 
     // Forward movement
-    [movement setForwardsMovementForAddingPoints];
+    /*[movement setForwardsMovementForAddingPoints];
     
     [movement addPoint:GLKVector2Make(-4.0f, -17.0f) lookAt:GLKVector2Make(-4.0f, -10.0f) pause:false];
 
@@ -267,8 +267,28 @@ float t = 0.0f;
     [movement addOffsetPoint:GLKVector2Make( 4.0f,  8.5f) lookAt:GLKVector2Make(7.0f, 4.5f) angleSpeed:0.8f];
     [movement addOffsetPoint:GLKVector2Make( 5.0f,  0.0f)];
     [movement addOffsetPoint:GLKVector2Make( 0.0f,  -2.0f)];
-    [movement addOffsetPoint:GLKVector2Make( -4.0f,  -2.0f)];
+    [movement addOffsetPoint:GLKVector2Make( -4.0f,  -2.0f)];*/
+
+    [movement setUserPhoto:0];
+    [movement addWalkPointAbsolute:GLKVector2Make(-4.0f, -17.0f)];
+    [movement addWalkPointRelative:GLKVector2Make(1.0f, 4.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, 2.0f) beginningAt:0.0f];
     
+    [movement setUserPhoto:1];
+    [movement setWalkPointToLastPoint];
+    [movement addWalkPointRelative:GLKVector2Make(-2.5f, 1.0f)];
+    [movement addWalkPointRelative:GLKVector2Make( 1.5f, 5.0f)];
+    [movement addWalkPointRelative:GLKVector2Make( 1.0f, 4.5f)];
+	[movement lookIn:-M_PI / 16.0f beginningAt:0.0f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(0.75f, 2.0f) beginningAt:1.5f];
+
+    [movement setUserPhoto:2];
+    [movement setWalkPointToLastPoint];
+    [movement addWalkPointRelative:GLKVector2Make(2.5f, 0.0f)];
+    [movement addWalkPointRelative:GLKVector2Make(2.5f, 3.0f)];
+    [movement addWalkPointRelative:GLKVector2Make(1.0f, -2.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(0.75f, -1.0f) beginningAt:0.0f];
+
     // Start
     [movement setAngle:0.0f];
     [movement setPositionToFirstPoint];
@@ -280,11 +300,13 @@ float t = 0.0f;
 }
 
 - (void) prevPhoto {
-    [movement goBackwards];
+    [movement setMovement:MOVEMENT_DIR_BACKWARD];
+    [movement resume];
 }
 
 - (void) nextPhoto {
-    [movement goForwards];
+    [movement setMovement:MOVEMENT_DIR_FORWARD];
+    [movement resume];
 }
 
 - (void) toggleTour {

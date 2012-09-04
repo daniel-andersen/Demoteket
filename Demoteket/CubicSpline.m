@@ -41,17 +41,43 @@
     recalculate = true;
 }
 
+- (void) addOffsetPoint:(GLKVector2)p {
+    if (splinePointCount == 0) {
+	    splinesX[splinePointCount].x = p.x;
+	    splinesY[splinePointCount].x = p.y;
+    } else {
+	    splinesX[splinePointCount].x = splinesX[splinePointCount - 1].x + p.x;
+	    splinesY[splinePointCount].x = splinesY[splinePointCount - 1].x + p.y;
+    }
+    splinePointCount++;
+    recalculate = true;
+}
+
 - (GLKVector2) getPosition:(float)t {
     if (recalculate) {
+        NSLog(@"Calculating spline...");
         [self calculateSpline:splinesX];
         [self calculateSpline:splinesY];
         recalculate = false;
     }
     int index = (int) t;
-    t -= (float) index;
+    if (index >= splinePointCount) {
+        index = splinePointCount - 1;
+        t = 1.0f;
+    } else {
+	    t -= (float) index;
+    }
     return GLKVector2Make(
                           (((splinesX[index].d * t) + splinesX[index].c) * t + splinesX[index].b) * t + splinesX[index].a,
                           (((splinesY[index].d * t) + splinesY[index].c) * t + splinesY[index].b) * t + splinesY[index].a);
+}
+
+- (GLKVector2) getEndPosition {
+    return [self getPosition:(float) splinePointCount - 1.0f];
+}
+
+- (float) getEndOffset {
+    return (float) splinePointCount - 1.0f;
 }
 
 - (void) calculateSpline:(SplinePoint*)p {
