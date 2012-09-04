@@ -28,8 +28,8 @@
 
 @implementation Room
 
-const float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4 - WALL_DEPTH, BLOCK_SIZE * -14 - WALL_DEPTH * 2, 0, 0};
-const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7,                  0, 0};
+const float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4 - WALL_DEPTH, BLOCK_SIZE * -14 - WALL_DEPTH * 2, BLOCK_SIZE * -14 - WALL_DEPTH * 2};
+const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7,                  BLOCK_SIZE *  11 + WALL_DEPTH    };
 
 - (id) init {
     if (self = [super init]) {
@@ -100,11 +100,29 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
 	}
     if (number == 2) {
         [self addStrip:@"+-----+X+-+"];
-        [self addStrip:@"|     |X| d"];
+        [self addStrip:@"|     |X|  "];
         [self addStrip:@"| +-+ +-+ +"];
         [self addStrip:@"| |X|     |"];
-        [self addStrip:@"+-+X+-----+"];
+        [self addStrip:@"+d+X+-----+"];
         [self addFloorQuadX1:0.0f z1:0.0f x2:14.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
+    }
+    if (number == 3) {
+        [self addStrip:@"+ +---+"];
+        [self addStrip:@"|     |"];
+        [self addStrip:@"|  I  |"];
+        [self addStrip:@"|     |"];
+        [self addStrip:@"+---+d+"];
+        [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
+    }
+    if (number == 4) {
+        [self addStrip:@"+-+ +-+"];
+        [self addStrip:@"|     |"];
+        [self addStrip:@"|     |"];
+        [self addStrip:@"|  @  |"];
+        [self addStrip:@"|     |"];
+        [self addStrip:@"|     |"];
+        [self addStrip:@"+-----+"];
+        [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:7.0f * BLOCK_SIZE];
     }
     [floor end];
     for (int i = 0; i < lightsCount; i++) {

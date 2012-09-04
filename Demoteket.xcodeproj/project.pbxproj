@@ -46,6 +46,7 @@
 		65E128F015E77F2900DCBAE9 /* wall1.png in Resources */ = {isa = PBXBuildFile; fileRef = 65E128ED15E77F2900DCBAE9 /* wall1.png */; };
 		65E128F115E77F2900DCBAE9 /* wall2.png in Resources */ = {isa = PBXBuildFile; fileRef = 65E128EE15E77F2900DCBAE9 /* wall2.png */; };
 		65ED6BF915F48F03008B71DE /* turn_around_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 65ED6BF815F48F03008B71DE /* turn_around_button.png */; };
+		65ED6BFD15F5D9E2008B71DE /* CubicSpline.m in Sources */ = {isa = PBXBuildFile; fileRef = 65ED6BFC15F5D9E2008B71DE /* CubicSpline.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,6 +102,8 @@
 		65E128ED15E77F2900DCBAE9 /* wall1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall1.png; sourceTree = "<group>"; };
 		65E128EE15E77F2900DCBAE9 /* wall2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall2.png; sourceTree = "<group>"; };
 		65ED6BF815F48F03008B71DE /* turn_around_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = turn_around_button.png; sourceTree = "<group>"; };
+		65ED6BFB15F5D9E2008B71DE /* CubicSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubicSpline.h; sourceTree = "<group>"; };
+		65ED6BFC15F5D9E2008B71DE /* CubicSpline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubicSpline.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +184,8 @@
 				654942C615E265380029C1E2 /* Movement.m */,
 				65880BEC15E92BD90055F33D /* PhotoInfo.h */,
 				65880BED15E92BD90055F33D /* PhotoInfo.m */,
+				65ED6BFB15F5D9E2008B71DE /* CubicSpline.h */,
+				65ED6BFC15F5D9E2008B71DE /* CubicSpline.m */,
 			);
 			path = Demoteket;
 			sourceTree = "<group>";
@@ -311,6 +316,7 @@
 				654942C715E265380029C1E2 /* Movement.m in Sources */,
 				656B8C8A15E565100048FA39 /* Globals.c in Sources */,
 				65880BEE15E92BD90055F33D /* PhotoInfo.m in Sources */,
+				65ED6BFD15F5D9E2008B71DE /* CubicSpline.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

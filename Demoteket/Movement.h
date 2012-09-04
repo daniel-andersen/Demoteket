@@ -42,8 +42,10 @@
 #define MOVEMENT_TYPE_ANGLE_LOOK_IN         2
 #define MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE 3
 
-#define MOVEMENT_DIR_FORWARDS  0
-#define MOVEMENT_DIR_BACKWARDS 1
+#define MOVEMENT_DIR_FORWARDS        0
+#define MOVEMENT_DIR_BACKWARDS       1
+#define MOVEMENT_DIR_FORWARDS_FLYBY  2
+#define MOVEMENT_DIR_BACKWARDS_FLYBY 3
 
 typedef struct {
     int type;
@@ -68,6 +70,12 @@ typedef struct {
     MovementPoint backwardPoints[MOVEMENT_MAX_POINTS];
     int backwardPointsCount;
 
+    MovementPoint forwardTourPoints[MOVEMENT_MAX_POINTS];
+    int forwardTourPointsCount;
+
+    MovementPoint backwardTourPoints[MOVEMENT_MAX_POINTS];
+    int backwardTourPointsCount;
+
     GLKVector2 position;
     GLKVector2 velocity;
     
@@ -77,7 +85,6 @@ typedef struct {
     MovementPoint oldDestAnglePoint;
 
     bool paused;
-    bool tour;
     int direction;
     
     PhotoInfo *photos[USER_PHOTOS_MAX_COUNT];
@@ -96,18 +103,23 @@ typedef struct {
 
 - (void) setForwardsMovementForAddingPoints;
 - (void) setBackwardsMovementForAddingPoints;
+- (void) setForwardsTourMovementForAddingPoints;
+- (void) setBackwardsTourMovementForAddingPoints;
 
 - (void) addPoint:(GLKVector2)p pause:(bool)pause;
 - (void) addPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause;
+- (void) addPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed pause:(bool)pause;
 - (void) addPoint:(GLKVector2)p lookIn:(float)a pause:(bool)pause;
 - (void) addPointInMovingDirection:(GLKVector2)p pause:(bool)pause;
 
 - (void) addOffsetPoint:(GLKVector2)p pause:(bool)pause;
 - (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause;
+- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed pause:(bool)pause;
 - (void) addOffsetPointInMovingDirection:(GLKVector2)p pause:(bool)pause;
 
 - (void) addOffsetPoint:(GLKVector2)p;
 - (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt;
+- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed;
 - (void) addOffsetPoint:(GLKVector2)p lookIn:(float)a;
 - (void) addOffsetPointInMovingDirection:(GLKVector2)p;
 

@@ -43,11 +43,20 @@
     angle = 0.0f;
     angleTransition = 1.0f;
     paused = false;
-    tour = false;
     direction = MOVEMENT_DIR_FORWARDS;
+    forwardPointsCount = 0;
+    backwardPointsCount = 0;
+    forwardTourPointsCount = 0;
+    backwardTourPointsCount = 0;
     for (int i = 0; i < MOVEMENT_MAX_POINTS; i++) {
         forwardPoints[i].photosIndex = -1;
+        forwardPoints[i].angleSpeed = 1.0f;
         backwardPoints[i].photosIndex = -1;
+        backwardPoints[i].angleSpeed = 1.0f;
+        forwardTourPoints[i].photosIndex = -1;
+        forwardTourPoints[i].angleSpeed = 1.0f;
+        backwardTourPoints[i].photosIndex = -1;
+        backwardTourPoints[i].angleSpeed = 1.0f;
     }
     [self setForwardsMovementForAddingPoints];
 }
@@ -63,6 +72,7 @@
 - (void) setPositionToFirstPoint {
     [self setForwardsMovementForAddingPoints];
     position = points[0].position;
+    [self nextPoint];
     /*[self nextPoint];
     [self nextPoint];
     [self nextPoint];
@@ -75,8 +85,8 @@
     [self nextPoint];
     [self nextPoint];
     [self nextPoint];
-    [self nextPoint];*/
     [self nextPoint];
+    [self nextPoint];*/
 }
 
 - (void) setForwardsMovementForAddingPoints {
@@ -87,6 +97,16 @@
 - (void) setBackwardsMovementForAddingPoints {
     points = backwardPoints;
     pointsCount = &backwardPointsCount;
+}
+
+- (void) setForwardsTourMovementForAddingPoints {
+    points = forwardTourPoints;
+    pointsCount = &forwardTourPointsCount;
+}
+
+- (void) setBackwardsTourMovementForAddingPoints {
+    points = backwardTourPoints;
+    pointsCount = &backwardTourPointsCount;
 }
 
 - (void) addUserPhoto:(PhotoInfo*)photoInfo {
@@ -106,6 +126,9 @@
     }
     points[*pointsCount].position = p;
     points[*pointsCount].pause = pause;
+    if ((*pointsCount) > 0) {
+        points[*pointsCount].angleSpeed = points[*pointsCount - 1].angleSpeed;
+    }
     (*pointsCount)++;
     if (*pointsCount == 1) {
         oldDestAnglePoint = points[0];
@@ -117,6 +140,18 @@
     points[*pointsCount].position = p;
     points[*pointsCount].lookAt = [self getOffsetPoint:lookAt];
     points[*pointsCount].pause = pause;
+    if ((*pointsCount) > 0) {
+        points[*pointsCount].angleSpeed = points[*pointsCount - 1].angleSpeed;
+    }
+    (*pointsCount)++;
+}
+
+- (void) addPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed pause:(bool)pause {
+    points[*pointsCount].type = MOVEMENT_TYPE_ANGLE_LOOK_AT;
+    points[*pointsCount].position = p;
+    points[*pointsCount].lookAt = [self getOffsetPoint:lookAt];
+    points[*pointsCount].angleSpeed = angleSpeed;
+    points[*pointsCount].pause = pause;
     (*pointsCount)++;
 }
 
@@ -125,6 +160,9 @@
     points[*pointsCount].position = p;
     points[*pointsCount].lookIn = a;
     points[*pointsCount].pause = pause;
+    if ((*pointsCount) > 0) {
+        points[*pointsCount].angleSpeed = points[*pointsCount - 1].angleSpeed;
+    }
     (*pointsCount)++;
 }
 
@@ -132,6 +170,9 @@
     points[*pointsCount].type = MOVEMENT_TYPE_ANGLE_IN_MOVING_DIR;
     points[*pointsCount].position = p;
     points[*pointsCount].pause = pause;
+    if ((*pointsCount) > 0) {
+        points[*pointsCount].angleSpeed = points[*pointsCount - 1].angleSpeed;
+    }
     (*pointsCount)++;
 }
 
@@ -141,6 +182,10 @@
 
 - (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt pause:(bool)pause {
     [self addPoint:[self getOffsetPoint:p] lookAt:lookAt pause:pause];
+}
+
+- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed pause:(bool)pause {
+    [self addPoint:[self getOffsetPoint:p] lookAt:lookAt angleSpeed:angleSpeed pause:pause];
 }
 
 - (void) addOffsetPointInMovingDirection:(GLKVector2)p pause:(bool)pause {
@@ -153,6 +198,10 @@
 
 - (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt {
     [self addPoint:[self getOffsetPoint:p] lookAt:lookAt pause:false];
+}
+
+- (void) addOffsetPoint:(GLKVector2)p lookAt:(GLKVector2)lookAt angleSpeed:(float)angleSpeed {
+    [self addPoint:[self getOffsetPoint:p] lookAt:lookAt angleSpeed:angleSpeed pause:false];
 }
 
 - (void) addOffsetPoint:(GLKVector2)p lookIn:(float)a {
@@ -186,7 +235,7 @@
         return;
     }
     paused = false;
-    if (direction == MOVEMENT_DIR_BACKWARDS) {
+    if (direction != MOVEMENT_DIR_FORWARDS) {
         direction = MOVEMENT_DIR_FORWARDS;
         MovementPoint oldPoint = points[pointIndex];
         points = forwardPoints;
@@ -210,7 +259,7 @@
         return;
     }
     paused = false;
-    if (direction == MOVEMENT_DIR_FORWARDS) {
+    if (direction != MOVEMENT_DIR_BACKWARDS) {
         direction = MOVEMENT_DIR_BACKWARDS;
         MovementPoint oldPoint = points[pointIndex];
         points = backwardPoints;
@@ -230,12 +279,27 @@
 }
 
 - (void) startTour {
-    tour = true;
-    [self goForwards];
+    paused = false;
+    direction = direction == MOVEMENT_DIR_FORWARDS ? MOVEMENT_DIR_FORWARDS_FLYBY : MOVEMENT_DIR_BACKWARDS_FLYBY;
+    if (direction == MOVEMENT_DIR_FORWARDS_FLYBY) {
+        NSLog(@"Starting tour!");
+        MovementPoint oldPoint = points[pointIndex];
+        points = forwardTourPoints;
+        pointsCount = &forwardTourPointsCount;
+        for (int i = 0; i < *pointsCount; i++) {
+            if (points[i].photosIndex == photosIndex + 1) {
+                pointIndex = i - 1;
+                break;
+            }
+        }
+	    [self nextPoint];
+        oldDestAnglePoint = oldPoint;
+        angleTransition = 0.0f;
+    }
 }
 
 - (void) stopTour {
-    tour = false;
+    direction = direction == MOVEMENT_DIR_FORWARDS_FLYBY ? MOVEMENT_DIR_FORWARDS : MOVEMENT_DIR_BACKWARDS;
 }
 
 - (PhotoInfo*) getCurrentPhoto {
@@ -273,7 +337,7 @@
         oldDestAngle += M_PI * 2.0f * (oldDestAngle < destAngle ? 1.0f : -1.0f);
     }
 	angle = destAngle + ((cos(angleTransition * M_PI) + 1.0f) * 0.5f * (oldDestAngle - destAngle));
-    angleTransition = MIN(angleTransition + ANGLE_TRANSITION_SPEED, 1.0f);
+    angleTransition = MIN(angleTransition + (ANGLE_TRANSITION_SPEED * points[pointIndex].angleSpeed), 1.0f);
 }
 
 - (float) calculateAngle:(MovementPoint)point {
@@ -293,7 +357,7 @@
     if (paused || GLKVector2Distance(position, points[pointIndex].position) > MOVEMENT_POINT_DISTANCE_NEXT) {
         return;
     }
-    if (points[pointIndex].pause && !tour) {
+    if (points[pointIndex].pause && ![self isOnTour]) {
         if (GLKVector2Distance(position, points[pointIndex].position) < MOVEMENT_POINT_DISTANCE_PAUSE) {
             paused = true;
         }
@@ -313,13 +377,6 @@
 }
 
 - (void) changePoint:(MovementPoint)newPoint oldPoint:(MovementPoint)oldPoint {
-    /*if ((newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT || newPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE) &&
-        (oldPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT || oldPoint.type == MOVEMENT_TYPE_ANGLE_LOOK_AT_NO_MOVE)) {
-        if (!GLKVector2AllEqualToVector2(newPoint.lookAt, oldPoint.lookAt)) {
-	        oldDestAnglePoint = oldPoint;
-	        angleTransition = 0.0f;
-        }
-    }*/
     if (!GLKVector2AllEqualToVector2(newPoint.lookAt, oldPoint.lookAt)) {
         oldDestAnglePoint = oldPoint;
         angleTransition = 0.0f;
@@ -338,7 +395,7 @@
 }
 
 - (bool) isOnTour {
-    return tour;
+    return direction == MOVEMENT_DIR_FORWARDS_FLYBY || direction == MOVEMENT_DIR_BACKWARDS_FLYBY;
 }
 
 - (bool) canGoBackwards {

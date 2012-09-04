@@ -95,6 +95,7 @@ float t = 0.0f;
     [rooms[0] initializeRoomNumber:0];
     [rooms[1] initializeRoomNumber:1];
     [rooms[2] initializeRoomNumber:2];
+    [rooms[3] initializeRoomNumber:3];
 
     [self createPath];
 }
@@ -109,15 +110,21 @@ float t = 0.0f;
 
     Texture userTextTexture = [textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256 asPhoto:false];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
     
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:7.0f z:4.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
 
     userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb4.jpg" textTexture:userTextTexture frontFacing:true];
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 6" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:0.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 7" author:@"Daniel Andersen" position:[self photoPositionX:0.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
 }
 
 - (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture {
@@ -161,6 +168,11 @@ float t = 0.0f;
     [movement addUserPhoto:userPhotos[3]];
     [movement addUserPhoto:userPhotos[4]];
     [movement addUserPhoto:userPhotos[5]];
+    [movement addUserPhoto:userPhotos[6]];
+    [movement addUserPhoto:userPhotos[7]];
+    [movement addUserPhoto:userPhotos[8]];
+    [movement addUserPhoto:userPhotos[9]];
+    [movement addUserPhoto:userPhotos[10]];
 
     // Forward movement
     [movement setForwardsMovementForAddingPoints];
@@ -193,10 +205,22 @@ float t = 0.0f;
     [movement addOffsetPoint:GLKVector2Make(1.0f, -1.0f) pause:true];
 
     [movement setUserPhoto:5];
-	[movement lookAt:GLKVector2Make(11.0f, -3.8f) continueDistance:0.75f];
-	[movement addOffsetPoint:GLKVector2Make(3.0f, -1.0f)];
-	[movement addOffsetPoint:GLKVector2Make(3.0f, -3.0f)];
-	[movement addOffsetPoint:GLKVector2Make(4.0f, 0.0f) pause:true];
+	[movement lookAt:GLKVector2Make(7.5f, -4.5f) continueDistance:0.75f];
+	[movement addOffsetPoint:GLKVector2Make(7.0f, -3.5f) pause:true];
+
+    [movement setUserPhoto:6];
+	[movement lookAt:GLKVector2Make(5.0f, -0.5f) continueDistance:0.75f];
+	[movement addOffsetPoint:GLKVector2Make(3.5f, -1.0f) pause:true];
+
+    [movement setUserPhoto:7];
+	[movement lookAt:GLKVector2Make(4.2f, 4.0f) continueDistance:0.75f];
+	[movement addOffsetPoint:GLKVector2Make(0.0f, 2.25f)];
+	[movement addOffsetPoint:GLKVector2Make(3.8f, 1.0f) pause:true];
+
+    [movement setUserPhoto:8];
+	[movement lookAt:GLKVector2Make(3.0f, -2.2f) continueDistance:0.75f];
+	[movement addOffsetPoint:GLKVector2Make(2.0f, -0.5f)];
+	[movement addOffsetPoint:GLKVector2Make(0.0f, -1.0f) pause:true];
 
     // Backward movement
     GLKVector2 endPoint = [movement getOffsetPoint:GLKVector2Make(0.0f, 0.0f)];
@@ -230,6 +254,21 @@ float t = 0.0f;
     [movement addOffsetPoint:GLKVector2Make(0.0f, -11.0f) lookAt:GLKVector2Make(-2.5f, 5.0f)];
     [movement addOffsetPoint:GLKVector2Make(0.0f, 0.0f) lookAt:GLKVector2Make(-0.5f, 1.0f) pause:true];
 
+    // Forward tour
+    [movement setForwardsTourMovementForAddingPoints];
+    [movement addPoint:GLKVector2Make(-4.0f, -17.0f) lookAt:GLKVector2Make(-4.0f, -10.0f) pause:false];
+    [movement addOffsetPoint:[self lookAt:GLKVector2Make(0.5f, 5.5f) angle:letterToAngle('D')] lookAt:GLKVector2Make(-0.0f, 8.0f) pause:true];
+    
+    [movement setUserPhoto:1];
+    [movement addOffsetPoint:GLKVector2Make(-1.8f, -1.0f) lookAt:GLKVector2Make(2.0f, 13.0f)];
+    [movement addOffsetPoint:GLKVector2Make(-1.5f,  0.5f)];
+    [movement addOffsetPoint:GLKVector2Make(-1.0f,  1.0f)];
+    [movement addOffsetPoint:GLKVector2Make( 2.0f,  4.5f)];
+    [movement addOffsetPoint:GLKVector2Make( 4.0f,  8.5f) lookAt:GLKVector2Make(7.0f, 4.5f) angleSpeed:0.8f];
+    [movement addOffsetPoint:GLKVector2Make( 5.0f,  0.0f)];
+    [movement addOffsetPoint:GLKVector2Make( 0.0f,  -2.0f)];
+    [movement addOffsetPoint:GLKVector2Make( -4.0f,  -2.0f)];
+    
     // Start
     [movement setAngle:0.0f];
     [movement setPositionToFirstPoint];
@@ -309,20 +348,14 @@ float t = 0.0f;
 }
 
 - (void) renderRooms {
-    for (int i = currentRoom - 1; i < currentRoom + 3; i++) {
-        if (i >= 0 && i < ROOM_COUNT) {
-            if (i == 2) {
-            }
-            [rooms[i] render];
-        }
+    for (int i = 0; i < ROOM_COUNT; i++) {
+        [rooms[i] render];
     }
 }
 
 - (void) renderFloor {
-    for (int i = currentRoom - 1; i < currentRoom + 3; i++) {
-        if (i >= 0 && i < ROOM_COUNT) {
-            [rooms[i] renderFloor];
-        }
+    for (int i = 0; i < ROOM_COUNT; i++) {
+        [rooms[i] renderFloor];
     }
 }
 

@@ -23,63 +23,26 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "Quads.h"
+#define SPLINES_MAX_COUNT 128
+
 #import "Globals.h"
-#import "Movement.h"
 
-#define ROOM_MAX_SIZE 16
+typedef struct {
+    float a, b, c, d;
+    float x;
+} SplinePoint;
 
-#define PHOTOS_MAX_COUNT 32
-#define WALL_COUNT 6
-#define LIGHT_MAX_COUNT 32
+@interface CubicSpline : NSObject {
 
-#define ROOM_HEIGHT 5.0f
-#define LIGHTS_HEIGHT (ROOM_HEIGHT * 1.3f)
-
-#define BLOCK_SIZE 1.5f
-
-#define WALL_DEPTH (BLOCK_SIZE * 0.05f)
-
-#define PILLAR_WIDTH (BLOCK_SIZE * 0.9f)
-#define PILLAR_DEPTH (BLOCK_SIZE * 0.03f)
-
-#define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
-
-#define PHOTO_BORDER_WIDTH 0.1f
-
-extern const float ROOM_OFFSET_X[];
-extern const float ROOM_OFFSET_Z[];
-
-@interface Room : NSObject {
 @private
-    char tiles[ROOM_MAX_SIZE][ROOM_MAX_SIZE];
-    int stripNumber;
-
-    bool isVisible;
     
-    int roomNumber;
-
-    Quads *floor;
-
-    Quads *lights[LIGHT_MAX_COUNT];
-    int lightsCount;
+    SplinePoint splinesX[SPLINES_MAX_COUNT];
+    SplinePoint splinesY[SPLINES_MAX_COUNT];
+    int splinePointCount;
     
-    Quads *walls[WALL_COUNT];
-    Quads *wallsBorder;
-
-    Quads *photos[PHOTOS_MAX_COUNT];
-    Quads *photosBackground[PHOTOS_MAX_COUNT];
-    Quads *photoNotLoaded[PHOTOS_MAX_COUNT];
-    Quads *photosBorder[PHOTOS_MAX_COUNT];
-    int photosCount;
-    
-    Quads *pillars;
-    Quads *pillarsBorder;
+    bool recalculate;
 }
 
-- (void) initializeRoomNumber:(int)number;
-
-- (void) render;
-- (void) renderFloor;
+- (void) addPoint:(GLKVector2)p;
 
 @end
