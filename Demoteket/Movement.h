@@ -27,8 +27,7 @@
 #import "Textures.h"
 #import "CubicSpline.h"
 
-#define MOVEMENT_POINT_DISTANCE_NEXT 0.75f
-#define MOVEMENT_POINT_DISTANCE_PAUSE 0.75f
+#define MOVEMENT_RESUME_DISTANCE 1.5f
 
 #define MOVEMENT_POINT_DISTANCE_SPLINE 0.5f
 #define MOVEMENT_POINT_SPLINE_INCREASE 0.01f
@@ -38,7 +37,7 @@
 #define MOVEMENT_STEERING_SPEED 0.001f
 
 #define ANGLE_POINTS_MAX_COUNT 16
-#define ANGLE_TRANSITION_SPEED 0.0075f
+#define ANGLE_TRANSITION_SPEED 0.006f
 
 #define ANGLE_TYPE_LOOK_AT 1
 #define ANGLE_TYPE_LOOK_IN 2
@@ -54,6 +53,7 @@ typedef struct {
     GLKVector2 lookAt;
     float lookIn;
     float angleSpeed;
+    float continueDelay;
 } AnglePoint;
 
 @interface Movement : NSObject {
@@ -97,9 +97,9 @@ typedef struct {
 - (void) addTourPointAbsolute:(GLKVector2)p;
 - (void) addTourPointRelative:(GLKVector2)p;
 
-- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t;
-- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t;
-- (void) lookIn:(float)a beginningAt:(float)t;
+- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
+- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
+- (void) lookIn:(float)a beginningAt:(float)t withDelay:(float)delay;
 
 - (void) move:(float)t;
 

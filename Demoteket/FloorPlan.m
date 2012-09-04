@@ -110,21 +110,23 @@ float t = 0.0f;
 
     Texture userTextTexture = [textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256 asPhoto:false];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:3.0f z:4.0f room:0] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
+
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
     
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:7.0f z:4.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 6" author:@"Daniel Andersen" position:[self photoPositionX:7.0f z:4.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb4.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 7" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb4.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 6" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:0.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 8" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:0.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
 
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 7" author:@"Daniel Andersen" position:[self photoPositionX:0.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
+    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 9" author:@"Daniel Andersen" position:[self photoPositionX:0.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
 }
 
 - (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture {
@@ -272,22 +274,24 @@ float t = 0.0f;
     [movement setUserPhoto:0];
     [movement addWalkPointAbsolute:GLKVector2Make(-4.0f, -17.0f)];
     [movement addWalkPointRelative:GLKVector2Make(1.0f, 4.0f)];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, 2.0f) beginningAt:0.0f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, 2.0f) beginningAt:0.0f withDelay:0.0f];
     
     [movement setUserPhoto:1];
     [movement setWalkPointToLastPoint];
     [movement addWalkPointRelative:GLKVector2Make(-2.5f, 1.0f)];
-    [movement addWalkPointRelative:GLKVector2Make( 1.5f, 5.0f)];
-    [movement addWalkPointRelative:GLKVector2Make( 1.0f, 4.5f)];
-	[movement lookIn:-M_PI / 16.0f beginningAt:0.0f];
-	[movement lookAtRelativeToEnd:GLKVector2Make(0.75f, 2.0f) beginningAt:1.5f];
+    [movement addWalkPointRelative:GLKVector2Make( 1.5f, 3.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-0.75f, 1.0f) beginningAt:0.0f withDelay:0.0f];
 
     [movement setUserPhoto:2];
     [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(2.5f, 0.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(2.5f, 3.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(1.0f, -2.0f)];
-	[movement lookAtRelativeToEnd:GLKVector2Make(0.75f, -1.0f) beginningAt:0.0f];
+    [movement addWalkPointRelative:GLKVector2Make(1.0f, 6.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(0.5f, 1.0f) beginningAt:0.0f withDelay:0.25f];
+
+    [movement setUserPhoto:3];
+    [movement setWalkPointToLastPoint];
+    [movement addWalkPointRelative:GLKVector2Make(4.0f,  3.0f)];
+    [movement addWalkPointRelative:GLKVector2Make(3.0f, -1.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.25f, -2.5f) beginningAt:0.0f withDelay:0.5f];
 
     // Start
     [movement setAngle:0.0f];

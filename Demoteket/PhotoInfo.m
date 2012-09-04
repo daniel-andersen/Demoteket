@@ -84,4 +84,8 @@
     callbackHandler = [callback copy];
 }
 
+- (bool) hasBorder {
+	return photoTexture.id != demoteketLogoTexture.id;
+}
+
 @end

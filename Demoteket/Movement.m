@@ -102,37 +102,44 @@
     [tourSplines addOffsetPoint:p];
 }
 
-- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t {
+- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay {
     AnglePoint *anglePoint = &anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex]];
     anglePoint->type = ANGLE_TYPE_LOOK_AT;
     anglePoint->splineOffset = t;
     anglePoint->lookAt = GLKVector2Add(p, [self getStartPosition]);
     anglePoint->angleSpeed = 1.0f;
+    anglePoint->continueDelay = delay;
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
-- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t {
+- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay {
     AnglePoint *anglePoint = &anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex]];
     anglePoint->type = ANGLE_TYPE_LOOK_AT;
     anglePoint->splineOffset = t;
     anglePoint->lookAt = GLKVector2Add(p, [self getEndPosition]);
     anglePoint->angleSpeed = 1.0f;
+    anglePoint->continueDelay = delay;
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
-- (void) lookIn:(float)a beginningAt:(float)t {
+- (void) lookIn:(float)a beginningAt:(float)t withDelay:(float)delay {
     AnglePoint *anglePoint = &anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex]];
     anglePoint->type = ANGLE_TYPE_LOOK_IN;
     anglePoint->splineOffset = t;
     anglePoint->lookIn = a;
     anglePoint->angleSpeed = 1.0f;
+    anglePoint->continueDelay = delay;
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
 - (void) move:(float)t {
-    [self updateMovement];
     [self updateAngle];
-    [self updatePath];
+    if (angleTransition >= anglePoints[movementType][userPhotoIndex][anglePointIndex].continueDelay) {
+        [self updatePath];
+        [self updateMovement];
+    } else {
+        [self decreaseMovement];
+    }
 }
 
 - (void) setMovement:(int)type {
@@ -186,6 +193,15 @@
     position = GLKVector2Add(position, velocity);
 }
 
+- (void) decreaseMovement {
+    float speed = GLKVector2Length(velocity);
+    if (speed <= 0.0f) {
+        return;
+    }
+    velocity = GLKVector2MultiplyScalar(GLKVector2Normalize(velocity), speed * (1.0f - MOVEMENT_STEERING_SPEED));
+    position = GLKVector2Add(position, velocity);
+}
+
 - (void) updateAngle {
     AnglePoint anglePoint = anglePoints[movementType][userPhotoIndex][anglePointIndex];
     float destAngle = [self calculateAngle:anglePoint];
@@ -226,9 +242,11 @@
     while ([self distanceToSplinePoint] < MOVEMENT_POINT_DISTANCE_SPLINE) {
         splineOffset += MOVEMENT_POINT_SPLINE_INCREASE;
     };
+    if ([self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) {
+	    paused = true;
+    }
     if (splineOffset > [[self getSplines] getEndOffset]) {
         splineOffset = [[self getSplines] getEndOffset];
-        paused = true;
         return;
     }
     if (anglePointIndex < anglePointCount[movementType][userPhotoIndex] - 1 && splineOffset > anglePoints[movementType][userPhotoIndex][anglePointIndex + 1].splineOffset) {
@@ -240,6 +258,10 @@
 
 - (float) distanceToSplinePoint {
     return GLKVector2Distance(position, [self getTargetPosition]);
+}
+
+- (float) distanceToEnd {
+    return GLKVector2Distance(position, [self getEndPosition]);
 }
 
 - (GLKVector2) getTargetPosition {

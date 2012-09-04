@@ -344,14 +344,14 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     
     [pillars addQuadVerticalX1:frontX1 y1:0.0f z1:frontZ1 x2:frontX2 y2:ROOM_HEIGHT z2:frontZ2];
     if (photoInfo != NULL && photoInfo.frontFacing) {
-	    [self addUserPhoto:photoInfo x:frontX z:frontZ angle:angle scale:1.5f];
+	    [self addUserPhoto:photoInfo x:frontX z:frontZ angle:angle scale:[photoInfo hasBorder] ? 1.2f : 1.75f];
     } else {
 	    [self addPhotosType:type x:frontX z:frontZ angle:angle];
     }
 
     [pillars addQuadVerticalX1:backX2 y1:0.0f z1:backZ2 x2:backX1 y2:ROOM_HEIGHT z2:backZ1];
     if (photoInfo != NULL && !photoInfo.frontFacing) {
-	    [self addUserPhoto:photoInfo x:backX z:backZ angle:angle + M_PI scale:1.5f];
+	    [self addUserPhoto:photoInfo x:backX z:backZ angle:angle + M_PI scale:[photoInfo hasBorder] ? 1.2f : 1.75f];
     } else {
 	    [self addPhotosType:type x:backX z:backZ angle:angle + M_PI];
     }
@@ -405,13 +405,12 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     float maxSize = MAX(photoInfo.photoTexture.width, photoInfo.photoTexture.height);
     float width = scale * (photoInfo.photoTexture.width / maxSize);
     float height = scale * (photoInfo.photoTexture.height / aspectRatio / maxSize);
-	bool hasBorder = photoInfo.photoTexture.id != demoteketLogoTexture.id;
     
     photosTexture[index] = photoInfo.photoTexture;
     
-    [self addPhotoQuads:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:hasBorder borderSize:PHOTO_BORDER_WIDTH];
+    [self addPhotoQuads:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:[photoInfo hasBorder] borderSize:PHOTO_BORDER_WIDTH];
     
-    if (hasBorder) {
+    if ([photoInfo hasBorder]) {
         [self addFrontBorder:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height angle:angle];
     }
     

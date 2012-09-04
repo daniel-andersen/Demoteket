@@ -54,6 +54,9 @@
 }
 
 - (GLKVector2) getPosition:(float)t {
+    if (splinePointCount == 0) {
+        return GLKVector2Make(0.0f, 0.0f);
+    }
     if (recalculate) {
         NSLog(@"Calculating spline...");
         [self calculateSpline:splinesX];

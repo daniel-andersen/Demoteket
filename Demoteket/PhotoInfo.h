@@ -68,4 +68,6 @@
 
 - (void) setFinishedLoadingCallback:(void(^)())callback;
 
+- (bool) hasBorder;
+
 @end
