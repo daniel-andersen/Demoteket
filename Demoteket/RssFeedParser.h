@@ -25,8 +25,32 @@
 
 #import "Globals.h"
 
-@interface RssFeedParser : NSObject
+@interface RssFeedParser : NSObject {
 
-- (void) loadFeed:(NSURL*)url;
+@private
+
+	NSString *feed;
+
+    NSString *descriptions[USER_PHOTOS_MAX_COUNT];
+    int descriptionCount;
+
+    NSString *titles[USER_PHOTOS_MAX_COUNT];
+    int titleCount;
+
+    NSString *links[USER_PHOTOS_MAX_COUNT];
+    int linkCount;
+
+    NSString *images[USER_PHOTOS_MAX_COUNT];
+    int imageCount;
+}
+
+- (void) loadFeed:(NSURL*)url callback:(void(^)())callback;
+
+- (bool) isPhoto:(int)index;
+
+- (NSString*) getDescription:(int)index;
+- (NSString*) getTitle:(int)index;
+- (NSString*) getLink:(int)index;
+- (NSString*) getImage:(int)index;
 
 @end

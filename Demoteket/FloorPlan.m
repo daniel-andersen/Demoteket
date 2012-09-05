@@ -92,9 +92,9 @@ float t = 0.0f;
     for (int i = 0; i < ROOM_COUNT; i++) {
         rooms[i] = [[Room alloc] init];
     }
-    [rooms[0] initializeRoomNumber:0]; rooms[0].visible = false;
+    [rooms[0] initializeRoomNumber:0]; rooms[0].visible = true;
     [rooms[1] initializeRoomNumber:1]; rooms[1].visible = true;
-    [rooms[2] initializeRoomNumber:2]; rooms[2].visible = true;
+    [rooms[2] initializeRoomNumber:2]; rooms[2].visible = false;
     [rooms[3] initializeRoomNumber:3]; rooms[3].visible = false;
 
     [self createPath];
@@ -142,7 +142,6 @@ float t = 0.0f;
     [info setPosition:p];
     [info setTextTexture:textTexture];
     [info setFrontFacing:frontFacing];
-    [info loadPhotoAsynchronously:photoFilename];
     return info;
 }
 

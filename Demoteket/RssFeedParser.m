@@ -27,13 +27,108 @@
 
 @implementation RssFeedParser
 
-- (void) loadFeed:(NSURL*)url {
+- (void) loadFeed:(NSURL*)url callback:(void(^)())callback {
     NSLog(@"Asynchronously loading feed");
     [NSURLConnection sendAsynchronousRequest:[[NSMutableURLRequest alloc] initWithURL:url] queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-        NSLog(@"Finished!");
-        NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", responseBody);
+        NSLog(@"Feed fetched!");
+        feed = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [self findDescriptions];
+        [self findTitles];
+        [self findLinks];
+        [self findImages];
+        if (callback != NULL) {
+	        callback();
+        }
     }];
+}
+
+- (bool) isPhoto:(int)index {
+    NSString *image = [self getImage:index];
+    return image != NULL ? [image hasSuffix:@".png"] || [image hasSuffix:@".jpg"] || [image hasSuffix:@".jpeg"] || [image hasSuffix:@".gif"] : false;
+}
+
+- (NSString*) getDescription:(int)index {
+    return index < descriptionCount ? descriptions[index] : NULL;
+}
+
+- (NSString*) getTitle:(int)index {
+    return index < titleCount ? titles[index] : NULL;
+}
+
+- (NSString*) getLink:(int)index {
+    return index < linkCount ? links[index] : NULL;
+}
+
+- (NSString*) getImage:(int)index {
+    return index < imageCount ? images[index] : NULL;
+}
+
+- (NSString*) findImages {
+    imageCount = 0;
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>.*?\\<description\\>.*?\\[CDATA\\[.*?src=\"(.*?)\"" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
+    if (error) {
+        return NULL;
+    }
+    NSArray *results = [regex matchesInString:feed options:0 range:NSMakeRange(0, [feed length])];
+    for (NSTextCheckingResult *result in results) {
+        for (int captureIndex = 1; captureIndex < result.numberOfRanges; captureIndex++) {
+            NSString* capture = [feed substringWithRange:[result rangeAtIndex:captureIndex]];
+            images[imageCount++] = capture;
+        }
+    }
+    return NULL;
+}
+
+- (NSString*) findDescriptions {
+    descriptionCount = 0;
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>.*?\\<description\\>\\<\\!\\[CDATA\\[(.*?)\\]\\]\\>\\<\\/description\\>" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
+    if (error) {
+        return NULL;
+    }
+    NSArray *results = [regex matchesInString:feed options:0 range:NSMakeRange(0, [feed length])];
+    for (NSTextCheckingResult *result in results) {
+        for (int captureIndex = 1; captureIndex < result.numberOfRanges; captureIndex++) {
+            NSString* capture = [feed substringWithRange:[result rangeAtIndex:captureIndex]];
+            descriptions[descriptionCount++] = capture;
+        }
+    }
+    return NULL;
+}
+
+- (NSString*) findTitles {
+    titleCount = 0;
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>.*?\\<title\\>(.*?)\\<\\/title\\>" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
+    if (error) {
+        return NULL;
+    }
+    NSArray *results = [regex matchesInString:feed options:0 range:NSMakeRange(0, [feed length])];
+    for (NSTextCheckingResult *result in results) {
+        for (int captureIndex = 1; captureIndex < result.numberOfRanges; captureIndex++) {
+            NSString* capture = [feed substringWithRange:[result rangeAtIndex:captureIndex]];
+            titles[titleCount++] = capture;
+        }
+    }
+    return NULL;
+}
+
+- (NSString*) findLinks {
+    linkCount = 0;
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>.*?\\<guid.*?\\>(.*?)\\<\\/guid\\>" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
+    if (error) {
+        return NULL;
+    }
+    NSArray *results = [regex matchesInString:feed options:0 range:NSMakeRange(0, [feed length])];
+    for (NSTextCheckingResult *result in results) {
+        for (int captureIndex = 1; captureIndex < result.numberOfRanges; captureIndex++) {
+            NSString* capture = [feed substringWithRange:[result rangeAtIndex:captureIndex]];
+            links[linkCount++] = capture;
+        }
+    }
+    return NULL;
 }
 
 @end

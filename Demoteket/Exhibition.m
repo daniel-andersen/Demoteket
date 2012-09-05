@@ -119,10 +119,20 @@
 }
 
 - (void) createExhibition {
-    [rssFeedParser loadFeed:[NSURL URLWithString:@"http://aagaarddesign.dk/demoteket/?feed=rss2"]];
     [floorPlan createFloorPlan];
+    [rssFeedParser loadFeed:[NSURL URLWithString:@"http://aagaarddesign.dk/demoteket/?feed=rss2"] callback:^{
+        [self loadPhotos];
+    }];
 
     NSLog(@"Exhibition initialized!");
+}
+
+- (void) loadPhotos {
+    for (int i = 0; i < USER_PHOTOS_MAX_COUNT; i++) {
+        if ([rssFeedParser isPhoto:i]) {
+            [userPhotos[i] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
+        }
+    }
 }
 
 - (void) tap:(GLKVector2)p {
