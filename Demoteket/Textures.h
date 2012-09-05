@@ -44,7 +44,6 @@ typedef struct {
     float texCoordX1, texCoordY1, texCoordX2, texCoordY2;
     bool blendEnabled;
     GLenum blendSrc, blendDst;
-    bool isReadyForRendering;
 } Texture;
 
 extern Texture textureMake(GLuint id);

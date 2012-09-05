@@ -85,84 +85,30 @@ float t = 0.0f;
 - (void) createFloorPlan {
     NSLog(@"Creating floor plan");
 
-    [self addPhotos];
+    for (int i = 0; i < ROOM_COUNT; i++) {
+        rooms[i] = [[Room alloc] initWithNumber:i];
+    }
+    rooms[0].visible = true;
+    rooms[1].visible = true;
+    rooms[2].visible = false;
+    rooms[3].visible = false;
 
     currentRoom = 0;
-
-    for (int i = 0; i < ROOM_COUNT; i++) {
-        rooms[i] = [[Room alloc] init];
-    }
-    [rooms[0] initializeRoomNumber:0]; rooms[0].visible = true;
-    [rooms[1] initializeRoomNumber:1]; rooms[1].visible = true;
-    [rooms[2] initializeRoomNumber:2]; rooms[2].visible = false;
-    [rooms[3] initializeRoomNumber:3]; rooms[3].visible = false;
-
-    [self createPath];
 }
 
-- (void) addPhotos {
-    userPhotosCount = 0;
-
-    Texture demoteketTextTexture = [textures textToTexture:@"DEMOTEKET AARHUS\n\niOS version af:\nDaniel Andersen" width:256 height:256 color:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f] asPhoto:false];
-    textureSetBlend(&demoteketTextTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Demotek Aarhus" author:@"Hovedbiblioteket Aarhus" position:[self photoPositionX:2.0f z:6.0f room:0] photoTexture:demoteketLogoTexture textTexture:demoteketTextTexture frontFacing:true];
-
-    Texture userTextTexture = [textures textToTexture:@"Dette er en test af Demoteket Aarhus til iOS" width:256 height:256 asPhoto:false];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 1" author:@"Daniel Andersen" position:[self photoPositionX:3.0f z:4.0f room:0] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 2" author:@"Daniel Andersen" position:[self photoPositionX:1.0f z:0.0f room:0] photoFilename:@"http://www.trollsahead.dk/eventyr/images/eventyr_thumb.jpg" textTexture:userTextTexture frontFacing:true];
-    
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 3" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:3.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 4" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:7.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 5" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:11.0f room:1] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 6" author:@"Daniel Andersen" position:[self photoPositionX:7.0f z:4.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 7" author:@"Daniel Andersen" position:[self photoPositionX:4.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb4.jpg" textTexture:userTextTexture frontFacing:true];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 8" author:@"Daniel Andersen" position:[self photoPositionX:2.0f z:0.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb3.jpg" textTexture:userTextTexture frontFacing:true];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 9" author:@"Daniel Andersen" position:[self photoPositionX:0.0f z:3.0f room:2] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb2.jpg" textTexture:userTextTexture frontFacing:true];
-
-    userPhotos[userPhotosCount++] = [self newPhotoWithTitle:@"Test 10" author:@"Daniel Andersen" position:[self photoPositionX:3.0f z:2.0f room:3] photoFilename:@"http://www.trollsahead.dk/dystopia/images/thumbs/thumb1.jpg" textTexture:userTextTexture frontFacing:true];
+- (void) createGeometrics {
+    [rooms[0] createGeometrics];
+    [rooms[1] createGeometrics];
+    [rooms[2] createGeometrics];
+    [rooms[3] createGeometrics];
 }
 
-- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p angle:(float)angle photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture {
-    return [self newPhotoWithTitle:title author:author position:p photoTexture:photoTexture textTexture:textTexture frontFacing:true];
+- (PhotoInfo*) createUserPhotoInRoom:(int)roomIndex x:(int)x z:(int)z depth:(float)depth scale:(float)scale {
+    float angle = [rooms[roomIndex] calculateWallAngleAtX:x z:z];
+    return [[PhotoInfo alloc] initWithPosition:[Room displacePosition:roomIndex x:x z:z angle:angle depth:depth] roomPosition:GLKVector2Make(x, z) angle:angle scale:scale];
 }
 
-- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p photoFilename:(NSString*)photoFilename textTexture:(Texture)textTexture frontFacing:(bool)frontFacing {
-    PhotoInfo *info = [[PhotoInfo alloc] init];
-    [info setTitle:title];
-    [info setAuthor:author];
-    [info setPosition:p];
-    [info setTextTexture:textTexture];
-    [info setFrontFacing:frontFacing];
-    return info;
-}
-
-- (PhotoInfo*) newPhotoWithTitle:(NSString*)title author:(NSString*)author position:(GLKVector2)p photoTexture:(Texture)photoTexture textTexture:(Texture)textTexture frontFacing:(bool)frontFacing {
-    PhotoInfo *info = [[PhotoInfo alloc] init];
-    [info setTitle:title];
-    [info setAuthor:author];
-    [info setPosition:p];
-    [info setPhotoImage:NULL];
-    [info definePhotoTexture:photoTexture];
-    [info setTextTexture:textTexture];
-    [info setFrontFacing:frontFacing];
-    return info;
-}
-
-- (GLKVector2) photoPositionX:(float)x z:(float)z room:(int)room {
-    return GLKVector2Make(ROOM_OFFSET_X[room] + (x * BLOCK_SIZE) + (BLOCK_SIZE / 2.0f),
-                          ROOM_OFFSET_Z[room] + (z * BLOCK_SIZE) + (BLOCK_SIZE / 2.0f));
-}
-
-- (void) createPath {
+- (void) createPaths {
     movement = [[Movement alloc] init];
 
     [movement setRoomVisibilityCallback:^(int type, int roomIndex) {
@@ -287,13 +233,17 @@ float t = 0.0f;
 }
 
 - (void) prevPhoto {
-    [movement setMovement:MOVEMENT_DIR_BACKWARD];
-    [movement resume];
+    if ([movement canGoBackwards]) {
+	    [movement setMovement:MOVEMENT_DIR_BACKWARD];
+	    [movement resume];
+    }
 }
 
 - (void) nextPhoto {
-    [movement setMovement:MOVEMENT_DIR_FORWARD];
-    [movement resume];
+    if ([movement canGoForwards]) {
+	    [movement setMovement:MOVEMENT_DIR_FORWARD];
+	    [movement resume];
+    }
 }
 
 - (void) toggleTour {
@@ -311,6 +261,9 @@ float t = 0.0f;
 }
 
 - (void) update {
+    for (int i = 0; i < USER_PHOTOS_MAX_COUNT; i++) {
+        [userPhotos[i] update];
+    }
     [movement move:0.015f];
 }
 
@@ -359,6 +312,9 @@ float t = 0.0f;
 - (void) renderRooms {
     for (int i = 0; i < ROOM_COUNT; i++) {
         [rooms[i] render];
+    }
+    for (int i = 0; i < USER_PHOTOS_MAX_COUNT; i++) {
+        [userPhotos[i] render];
     }
 }
 

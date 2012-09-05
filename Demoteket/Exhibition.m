@@ -39,11 +39,7 @@
 }
 
 - (void) initialize {
-    CFURLRef soundUrl = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("tap"), CFSTR("aif"), NULL);
-    
-    AudioServicesCreateSystemSoundID(soundUrl, &clickSoundId);
-
-    rssFeedParser = [[RssFeedParser alloc] init];
+	rssFeedParser = [[RssFeedParser alloc] init];
     
     textures = [[Textures alloc] init];
     [textures load];
@@ -120,6 +116,26 @@
 
 - (void) createExhibition {
     [floorPlan createFloorPlan];
+
+    userPhotos[0] = [floorPlan createUserPhotoInRoom:0 x:2 z: 6 depth:PILLAR_DEPTH scale:1.7f]; // Demoteket logo
+    [userPhotos[0] definePhotoTexture:demoteketLogoTexture];
+
+	userPhotosCount = 1;
+
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:0 x:3 z: 4 depth:PILLAR_DEPTH scale:1.2f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:0 x:1 z: 0 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:2 z: 3 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:4 z: 7 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:2 z:11 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:7 z: 4 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:4 z: 3 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:2 z: 0 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:0 z: 3 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:3 z: 2 depth:PILLAR_DEPTH scale:1.2f];
+
+    [floorPlan createPaths];
+    [floorPlan createGeometrics];
+    
     [rssFeedParser loadFeed:[NSURL URLWithString:@"http://aagaarddesign.dk/demoteket/?feed=rss2"] callback:^{
         [self loadPhotos];
     }];
@@ -128,23 +144,18 @@
 }
 
 - (void) loadPhotos {
-    for (int i = 0; i < USER_PHOTOS_MAX_COUNT; i++) {
-        if ([rssFeedParser isPhoto:i]) {
-            [userPhotos[i] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
-        }
+    for (int i = 0; i < MIN([rssFeedParser photoCount], 10); i++) {
+        [userPhotos[i + 1] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
     }
 }
 
 - (void) tap:(GLKVector2)p {
     if (mode == EXHIBITION_MODE_NORMAL) {
 	    if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
-		    [self playClickSound];
 		    [floorPlan nextPhoto];
 		} else if ([self clickedInRectX:p.x y:p.y rx:NAVIGATION_BUTTON_BORDER ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
-		    [self playClickSound];
 		    [floorPlan prevPhoto];
 		} else if ([self clickedInRectX:p.x y:p.y rx:0.5f - (NAVIGATION_BUTTON_SIZE / 2.0f) ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
-		    [self playClickSound];
 	        [floorPlan toggleTour];
 		} else {
 	        [self clickPhoto];
@@ -171,7 +182,7 @@
 }
 
 - (void) viewPhoto:(PhotoInfo*)photoInfo {
-    if (photoInfo.photoTexture.id == demoteketLogoTexture.id) {
+    if (![photoInfo isClickable]) {
         return;
     }
     mode = EXHIBITION_MODE_VIEWING_PHOTO;
@@ -231,10 +242,6 @@
 
 - (bool) clickedInRectX:(float)x y:(float)y rx:(float)rx ry:(float)ry width:(float)width height:(float)height {
     return x >= rx && y >= ry && x <= rx + width && y <= ry + height;
-}
-
-- (void) playClickSound {
-    AudioServicesPlaySystemSound(clickSoundId);
 }
 
 @end

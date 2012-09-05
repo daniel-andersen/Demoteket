@@ -32,21 +32,15 @@
 	NSString *feed;
 
     NSString *descriptions[USER_PHOTOS_MAX_COUNT];
-    int descriptionCount;
-
     NSString *titles[USER_PHOTOS_MAX_COUNT];
-    int titleCount;
-
     NSString *links[USER_PHOTOS_MAX_COUNT];
-    int linkCount;
-
     NSString *images[USER_PHOTOS_MAX_COUNT];
-    int imageCount;
+    int count;
 }
 
 - (void) loadFeed:(NSURL*)url callback:(void(^)())callback;
 
-- (bool) isPhoto:(int)index;
+- (int) photoCount;
 
 - (NSString*) getDescription:(int)index;
 - (NSString*) getTitle:(int)index;

@@ -23,8 +23,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <AudioToolbox/AudioToolbox.h>
-
 #import "FloorPlan.h"
 #import "RssFeedParser.h"
 
@@ -53,8 +51,6 @@
     Quads *screenOverlay;
     Quads *photoOverlay;
 
-    SystemSoundID clickSoundId;
-    
     float overlayAnimation;
 
 	double startTime;

@@ -25,39 +25,41 @@
 
 #import "PhotoInfo.h"
 #import "Globals.h"
+#import "Room.h"
 
 @implementation PhotoInfo
 
-@synthesize position;
-
+@synthesize roomPosition;
 @synthesize title;
 @synthesize author;
-
-@synthesize photoQuads;
-@synthesize textQuads;
-
-@synthesize photoImage;
-
+@synthesize description;
 @synthesize photoTexture;
-@synthesize textTexture;
 
-@synthesize frontFacing;
-
-- (id) init {
+- (id) initWithPosition:(GLKVector2)p roomPosition:(GLKVector2)roomPos angle:(float)a scale:(float)s {
     if (self = [super init]) {
-        callbackHandler = nil;
-        photoImage = NULL;
-        photoTexture.isReadyForRendering = false;
+        position = p;
+        roomPosition = roomPos;
+        angle = a;
+        scale = s;
+        [self initialize];
     }
     return self;
 }
 
+- (void) initialize {
+    photoFilename = NULL;
+    photoTexture = photoLoadingTexture;
+    [self addPhotoQuads];
+}
+
 - (void) definePhotoTexture:(Texture)texture {
-    photoTexture = texture;
-    photoTexture.isReadyForRendering = true;
+    [self photoLoaded:texture];
 }
 
 - (void) loadPhotoAsynchronously:(NSString*)filename {
+    if ([photoFilename isEqualToString:filename]) {
+        return;
+    }
     photoFilename = filename;
     if ([filename hasPrefix:@"http"]) {
         NSLog(@"Loading asynchronously: %@", filename);
@@ -66,26 +68,62 @@
         }];
     } else {
         NSLog(@"Loading synchronously: %@", filename);
-        photoImage = [UIImage imageNamed:photoFilename];
-        [self photoLoaded:[textures photoFromImage:photoImage]];
+        [self photoLoaded:[textures photoFromFile:filename]];
     }
 }
 
 - (void) photoLoaded:(Texture)texture {
-    NSLog(@"Asynchronous loaded photo: %@", photoFilename);
-    photoTexture = texture;
-    photoTexture.isReadyForRendering = true;
-    if (callbackHandler != nil) {
-	    callbackHandler();
+    if (photoFilename != NULL) {
+	    NSLog(@"Loaded photo: %@", photoFilename);
     }
-}
-
-- (void) setFinishedLoadingCallback:(void(^)())callback {
-    callbackHandler = [callback copy];
+    photoTexture = texture;
+    [self addPhotoQuads];
 }
 
 - (bool) hasBorder {
-	return photoTexture.id != demoteketLogoTexture.id;
+	return [self isClickable];
+}
+
+- (bool) isClickable {
+	return photoTexture.id != demoteketLogoTexture.id && photoTexture.id != photoLoadingTexture.id;
+}
+
+- (void) addPhotoQuads {
+    float maxSize = MAX(photoTexture.width, photoTexture.height);
+    float width = scale * (photoTexture.width / maxSize);
+    float height = scale * (photoTexture.height / aspectRatio / maxSize);
+    
+    photoQuads = [[Quads alloc] init];
+    [photoQuads beginWithTexture:photoTexture];
+
+    borderQuads = [[Quads alloc] init];
+    [borderQuads beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
+
+    backgroundQuads = [[Quads alloc] init];
+    [backgroundQuads beginWithTexture:photoBackgroundTexture];
+
+    [Room addPhotoQuads:photoQuads x:position.x y:ROOM_HEIGHT / 2.0f z:position.y width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle borderSize:PHOTO_BORDER_WIDTH];
+
+    if ([self hasBorder]) {
+        [Room addPhotoBorder:borderQuads x:position.x y:ROOM_HEIGHT / 2.0f z:position.y width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle];
+        [Room addPhotoBackground:backgroundQuads x:position.x y:ROOM_HEIGHT / 2.0f z:position.y width:width height:height angle:angle];
+    }
+    
+    [photoQuads end];
+    [borderQuads end];
+    [backgroundQuads end];
+}
+
+- (void) update {
+}
+
+- (void) render {
+    glDepthMask(GL_FALSE);
+    [backgroundQuads render];
+    glDepthMask(GL_TRUE);
+    
+    [photoQuads render];
+    [borderQuads render];
 }
 
 @end

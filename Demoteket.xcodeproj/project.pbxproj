@@ -32,7 +32,6 @@
 		656B8C8A15E565100048FA39 /* Globals.c in Sources */ = {isa = PBXBuildFile; fileRef = 656B8C8915E565100048FA39 /* Globals.c */; };
 		6570FC7A15DD70F8003A2003 /* floor_distortion.png in Resources */ = {isa = PBXBuildFile; fileRef = 6570FC7915DD70F8003A2003 /* floor_distortion.png */; };
 		6573202E15D502C9002562E9 /* Textures.m in Sources */ = {isa = PBXBuildFile; fileRef = 6573202D15D502C9002562E9 /* Textures.m */; };
-		65880BEA15E8F2640055F33D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65880BE915E8F2640055F33D /* AudioToolbox.framework */; };
 		65880BEE15E92BD90055F33D /* PhotoInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 65880BED15E92BD90055F33D /* PhotoInfo.m */; };
 		65880BF015E955C20055F33D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65880BEF15E955C20055F33D /* QuartzCore.framework */; };
 		658AE91B15E4CAA5009B12D9 /* photo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 658AE91915E4CAA5009B12D9 /* photo2.png */; };
@@ -115,7 +114,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				65880BF015E955C20055F33D /* QuartzCore.framework in Frameworks */,
-				65880BEA15E8F2640055F33D /* AudioToolbox.framework in Frameworks */,
 				65083E7F15D43C3A003108B5 /* UIKit.framework in Frameworks */,
 				65083E8115D43C3A003108B5 /* Foundation.framework in Frameworks */,
 				65083E8315D43C3A003108B5 /* CoreGraphics.framework in Frameworks */,

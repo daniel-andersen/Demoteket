@@ -54,6 +54,10 @@
 - (void) dealloc;
 
 - (void) createFloorPlan;
+- (void) createPaths;
+- (void) createGeometrics;
+
+- (PhotoInfo*) createUserPhotoInRoom:(int)roomIndex x:(int)x z:(int)z depth:(float)depth scale:(float)scale;
 
 - (void) prevPhoto;
 - (void) nextPhoto;

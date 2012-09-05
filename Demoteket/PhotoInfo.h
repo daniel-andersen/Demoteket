@@ -25,49 +25,48 @@
 
 #import "Quads.h"
 
+#define PHOTO_TRANSITION_SPEED 0.01f
+
 @interface PhotoInfo : NSObject {
 
 @private
     
-    GLKVector2 position;
-    
     NSString *title;
     NSString *author;
+    NSString *description;
+
+    GLKVector2 roomPosition;
+    GLKVector2 position;
+    float angle;
+    float scale;
     
     Quads *photoQuads;
-    Quads *textQuads;
-    
+    Quads *borderQuads;
+    Quads *backgroundQuads;
+
     NSString *photoFilename;
-    UIImage *photoImage;
 
     Texture photoTexture;
     Texture textTexture;
-
-    bool frontFacing;
-    
-    void (^callbackHandler)();
 }
 
-@property(readwrite) GLKVector2 position;
+@property(readwrite) GLKVector2 roomPosition;
 
 @property(readwrite) NSString *title;
 @property(readwrite) NSString *author;
-
-@property(readwrite) Quads *photoQuads;
-@property(readwrite) Quads *textQuads;
-
-@property(readwrite) UIImage *photoImage;
+@property(readwrite) NSString *description;
 
 @property(readwrite) Texture photoTexture;
-@property(readwrite) Texture textTexture;
 
-@property(readwrite) bool frontFacing;
+- (id) initWithPosition:(GLKVector2)p roomPosition:(GLKVector2)roomPos angle:(float)a scale:(float)s;
 
 - (void) definePhotoTexture:(Texture)texture;
 - (void) loadPhotoAsynchronously:(NSString*)filename;
 
-- (void) setFinishedLoadingCallback:(void(^)())callback;
-
 - (bool) hasBorder;
+- (bool) isClickable;
+
+- (void) update;
+- (void) render;
 
 @end

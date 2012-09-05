@@ -33,20 +33,16 @@
 const float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4 - WALL_DEPTH, BLOCK_SIZE * -14 - WALL_DEPTH * 2, BLOCK_SIZE * -14 - WALL_DEPTH * 2};
 const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7,                  BLOCK_SIZE *  11 + WALL_DEPTH    };
 
-- (id) init {
+- (id) initWithNumber:(int)number {
     if (self = [super init]) {
+        [self createRoomNumber:number];
         visible = false;
     }
     return self;
 }
 
-- (void) initializeRoomNumber:(int)number {
-    NSLog(@"Initializing room number %i", number);
-    [self createRoomNumber:number];
-    [self createGeometrics];
-}
-
 - (void) createRoomNumber:(int)number {
+    NSLog(@"Initializing room number %i", number);
     roomNumber = number;
     stripNumber = 0;
     for (int i = 0; i < ROOM_MAX_SIZE; i++) {
@@ -54,9 +50,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
             tiles[i][j] = 'X';
         }
     }
-    lightsCount = 0;
-    floor = [[Quads alloc] init];
-    [floor beginWithTexture:floorDistortionTexture];
     if (number == 0) {
         [self addStrip:@"+---+"];
         [self addStrip:@"d   |"];
@@ -70,11 +63,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"+---+"];
-        [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
-        [self addLightType:0 x:4.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
-        [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
-        [self addLightType:1 x:1.5f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
-        [self addLightType:2 x:3.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
 	}
     if (number == 1) {
         [self addStrip:@"+---+"];
@@ -89,15 +77,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addStrip:@"+   |"];
         [self addStrip:@"d   |"];
         [self addStrip:@"+---+"];
-        [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
-        [self addLightType:1 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
-        [self addLightType:0 x:3.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
-        [self addLightType:0 x:5.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
-        [self addLightType:1 x:2.0f * BLOCK_SIZE z:5.0f * BLOCK_SIZE];
-        [self addLightType:2 x:1.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
-        [self addLightType:0 x:3.0f * BLOCK_SIZE z:10.0f * BLOCK_SIZE];
-        [self addLightType:2 x:0.0f * BLOCK_SIZE z:12.0f * BLOCK_SIZE];
-        [self addLightType:1 x:4.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
 	}
     if (number == 2) {
         [self addStrip:@"+-----+X+-+"];
@@ -105,7 +84,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addStrip:@"| +-+ +-+ +"];
         [self addStrip:@"| |X|     |"];
         [self addStrip:@"+d+X+-----+"];
-        [self addFloorQuadX1:0.0f z1:0.0f x2:14.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
     }
     if (number == 3) {
         [self addStrip:@"+ +---+"];
@@ -113,7 +91,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addStrip:@"|  I  |"];
         [self addStrip:@"|     |"];
         [self addStrip:@"+---+d+"];
-        [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
     }
     if (number == 4) {
         [self addStrip:@"+-+ +-+"];
@@ -123,34 +100,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addStrip:@"|     |"];
         [self addStrip:@"|     |"];
         [self addStrip:@"+-----+"];
-        [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:7.0f * BLOCK_SIZE];
     }
-    [floor end];
-    for (int i = 0; i < lightsCount; i++) {
-		[lights[i] end];
-    }
-}
-
-- (void) addLightType:(int)type x:(float)x z:(float)z {
-    x += ROOM_OFFSET_X[roomNumber];
-    z += ROOM_OFFSET_Z[roomNumber];
-    float lightSize = lightTexture[type].imageWidth / 32.0f;
-    lights[lightsCount] = [[Quads alloc] init];
-    [lights[lightsCount] beginWithTexture:lightTexture[type]];
-
-    [lights[lightsCount] addQuadVerticalX1:-(lightSize / 2.0f) y1:-(lightSize / 2.0f) z1:0.0f x2:lightSize / 2.0f y2:lightSize / 2.0f z2:0.0f];
-    [lights[lightsCount] setTranslation:GLKVector3Make(x, LIGHTS_HEIGHT, z)];
-    [lights[lightsCount] setFaceToCamera:true];
-    lightsCount++;
-}
-
-- (void) addFloorQuadX1:(float)x1 z1:(float)z1 x2:(float)x2 z2:(float)z2 {
-    x1 += ROOM_OFFSET_X[roomNumber];
-    z1 += ROOM_OFFSET_Z[roomNumber];
-    x2 += ROOM_OFFSET_X[roomNumber];
-    z2 += ROOM_OFFSET_Z[roomNumber];
-    [floor addQuadHorizontalX1:x1 z1:z1 x2:x2 z2:z2 y:0.0f];
-    [floor refineTexCoordsX1:0.0f y1:0.0f x2:(30.0f / (x2 - x1)) * 55.0f y2:(30.0f / (z2 - z1)) * 55.0f];
 }
 
 - (void) addStrip:(NSString*)strip {
@@ -161,13 +111,48 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
 }
 
 - (void) createGeometrics {
-    photosCount = 3;
+    NSLog(@"Creating geometrics for room number %i", roomNumber);
 
-    for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
+    lightsCount = 0;
+    floor = [[Quads alloc] init];
+    [floor beginWithTexture:floorDistortionTexture];
+
+    if (roomNumber == 0) {
+        [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
+        [self addLightType:0 x:4.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
+        [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:1 x:1.5f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:2 x:3.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
+	}
+    if (roomNumber == 1) {
+        [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
+        [self addLightType:1 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:0 x:3.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
+        [self addLightType:0 x:5.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
+        [self addLightType:1 x:2.0f * BLOCK_SIZE z:5.0f * BLOCK_SIZE];
+        [self addLightType:2 x:1.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:0 x:3.0f * BLOCK_SIZE z:10.0f * BLOCK_SIZE];
+        [self addLightType:2 x:0.0f * BLOCK_SIZE z:12.0f * BLOCK_SIZE];
+        [self addLightType:1 x:4.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
+	}
+    if (roomNumber == 2) {
+        [self addFloorQuadX1:0.0f z1:0.0f x2:14.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
+    }
+    if (roomNumber == 3) {
+        [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
+    }
+    if (roomNumber == 4) {
+        [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:7.0f * BLOCK_SIZE];
+    }
+
+    [floor end];
+    for (int i = 0; i < lightsCount; i++) {
+		[lights[i] end];
+    }
+    
+    for (int i = 0; i < PHOTO_COUNT; i++) {
         photos[i] = NULL;
-        photoNotLoaded[i] = NULL;
         photosBorder[i] = NULL;
-        photosBackground[i] = NULL;
     }
 
     for (int i = 0; i < WALL_COUNT; i++) {
@@ -193,23 +178,11 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
             if (tiles[i][j] == 'X' || tiles[i][j] == ' ') {
                 continue;
             }
-            float x1 = ROOM_OFFSET_X[roomNumber] + ((float) j * BLOCK_SIZE);
-            float z1 = ROOM_OFFSET_Z[roomNumber] + ((float) i * BLOCK_SIZE);
-            float centerX = x1 + (BLOCK_SIZE / 2);
-            float centerZ = z1 + (BLOCK_SIZE / 2);
-            if (tiles[i][j] == '-') {
-                if ([self isOutsideRoomX:j y:i - 1]) {
-	                [self addWallGridX:j gridY:i x:centerX z:centerZ angle:0.0f];
-                } else {
-	                [self addWallGridX:j gridY:i x:centerX z:centerZ angle:M_PI];
-                }
-            }
-            if (tiles[i][j] == '|') {
-                if ([self isOutsideRoomX:j - 1 y:i]) {
-	                [self addWallGridX:j gridY:i x:centerX z:centerZ angle:-M_PI_2];
-                } else {
-	                [self addWallGridX:j gridY:i x:centerX z:centerZ angle: M_PI_2];
-                }
+            float centerX = ROOM_OFFSET_X[roomNumber] + ((float) j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+            float centerZ = ROOM_OFFSET_Z[roomNumber] + ((float) i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+            char tile = [self getTileX:j y:i];
+            if (tile == '-' || tile == '|') {
+                [self addWallGridX:j gridY:i x:centerX z:centerZ angle:[self calculateWallAngleAtX:j z:i]];
             }
             if (tiles[i][j] == 'd') {
                 [self addDoorGridX:j gridY:i x:centerX z:centerZ];
@@ -238,11 +211,63 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     for (int i = 0; i < WALL_COUNT; i++) {
         [walls[i] end];
     }
-    for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
+    for (int i = 0; i < PHOTO_COUNT; i++) {
 		[photos[i] end];
-		[photoNotLoaded[i] end];
         [photosBorder[i] end];
     }
+}
+
+- (void) addLightType:(int)type x:(float)x z:(float)z {
+    x += ROOM_OFFSET_X[roomNumber];
+    z += ROOM_OFFSET_Z[roomNumber];
+    float lightSize = lightTexture[type].imageWidth / 32.0f;
+    lights[lightsCount] = [[Quads alloc] init];
+    [lights[lightsCount] beginWithTexture:lightTexture[type]];
+    
+    [lights[lightsCount] addQuadVerticalX1:-(lightSize / 2.0f) y1:-(lightSize / 2.0f) z1:0.0f x2:lightSize / 2.0f y2:lightSize / 2.0f z2:0.0f];
+    [lights[lightsCount] setTranslation:GLKVector3Make(x, LIGHTS_HEIGHT, z)];
+    [lights[lightsCount] setFaceToCamera:true];
+    lightsCount++;
+}
+
+- (void) addFloorQuadX1:(float)x1 z1:(float)z1 x2:(float)x2 z2:(float)z2 {
+    x1 += ROOM_OFFSET_X[roomNumber];
+    z1 += ROOM_OFFSET_Z[roomNumber];
+    x2 += ROOM_OFFSET_X[roomNumber];
+    z2 += ROOM_OFFSET_Z[roomNumber];
+    [floor addQuadHorizontalX1:x1 z1:z1 x2:x2 z2:z2 y:0.0f];
+    [floor refineTexCoordsX1:0.0f y1:0.0f x2:(30.0f / (x2 - x1)) * 55.0f y2:(30.0f / (z2 - z1)) * 55.0f];
+}
+
+- (float) calculateWallAngleAtX:(int)x z:(int)z {
+    char tile = [self getTileX:x y:z];
+    if (tile == '-') {
+        return [self isOutsideRoomX:x y:z - 1] ? 0.0f : M_PI;
+    }
+    if (tile == '|') {
+        return [self isOutsideRoomX:x - 1 y:z] ? -M_PI_2 : M_PI_2;
+    }
+    if (tile >= 'A' && tile <= 'Z') {
+        return letterToAngle(tile);
+    }
+    return 0.0f;
+}
+
++ (GLKVector2) displacePosition:(int)roomIndex x:(int)x z:(int)z angle:(float)angle depth:(float)depth {
+    float dx = ((float) x * BLOCK_SIZE) + (BLOCK_SIZE / 2.0f) + cos(angle + M_PI_2) * depth;
+    float dz = ((float) z * BLOCK_SIZE) + (BLOCK_SIZE / 2.0f) + sin(angle + M_PI_2) * depth;
+    return GLKVector2Make(dx + ROOM_OFFSET_X[roomIndex], dz + ROOM_OFFSET_Z[roomIndex]);
+}
+
+- (PhotoInfo*) hasUserPhotoAtX:(int)x z:(int)z {
+    for (int i = 0; i < userPhotosCount; i++) {
+        if (userPhotos[i] != NULL) {
+            if (x == (int) userPhotos[i].roomPosition.x && z == (int) userPhotos[i].roomPosition.y) {
+                return userPhotos[i];
+            }
+        }
+    }
+    return NULL;
 }
 
 - (void) addCornerGridX:(int)gridX gridY:(int)gridY x1:(float)x1 z1:(float)z1 centerX:(float)centerX centerZ:(float)centerZ x2:(float)x2 z2:(float)z2 {
@@ -293,23 +318,12 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     }
     tiles[gridY][gridX] = type;
     [self addWallType:type x:x z:z angle:angle];
-    PhotoInfo *photoInfo = [self userPhotoAtX:x z:z];
+    PhotoInfo *photoInfo = [self hasUserPhotoAtX:gridX z:gridY];
     if (photoInfo == NULL) {
         [self addPhotosType:type x:x z:z angle:angle];
     } else {
-        [self addUserPhoto:photoInfo x:x z:z angle:angle scale:1.0f];
+        //[self addUserPhoto:photoInfo x:x z:z angle:angle scale:1.0f];
     }
-}
-
-- (PhotoInfo*) userPhotoAtX:(float)x z:(float)z {
-    for (int i = 0; i < userPhotosCount; i++) {
-        if (userPhotos[i] != NULL) {
-            if (x == userPhotos[i].position.x && z == userPhotos[i].position.y) {
-                return userPhotos[i];
-            }
-        }
-    }
-    return NULL;
 }
 
 - (void) addWallType:(int)type x:(float)x z:(float)z angle:(float)angle {
@@ -321,10 +335,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
 }
 
 - (void) addPillarGridX:(int)gridX gridY:(int)gridY x:(float)x z:(float)z angle:(float)angle {
-    [self addPillarType:1 x:x z:z angle:angle];
-}
-
-- (void) addPillarType:(int)type x:(float)x z:(float)z angle:(float)angle {
     float frontX = x + cos(angle + M_PI_2) * PILLAR_DEPTH;
     float frontZ = z + sin(angle + M_PI_2) * PILLAR_DEPTH;
 
@@ -341,21 +351,17 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     float backX2 = backX + cos(angle) * PILLAR_WIDTH;
     float backZ2 = backZ + sin(angle) * PILLAR_WIDTH;
 
-    PhotoInfo *photoInfo = [self userPhotoAtX:x z:z];
+    PhotoInfo *photoInfo = [self hasUserPhotoAtX:gridX z:gridY];
     
     [pillars addQuadVerticalX1:frontX1 y1:0.0f z1:frontZ1 x2:frontX2 y2:ROOM_HEIGHT z2:frontZ2];
-    if (photoInfo != NULL && photoInfo.frontFacing) {
-	    [self addUserPhoto:photoInfo x:frontX z:frontZ angle:angle scale:[photoInfo hasBorder] ? 1.2f : 1.75f];
+    if (photoInfo != NULL) {
+	    //[self addUserPhoto:photoInfo x:frontX z:frontZ angle:angle scale:[photoInfo hasBorder] ? 1.2f : 1.75f];
     } else {
-	    [self addPhotosType:type x:frontX z:frontZ angle:angle];
+	    [self addPhotosType:1 x:frontX z:frontZ angle:angle];
     }
 
     [pillars addQuadVerticalX1:backX2 y1:0.0f z1:backZ2 x2:backX1 y2:ROOM_HEIGHT z2:backZ1];
-    if (photoInfo != NULL && !photoInfo.frontFacing) {
-	    [self addUserPhoto:photoInfo x:backX z:backZ angle:angle + M_PI scale:[photoInfo hasBorder] ? 1.2f : 1.75f];
-    } else {
-	    [self addPhotosType:type x:backX z:backZ angle:angle + M_PI];
-    }
+    [self addPhotosType:1 x:backX z:backZ angle:angle + M_PI];
     
     [pillarsBorder addQuadVerticalX1:backX1 y1:0.0f z1:backZ1 x2:frontX1 y2:ROOM_HEIGHT z2:frontZ1];
     [pillarsBorder addQuadVerticalX1:frontX2 y1:0.0f z1:frontZ2 x2:backX2 y2:ROOM_HEIGHT z2:backZ2];
@@ -371,62 +377,26 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     }
 }
 
-- (void) addUserPhoto:(PhotoInfo*)photoInfo x:(float)x z:(float)z angle:(float)angle scale:(float)scale {
-    int index = photosCount++;
-    if (!photoInfo.photoTexture.isReadyForRendering) {
-        [self addPhotoNotLoaded:index x:x z:z angle:angle size:1.0f];
-        [photoInfo setFinishedLoadingCallback:^() {
-            [self addUserPhotoAsync:photoInfo index:index x:x z:z angle:angle scale:scale]; // Nevermind
-        }];
-    } else {
-	    [self addUserPhotoAsync:photoInfo index:index x:x z:z angle:angle scale:scale];
-    }
-}
-
-- (void) addPhotoNotLoaded:(int)index x:(float)x z:(float)z angle:(float)angle size:(float)size {
-    float wallX1 = x - cos(angle) * (size / 2.0f);
-    float wallZ1 = z - sin(angle) * (size / 2.0f);
-    float wallX2 = x + cos(angle) * (size / 2.0f);
-    float wallZ2 = z + sin(angle) * (size / 2.0f);
-    float photoX1 = wallX1 + (cos(angle + M_PI_2) * PHOTO_DEPTH);
-    float photoZ1 = wallZ1 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
-    float photoX2 = wallX2 + (cos(angle + M_PI_2) * PHOTO_DEPTH);
-    float photoZ2 = wallZ2 + (sin(angle + M_PI_2) * PHOTO_DEPTH);
-
-	float y1 = (ROOM_HEIGHT - size) / 2;
-	float y2 = (ROOM_HEIGHT + size) / 2;
-    
-    photoNotLoaded[index] = [[Quads alloc] init];
-	[photoNotLoaded[index] beginWithTexture:photoLoadingTexture];
-	[photoNotLoaded[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
-    [photoNotLoaded[index] end];
-}
-
-- (void) addUserPhotoAsync:(PhotoInfo*)photoInfo index:(int)index x:(float)x z:(float)z angle:(float)angle scale:(float)scale {
-    float maxSize = MAX(photoInfo.photoTexture.width, photoInfo.photoTexture.height);
-    float width = scale * (photoInfo.photoTexture.width / maxSize);
-    float height = scale * (photoInfo.photoTexture.height / aspectRatio / maxSize);
-    
-    photosTexture[index] = photoInfo.photoTexture;
-    
-    [self addPhotoQuads:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height horizontalOffset:0.0f verticalOffset:0.0f angle:angle border:[photoInfo hasBorder] borderSize:PHOTO_BORDER_WIDTH];
-    
-    if ([photoInfo hasBorder]) {
-        [self addFrontBorder:index x:x y:ROOM_HEIGHT / 2.0f z:z width:width height:height angle:angle];
-    }
-    
-    [photos[index] end];
-    [photosBorder[index] end];
-}
-
 - (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border {
     [self addPhotoQuads:index x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle border:border borderSize:0.0f];
 }
 
 - (void) addPhotoQuads:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle border:(bool)border borderSize:(float)borderSize {
     if (border) {
-        [self addPhotoBorder:index x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle];
+	    if (photosBorder[index] == NULL) {
+		    photosBorder[index] = [[Quads alloc] init];
+	    	[photosBorder[index] beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
+	    }
+        [Room addPhotoBorder:photosBorder[index] x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle];
     }
+    if (photos[index] == NULL) {
+	    photos[index] = [[Quads alloc] init];
+	    [photos[index] beginWithTexture:photosTexture[index]];
+    }
+    [Room addPhotoQuads:photos[index] x:x y:y z:z width:width height:height horizontalOffset:offsetHorz verticalOffset:offsetVert angle:angle borderSize:borderSize];
+}
+
++ (void) addPhotoQuads:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle borderSize:(float)borderSize {
     width = (width - borderSize) / 2.0f;
     height = (height - borderSize) / 2.0f;
     y += offsetVert;
@@ -441,15 +411,10 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     float y1 = y - height;
     float y2 = y + height;
 
-    if (photos[index] == NULL) {
-	    photos[index] = [[Quads alloc] init];
-	    [photos[index] beginWithTexture:photosTexture[index]];
-    }
-	[photos[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
-    photoNotLoaded[index] = NULL;
+	[quads addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
 }
 
-- (void) addFrontBorder:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height angle:(float)angle {
++ (void) addPhotoBackground:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height angle:(float)angle {
     width /= 2.0f;
     height /= 2.0f;
     float wallX1 = x - cos(angle) * width;
@@ -463,13 +428,10 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     float y1 = y - height;
     float y2 = y + height;
     
-    photosBackground[index] = [[Quads alloc] init];
-	[photosBackground[index] beginWithTexture:photoBackgroundTexture];
-	[photosBackground[index] addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
-    [photosBackground[index] end];
+	[quads addQuadVerticalX1:photoX1 y1:y1 z1:photoZ1 x2:photoX2 y2:y2 z2:photoZ2];
 }
 
-- (void) addPhotoBorder:(int)index x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
++ (void) addPhotoBorder:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle {
     width /= 2.0f;
     height /= 2.0f;
     y += offsetVert;
@@ -484,15 +446,10 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     float y1 = y - height;
     float y2 = y + height;
     
-    if (photosBorder[index] == NULL) {
-	    photosBorder[index] = [[Quads alloc] init];
-	    [photosBorder[index] beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
-    }
-
-    [photosBorder[index] addQuadVerticalX1:wallX1 y1:y1 z1:wallZ1 x2:photoX1 y2:y2 z2:photoZ1];
-	[photosBorder[index] addQuadVerticalX1:photoX2 y1:y1 z1:photoZ2 x2:wallX2 y2:y2 z2:wallZ2];
-	[photosBorder[index] addQuadHorizontalX1:wallX1 z1:wallZ1 x2:wallX2 z2:wallZ2 x3:photoX2 z3:photoZ2 x4:photoX1 z4:photoZ1 y:y1];
-	[photosBorder[index] addQuadHorizontalX1:wallX1 z1:wallZ1 x2:photoX1 z2:photoZ1 x3:photoX2 z3:photoZ2 x4:wallX2 z4:wallZ2 y:y2];
+    [quads addQuadVerticalX1:wallX1 y1:y1 z1:wallZ1 x2:photoX1 y2:y2 z2:photoZ1];
+	[quads addQuadVerticalX1:photoX2 y1:y1 z1:photoZ2 x2:wallX2 y2:y2 z2:wallZ2];
+	[quads addQuadHorizontalX1:wallX1 z1:wallZ1 x2:wallX2 z2:wallZ2 x3:photoX2 z3:photoZ2 x4:photoX1 z4:photoZ1 y:y1];
+	[quads addQuadHorizontalX1:wallX1 z1:wallZ1 x2:photoX1 z2:photoZ1 x3:photoX2 z3:photoZ2 x4:wallX2 z4:wallZ2 y:y2];
 }
 
 - (int) getDoorDirectionX:(int)x y:(int)y {
@@ -532,14 +489,8 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     for (int i = 0; i < lightsCount; i++) {
 		[lights[i] render];
     }
-    for (int i = 0; i < PHOTOS_MAX_COUNT; i++) {
+    for (int i = 0; i < PHOTO_COUNT; i++) {
         [photosBorder[i] render];
-
-        glDepthMask(GL_FALSE);
-        [photosBackground[i] render];
-        glDepthMask(GL_TRUE);
-		
-        [photoNotLoaded[i] render];
 		[photos[i] render];
     }
 }

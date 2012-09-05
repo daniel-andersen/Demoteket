@@ -29,7 +29,6 @@
 
 #define ROOM_MAX_SIZE 16
 
-#define PHOTOS_MAX_COUNT 32
 #define WALL_COUNT 6
 #define LIGHT_MAX_COUNT 32
 
@@ -46,6 +45,8 @@
 #define PHOTO_DEPTH (BLOCK_SIZE / 30.0f)
 
 #define PHOTO_BORDER_WIDTH 0.1f
+
+#define PHOTO_COUNT 3
 
 extern const float ROOM_OFFSET_X[];
 extern const float ROOM_OFFSET_Z[];
@@ -67,11 +68,8 @@ extern const float ROOM_OFFSET_Z[];
     Quads *walls[WALL_COUNT];
     Quads *wallsBorder;
 
-    Quads *photos[PHOTOS_MAX_COUNT];
-    Quads *photosBackground[PHOTOS_MAX_COUNT];
-    Quads *photoNotLoaded[PHOTOS_MAX_COUNT];
-    Quads *photosBorder[PHOTOS_MAX_COUNT];
-    int photosCount;
+    Quads *photos[PHOTO_COUNT];
+    Quads *photosBorder[PHOTO_COUNT];
     
     Quads *pillars;
     Quads *pillarsBorder;
@@ -79,9 +77,19 @@ extern const float ROOM_OFFSET_Z[];
 
 @property(readwrite) bool visible;
 
-- (void) initializeRoomNumber:(int)number;
+- (id) initWithNumber:(int)number;
+
+- (void) createGeometrics;
 
 - (void) render;
 - (void) renderFloor;
+
+- (float) calculateWallAngleAtX:(int)x z:(int)z;
+
++ (GLKVector2) displacePosition:(int)roomIndex x:(int)x z:(int)z angle:(float)angle depth:(float)depth;
+
++ (void) addPhotoQuads:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle borderSize:(float)borderSize;
++ (void) addPhotoBackground:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height angle:(float)angle;
++ (void) addPhotoBorder:(Quads*)quads x:(float)x y:(float)y z:(float)z width:(float)width height:(float)height horizontalOffset:(float)offsetHorz verticalOffset:(float)offsetVert angle:(float)angle;
 
 @end

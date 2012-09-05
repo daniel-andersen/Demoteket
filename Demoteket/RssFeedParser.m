@@ -32,100 +32,89 @@
     [NSURLConnection sendAsynchronousRequest:[[NSMutableURLRequest alloc] initWithURL:url] queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
         NSLog(@"Feed fetched!");
         feed = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        [self findDescriptions];
-        [self findTitles];
-        [self findLinks];
-        [self findImages];
+        [self findElements];
         if (callback != NULL) {
 	        callback();
         }
     }];
 }
 
-- (bool) isPhoto:(int)index {
-    NSString *image = [self getImage:index];
-    return image != NULL ? [image hasSuffix:@".png"] || [image hasSuffix:@".jpg"] || [image hasSuffix:@".jpeg"] || [image hasSuffix:@".gif"] : false;
+- (int) photoCount {
+    return count;
+}
+
+- (bool) isPhoto:(NSString*)url {
+    return url != NULL ? [url hasSuffix:@".png"] || [url hasSuffix:@".jpg"] || [url hasSuffix:@".jpeg"] : false;
 }
 
 - (NSString*) getDescription:(int)index {
-    return index < descriptionCount ? descriptions[index] : NULL;
+    return index < count ? descriptions[index] : NULL;
 }
 
 - (NSString*) getTitle:(int)index {
-    return index < titleCount ? titles[index] : NULL;
+    return index < count ? titles[index] : NULL;
 }
 
 - (NSString*) getLink:(int)index {
-    return index < linkCount ? links[index] : NULL;
+    return index < count ? links[index] : NULL;
 }
 
 - (NSString*) getImage:(int)index {
-    return index < imageCount ? images[index] : NULL;
+    return index < count ? images[index] : NULL;
 }
 
-- (NSString*) findImages {
-    imageCount = 0;
+- (void) findElements {
+    count = 0;
     NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>.*?\\<description\\>.*?\\[CDATA\\[.*?src=\"(.*?)\"" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>(.*?)\\<\\/item\\>" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
     if (error) {
-        return NULL;
+        return;
     }
     NSArray *results = [regex matchesInString:feed options:0 range:NSMakeRange(0, [feed length])];
     for (NSTextCheckingResult *result in results) {
-        for (int captureIndex = 1; captureIndex < result.numberOfRanges; captureIndex++) {
-            NSString* capture = [feed substringWithRange:[result rangeAtIndex:captureIndex]];
-            images[imageCount++] = capture;
+        if (result.numberOfRanges != 2) {
+            continue;
+        }
+        NSString* capture = [feed substringWithRange:[result rangeAtIndex:1]];
+        images[count] = [self findImage:count fromText:capture];
+        titles[count] = [self findTitle:count fromText:capture];
+        descriptions[count] = [self findDescription:count fromText:capture];
+        links[count] = [self findLink:count fromText:capture];
+        if ([self isPhoto:images[count]]) {
+	        count++;
+        }
+        if (count >= USER_PHOTOS_MAX_COUNT) {
+            return;
         }
     }
-    return NULL;
 }
 
-- (NSString*) findDescriptions {
-    descriptionCount = 0;
+- (NSString*) findTitle:(int)index fromText:(NSString*)text {
+    return [self findElement:@"\\<title\\>(.*?)\\<\\/title\\>" fromText:text];
+}
+
+- (NSString*) findDescription:(int)index fromText:(NSString*)text {
+    return [self findElement:@"<description\\>\\<\\!\\[CDATA\\[(.*?)\\]\\]\\>\\<\\/description\\>" fromText:text];
+}
+
+- (NSString*) findImage:(int)index fromText:(NSString*)text {
+    return [self findElement:@"<description\\>.*?\\[CDATA\\[.*?src=\"(.*?)\"" fromText:text];
+}
+
+- (NSString*) findLink:(int)index fromText:(NSString*)text {
+    return [self findElement:@"\\<guid.*?\\>(.*?)\\<\\/guid\\>" fromText:text];
+}
+
+- (NSString*) findElement:(NSString*)pattern fromText:(NSString*)text {
     NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>.*?\\<description\\>\\<\\!\\[CDATA\\[(.*?)\\]\\]\\>\\<\\/description\\>" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionDotMatchesLineSeparators error:&error];
     if (error) {
         return NULL;
     }
-    NSArray *results = [regex matchesInString:feed options:0 range:NSMakeRange(0, [feed length])];
+    NSArray *results = [regex matchesInString:text options:0 range:NSMakeRange(0, [text length])];
     for (NSTextCheckingResult *result in results) {
         for (int captureIndex = 1; captureIndex < result.numberOfRanges; captureIndex++) {
-            NSString* capture = [feed substringWithRange:[result rangeAtIndex:captureIndex]];
-            descriptions[descriptionCount++] = capture;
-        }
-    }
-    return NULL;
-}
-
-- (NSString*) findTitles {
-    titleCount = 0;
-    NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>.*?\\<title\\>(.*?)\\<\\/title\\>" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
-    if (error) {
-        return NULL;
-    }
-    NSArray *results = [regex matchesInString:feed options:0 range:NSMakeRange(0, [feed length])];
-    for (NSTextCheckingResult *result in results) {
-        for (int captureIndex = 1; captureIndex < result.numberOfRanges; captureIndex++) {
-            NSString* capture = [feed substringWithRange:[result rangeAtIndex:captureIndex]];
-            titles[titleCount++] = capture;
-        }
-    }
-    return NULL;
-}
-
-- (NSString*) findLinks {
-    linkCount = 0;
-    NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\<item\\>.*?\\<guid.*?\\>(.*?)\\<\\/guid\\>" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
-    if (error) {
-        return NULL;
-    }
-    NSArray *results = [regex matchesInString:feed options:0 range:NSMakeRange(0, [feed length])];
-    for (NSTextCheckingResult *result in results) {
-        for (int captureIndex = 1; captureIndex < result.numberOfRanges; captureIndex++) {
-            NSString* capture = [feed substringWithRange:[result rangeAtIndex:captureIndex]];
-            links[linkCount++] = capture;
+            return [text substringWithRange:[result rangeAtIndex:captureIndex]];
         }
     }
     return NULL;
