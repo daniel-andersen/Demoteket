@@ -47,6 +47,11 @@
 #define MOVEMENT_DIR_FORWARD_TOUR   2
 #define MOVEMENT_DIR_BACKWARDS_TOUR 3
 
+#define ROOM_VISIBILITY_MAX_COUNT 8
+
+#define ROOM_VISIBILITY_TYPE_SHOW 0
+#define ROOM_VISIBILITY_TYPE_HIDE 1
+
 typedef struct {
     int type;
     float splineOffset;
@@ -55,6 +60,12 @@ typedef struct {
     float angleSpeed;
     float continueDelay;
 } AnglePoint;
+
+typedef struct {
+    int type;
+    float splineOffset;
+    int roomIndex;
+} RoomVisibility;
 
 @interface Movement : NSObject {
 
@@ -75,6 +86,11 @@ typedef struct {
     AnglePoint oldDestAnglePoint;
     int anglePointCount[4][USER_PHOTOS_MAX_COUNT];
     int anglePointIndex;
+    
+    RoomVisibility roomVisibility[4][USER_PHOTOS_MAX_COUNT][ROOM_VISIBILITY_MAX_COUNT];
+    int roomVisibilityCount[4][USER_PHOTOS_MAX_COUNT];
+    int roomVisibilityIndex;
+    void (^roomVisibilityCallbackHandler)(int, int);
     
 	float angle;
     float angleTransition;
@@ -101,6 +117,9 @@ typedef struct {
 - (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
 - (void) lookIn:(float)a beginningAt:(float)t withDelay:(float)delay;
 
+- (void) showRoom:(int)index beginningAt:(float)t;
+- (void) hideRoom:(int)index beginningAt:(float)t;
+
 - (void) move:(float)t;
 
 - (void) setMovement:(int)type;
@@ -119,5 +138,7 @@ typedef struct {
 - (bool) canGoForwards;
 
 - (GLKVector3) getPositionAndAngle;
+
+- (void) setRoomVisibilityCallback:(void(^)(int, int))callback;
 
 @end

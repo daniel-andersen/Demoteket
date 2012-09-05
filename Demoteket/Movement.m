@@ -45,14 +45,17 @@
     oldDestAnglePoint.lookIn = angle;
 
     userPhotosCount = 0;
+    
     userPhotoIndex = 0;
     anglePointIndex = 0;
+    roomVisibilityIndex = 0;
     
     tourSplines = [[CubicSpline alloc] init];
     for (int i = 0; i < USER_PHOTOS_MAX_COUNT; i++) {
         walkSplines[i] = [[CubicSpline alloc] init];
         for (int j = 0; j < 4; j++) {
             anglePointCount[j][i] = 0;
+            roomVisibilityCount[j][i] = 0;
         }
     }
 }
@@ -68,8 +71,9 @@
 - (void) setPositionToFirstPoint {
     [self setMovement:MOVEMENT_DIR_FORWARD];
     splineOffset = 0.0f;
-    userPhotoIndex = 0;
+    userPhotoIndex = 9;
     anglePointIndex = 0;
+    roomVisibilityIndex = 0;
     position = [self getTargetPosition];
 }
 
@@ -132,6 +136,22 @@
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
+- (void) showRoom:(int)index beginningAt:(float)t {
+    RoomVisibility *visibility = &roomVisibility[movementType][userPhotoIndex][roomVisibilityCount[movementType][userPhotoIndex]];
+    visibility->type = ROOM_VISIBILITY_TYPE_SHOW;
+    visibility->splineOffset = t;
+    visibility->roomIndex = index;
+    roomVisibilityCount[movementType][userPhotoIndex]++;
+}
+
+- (void) hideRoom:(int)index beginningAt:(float)t {
+    RoomVisibility *visibility = &roomVisibility[movementType][userPhotoIndex][roomVisibilityCount[movementType][userPhotoIndex]];
+    visibility->type = ROOM_VISIBILITY_TYPE_HIDE;
+    visibility->splineOffset = t;
+    visibility->roomIndex = index;
+    roomVisibilityCount[movementType][userPhotoIndex]++;
+}
+
 - (void) move:(float)t {
     [self updateAngle];
     if (angleTransition >= anglePoints[movementType][userPhotoIndex][anglePointIndex].continueDelay) {
@@ -140,6 +160,7 @@
     } else {
         [self decreaseMovement];
     }
+    [self updateRoomVisibility];
 }
 
 - (void) setMovement:(int)type {
@@ -154,6 +175,7 @@
     oldDestAnglePoint.lookIn = angle;
     anglePointIndex = 0;
     angleTransition = 0.0f;
+    roomVisibilityIndex = 0;
 }
 
 - (void) startTour {
@@ -168,8 +190,20 @@
     if (!paused) {
         return NULL;
     }
-    NSLog(@"%@", userPhotos[userPhotoIndex].title);
     return userPhotos[userPhotoIndex];
+}
+
+- (void) updateRoomVisibility {
+    if (roomVisibilityIndex >= roomVisibilityCount[movementType][userPhotoIndex]) {
+        return;
+    }
+    RoomVisibility *visibility = &roomVisibility[movementType][userPhotoIndex][roomVisibilityIndex];
+    if (splineOffset > visibility->splineOffset) {
+        if (roomVisibilityCallbackHandler != nil) {
+	        roomVisibilityCallbackHandler(visibility->type, visibility->roomIndex);
+        }
+        roomVisibilityIndex++;
+    }
 }
 
 - (void) updateMovement {
@@ -230,6 +264,9 @@
 }
 
 - (void) updatePath {
+    if (splineOffset >= [[self getSplines] getEndOffset]) {
+        return;
+    }
     float oldSplineOffset = splineOffset;
     splineOffset += MOVEMENT_POINT_SPLINE_INCREASE;
     while ([self distanceToSplinePoint] > MOVEMENT_POINT_DISTANCE_SPLINE) {
@@ -245,14 +282,13 @@
     if ([self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) {
 	    paused = true;
     }
-    if (splineOffset > [[self getSplines] getEndOffset]) {
-        splineOffset = [[self getSplines] getEndOffset];
-        return;
-    }
     if (anglePointIndex < anglePointCount[movementType][userPhotoIndex] - 1 && splineOffset > anglePoints[movementType][userPhotoIndex][anglePointIndex + 1].splineOffset) {
         oldDestAnglePoint = anglePoints[movementType][userPhotoIndex][anglePointIndex];
         angleTransition = 0.0f;
         anglePointIndex = MIN(anglePointIndex + 1, anglePointCount[movementType][userPhotoIndex] - 1);
+    }
+    if (splineOffset > [[self getSplines] getEndOffset]) {
+        splineOffset = [[self getSplines] getEndOffset];
     }
 }
 
@@ -298,6 +334,10 @@
 
 - (bool) canGoForwards {
     return paused && userPhotoIndex < userPhotosCount - 1;
+}
+
+- (void) setRoomVisibilityCallback:(void(^)(int, int))callback {
+    roomVisibilityCallbackHandler = [callback copy];
 }
 
 @end

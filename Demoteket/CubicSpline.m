@@ -76,7 +76,7 @@
 }
 
 - (GLKVector2) getEndPosition {
-    return [self getPosition:(float) splinePointCount - 1.0f];
+    return [self getPosition:[self getEndOffset]];
 }
 
 - (float) getEndOffset {
@@ -84,6 +84,8 @@
 }
 
 - (void) calculateSpline:(SplinePoint*)p {
+    p[splinePointCount].x = p[splinePointCount - 1].x;
+
     float gamma[splinePointCount + 1];
     float delta[splinePointCount + 1];
     float D[splinePointCount + 1];

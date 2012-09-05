@@ -55,7 +55,7 @@ extern const float ROOM_OFFSET_Z[];
     char tiles[ROOM_MAX_SIZE][ROOM_MAX_SIZE];
     int stripNumber;
 
-    bool isVisible;
+    bool visible;
     
     int roomNumber;
 
@@ -76,6 +76,8 @@ extern const float ROOM_OFFSET_Z[];
     Quads *pillars;
     Quads *pillarsBorder;
 }
+
+@property(readwrite) bool visible;
 
 - (void) initializeRoomNumber:(int)number;
 

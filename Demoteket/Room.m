@@ -28,12 +28,14 @@
 
 @implementation Room
 
+@synthesize visible;
+
 const float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4 - WALL_DEPTH, BLOCK_SIZE * -14 - WALL_DEPTH * 2, BLOCK_SIZE * -14 - WALL_DEPTH * 2};
 const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7,                  BLOCK_SIZE *  11 + WALL_DEPTH    };
 
 - (id) init {
     if (self = [super init]) {
-        isVisible = false;
+        visible = false;
     }
     return self;
 }
@@ -42,7 +44,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     NSLog(@"Initializing room number %i", number);
     [self createRoomNumber:number];
     [self createGeometrics];
-    isVisible = true;
 }
 
 - (void) createRoomNumber:(int)number {
@@ -519,6 +520,9 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
 }
 
 - (void) render {
+    if (!visible) {
+        return;
+    }
     for (int i = 0; i < WALL_COUNT; i++) {
 	    [walls[i] render];
     }
