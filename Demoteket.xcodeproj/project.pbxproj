@@ -25,6 +25,7 @@
 		65083EAB15D43CFC003108B5 /* FloorPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083EAA15D43CFC003108B5 /* FloorPlan.m */; };
 		65083EAE15D4FACE003108B5 /* Quads.m in Sources */ = {isa = PBXBuildFile; fileRef = 65083EAD15D4FACE003108B5 /* Quads.m */; };
 		652CF34015D98F5A00F4F07F /* photo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 652CF33F15D98F5A00F4F07F /* photo1.png */; };
+		6541B5BC15F75BD800A75786 /* RssFeedParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6541B5BB15F75BD800A75786 /* RssFeedParser.m */; };
 		6544839E15E618CF008132FC /* demoteket_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6544839D15E618CF008132FC /* demoteket_logo.png */; };
 		654942C715E265380029C1E2 /* Movement.m in Sources */ = {isa = PBXBuildFile; fileRef = 654942C615E265380029C1E2 /* Movement.m */; };
 		654E9C9515E8021D00570F64 /* tour_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 654E9C9315E8021D00570F64 /* tour_button.png */; };
@@ -77,6 +78,8 @@
 		65083EAD15D4FACE003108B5 /* Quads.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Quads.m; sourceTree = "<group>"; };
 		65083EAF15D4FD52003108B5 /* Globals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
 		652CF33F15D98F5A00F4F07F /* photo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo1.png; sourceTree = "<group>"; };
+		6541B5BA15F75BD700A75786 /* RssFeedParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RssFeedParser.h; sourceTree = "<group>"; };
+		6541B5BB15F75BD800A75786 /* RssFeedParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssFeedParser.m; sourceTree = "<group>"; };
 		6544839D15E618CF008132FC /* demoteket_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demoteket_logo.png; sourceTree = "<group>"; };
 		654942C515E265380029C1E2 /* Movement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movement.h; sourceTree = "<group>"; };
 		654942C615E265380029C1E2 /* Movement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movement.m; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 				65880BED15E92BD90055F33D /* PhotoInfo.m */,
 				65ED6BFB15F5D9E2008B71DE /* CubicSpline.h */,
 				65ED6BFC15F5D9E2008B71DE /* CubicSpline.m */,
+				6541B5BA15F75BD700A75786 /* RssFeedParser.h */,
+				6541B5BB15F75BD800A75786 /* RssFeedParser.m */,
 			);
 			path = Demoteket;
 			sourceTree = "<group>";
@@ -317,6 +322,7 @@
 				656B8C8A15E565100048FA39 /* Globals.c in Sources */,
 				65880BEE15E92BD90055F33D /* PhotoInfo.m in Sources */,
 				65ED6BFD15F5D9E2008B71DE /* CubicSpline.m in Sources */,
+				6541B5BC15F75BD800A75786 /* RssFeedParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

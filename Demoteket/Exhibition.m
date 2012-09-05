@@ -43,6 +43,8 @@
     
     AudioServicesCreateSystemSoundID(soundUrl, &clickSoundId);
 
+    rssFeedParser = [[RssFeedParser alloc] init];
+    
     textures = [[Textures alloc] init];
     [textures load];
     
@@ -117,6 +119,7 @@
 }
 
 - (void) createExhibition {
+    [rssFeedParser loadFeed:[NSURL URLWithString:@"http://aagaarddesign.dk/demoteket/?feed=rss2"]];
     [floorPlan createFloorPlan];
 
     NSLog(@"Exhibition initialized!");

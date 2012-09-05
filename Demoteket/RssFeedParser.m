@@ -23,57 +23,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <AudioToolbox/AudioToolbox.h>
-
-#import "FloorPlan.h"
 #import "RssFeedParser.h"
 
-#define APPEAR_SPEED 0.0125f
-#define PHOTO_APPEAR_SPEED 0.025f
+@implementation RssFeedParser
 
-#define EXHIBITION_MODE_NORMAL 0
-#define EXHIBITION_MODE_VIEWING_PHOTO 1
-#define EXHIBITION_MODE_VIEWING_TEXT 2
-
-#define MOVEMENT_START_DELAY 2.0f
-
-@interface Exhibition : NSObject {
-
-@private
-
-    FloorPlan *floorPlan;
-	RssFeedParser *rssFeedParser;
-    
-    Quads *nextButton;
-    Quads *prevButton;
-    Quads *startTourButton;
-    Quads *stopTourButton;
-    Quads *turnAroundPhotoButton;
-
-    Quads *screenOverlay;
-    Quads *photoOverlay;
-
-    SystemSoundID clickSoundId;
-    
-    float overlayAnimation;
-
-	double startTime;
-    
-    int mode;
-    float photoAnimation;
-    
-    PhotoInfo *userPhoto;
-    Texture photoTexture;
-    Texture textTexture;
+- (void) loadFeed:(NSURL*)url {
+    NSLog(@"Asynchronously loading feed");
+    [NSURLConnection sendAsynchronousRequest:[[NSMutableURLRequest alloc] initWithURL:url] queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        NSLog(@"Finished!");
+        NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", responseBody);
+    }];
 }
-
-- (id) init;
-
-- (void) createExhibition;
-
-- (void) tap:(GLKVector2)p;
-
-- (void) update;
-- (void) render;
 
 @end
