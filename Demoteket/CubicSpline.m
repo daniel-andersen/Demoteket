@@ -37,6 +37,9 @@
 - (void) setFirstPoint:(GLKVector2)p {
     splinesX[0].x = p.x;
     splinesY[0].x = p.y;
+    if (splinePointCount == 0) {
+        splinePointCount = 1;
+    }
     recalculate = true;
 }
 

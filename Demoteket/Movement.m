@@ -233,7 +233,7 @@
     if (speed <= 0.0f) {
         return;
     }
-    velocity = GLKVector2MultiplyScalar(GLKVector2Normalize(velocity), speed * 0.95f);
+    velocity = GLKVector2MultiplyScalar(GLKVector2Normalize(velocity), speed * 0.9f);
 }
 
 - (void) updateAngle {
@@ -278,6 +278,10 @@
     }
     while ([self distanceToSplinePoint] < MOVEMENT_POINT_DISTANCE_SPLINE) {
         splineOffset += MOVEMENT_POINT_SPLINE_INCREASE;
+        if (splineOffset >= [[self getSplines] getEndOffset]) {
+            splineOffset = [[self getSplines] getEndOffset];
+            break;
+        }
     };
     if ([self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) {
 	    paused = true;
@@ -286,9 +290,6 @@
         oldDestAnglePoint = anglePoints[movementType][userPhotoIndex][anglePointIndex];
         angleTransition = 0.0f;
         anglePointIndex = MIN(anglePointIndex + 1, anglePointCount[movementType][userPhotoIndex] - 1);
-    }
-    if (splineOffset > [[self getSplines] getEndOffset]) {
-        splineOffset = [[self getSplines] getEndOffset];
     }
 }
 
