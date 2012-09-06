@@ -57,6 +57,7 @@
 @property(readwrite) NSString *description;
 
 @property(readwrite) Texture photoTexture;
+@property(readwrite) Texture textTexture;
 
 - (id) initWithPosition:(GLKVector2)p roomPosition:(GLKVector2)roomPos angle:(float)a scale:(float)s;
 
@@ -65,6 +66,9 @@
 
 - (bool) hasBorder;
 - (bool) isClickable;
+
+- (void) createTextTexture;
+- (void) releaseTextTexture;
 
 - (void) update;
 - (void) render;

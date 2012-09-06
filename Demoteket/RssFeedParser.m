@@ -27,14 +27,20 @@
 
 @implementation RssFeedParser
 
-- (void) loadFeed:(NSURL*)url callback:(void(^)())callback {
+- (void) loadFeed:(NSURL*)url successCallback:(void(^)())successCallback errorCallback:(void(^)())errorCallback {
     NSLog(@"Asynchronously loading feed");
     [NSURLConnection sendAsynchronousRequest:[[NSMutableURLRequest alloc] initWithURL:url] queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        if (error) {
+            if (errorCallback != NULL) {
+                errorCallback();
+            }
+            return;
+        }
         NSLog(@"Feed fetched!");
         feed = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         [self findElements];
-        if (callback != NULL) {
-	        callback();
+        if (successCallback != NULL) {
+	        successCallback();
         }
     }];
 }

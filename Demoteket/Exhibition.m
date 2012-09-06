@@ -103,10 +103,11 @@
     photoOverlay = [[Quads alloc] init];
     [photoOverlay beginWithTexture:wallTexture[0]];
     [photoOverlay setIsOrthoProjection:true];
-    [photoOverlay addQuadX1:1.0f y1:0.0f z1:0.0f
-                         x2:1.0f y2:1.0f z2:0.0f
-                       	 x3:0.0f y3:1.0f z3:0.0f
-                       	 x4:0.0f y4:0.0f z4:0.0f];
+    [photoOverlay addQuadX1: 0.5f y1:-0.5f z1:0.0f
+                         x2: 0.5f y2: 0.5f z2:0.0f
+                       	 x3:-0.5f y3: 0.5f z3:0.0f
+                       	 x4:-0.5f y4:-0.5f z4:0.0f];
+    [photoOverlay setTranslation:GLKVector3Make(0.5f, 0.5f, 0.0f)];
     [photoOverlay end];
 
     overlayAnimation = 0.0f;
@@ -136,8 +137,10 @@
     [floorPlan createPaths];
     [floorPlan createGeometrics];
     
-    [rssFeedParser loadFeed:[NSURL URLWithString:@"http://aagaarddesign.dk/demoteket/?feed=rss2"] callback:^{
+    [rssFeedParser loadFeed:[NSURL URLWithString:@"http://aagaarddesign.dk/demoteket/?feed=rss2"] successCallback:^{
         [self loadPhotos];
+    } errorCallback:^{
+        NSLog(@"Could not load feed!");
     }];
 
     NSLog(@"Exhibition initialized!");
@@ -162,7 +165,7 @@
 	    }
     } else {
 	    if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
-            // TODO!
+            [self turnAroundPhoto];
 		} else {
 	        [self clickPhoto];
         }
@@ -181,16 +184,27 @@
     }
 }
 
+- (void) turnAroundPhoto {
+    mode = photoTexture.id == userPhoto.photoTexture.id ? EXHIBITION_MODE_VIEWING_TEXT : EXHIBITION_MODE_VIEWING_PHOTO;
+    photoAnimation = 0.0f;
+}
+
+- (void) preparePhotoTexture {
+    textureSetBlend(&photoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    [photoOverlay setTexture:photoTexture];
+}
+
 - (void) viewPhoto:(PhotoInfo*)photoInfo {
     if (![photoInfo isClickable]) {
         return;
     }
     mode = EXHIBITION_MODE_VIEWING_PHOTO;
     userPhoto = photoInfo;
+    [photoInfo createTextTexture];
     photoTexture = photoInfo.photoTexture;
-    textureSetBlend(&photoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    [photoOverlay setTexture:photoTexture];
-    photoAnimation = 0.0f;
+    photoFadeAnimation = 0.0f;
+    photoAnimation = 2.0f;
+    [self preparePhotoTexture];
 }
 
 - (void) hidePhoto {
@@ -202,23 +216,46 @@
 	    [floorPlan update];
     }
 
-    overlayAnimation = MIN(1.0f, overlayAnimation + APPEAR_SPEED);
-    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - overlayAnimation)];
-
     if (mode == EXHIBITION_MODE_VIEWING_PHOTO || mode == EXHIBITION_MODE_VIEWING_TEXT) {
-	    photoAnimation = MIN(1.0f, photoAnimation + PHOTO_APPEAR_SPEED);
+	    photoFadeAnimation = MIN(1.0f, photoFadeAnimation + PHOTO_APPEAR_SPEED);
     } else {
-	    photoAnimation = MAX(0.0f, photoAnimation - PHOTO_APPEAR_SPEED);
+	    photoFadeAnimation = MAX(0.0f, photoFadeAnimation - PHOTO_APPEAR_SPEED);
     }
-    [photoOverlay setColor:GLKVector4Make(1.0f, 1.0f, 1.0f, photoAnimation)];
+    [photoOverlay setColor:GLKVector4Make(1.0f, 1.0f, 1.0f, photoFadeAnimation)];
+    
+    if (mode == EXHIBITION_MODE_VIEWING_PHOTO || mode == EXHIBITION_MODE_VIEWING_TEXT) {
+	    photoAnimation = MIN(2.0f, photoAnimation + PHOTO_APPEAR_SPEED);
+        overlayAnimation = 1.0f - (photoAnimation < 1.0f ? photoAnimation : (2.0f - photoAnimation));
+        if (photoAnimation > 1.0f && mode == EXHIBITION_MODE_VIEWING_TEXT && photoTexture.id == userPhoto.photoTexture.id) {
+	        photoTexture = userPhoto.textTexture;
+            [self preparePhotoTexture];
+        } else if (photoAnimation > 1.0f && mode == EXHIBITION_MODE_VIEWING_PHOTO && photoTexture.id == userPhoto.textTexture.id) {
+	        photoTexture = userPhoto.photoTexture;
+            [self preparePhotoTexture];
+        }
+    } else {
+	    overlayAnimation = MIN(1.0f, overlayAnimation + APPEAR_SPEED);
+    }
+    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - overlayAnimation)];
 }
 
 - (void) render {
-    [floorPlan render];
+    if (photoFadeAnimation < 1.0f) {
+	    [floorPlan render];
+    }
     glDisable(GL_CULL_FACE);
-    if (photoAnimation > 0.0f) {
-        [photoOverlay render];
-        if (photoAnimation == 1.0f && mode != EXHIBITION_MODE_NORMAL) {
+    if (photoFadeAnimation > 0.0f) {
+        [self renderPhoto];
+    }
+    [self renderButtons];
+    if (overlayAnimation < 1.0f) {
+        [screenOverlay render];
+    }
+}
+
+- (void) renderButtons {
+    if (photoFadeAnimation > 0.0f) {
+        if (photoFadeAnimation == 1.0f) {
             [turnAroundPhotoButton render];
         }
     } else {
@@ -235,9 +272,13 @@
 		    [stopTourButton render];
 	    }
     }
-    if (overlayAnimation < 1.0f) {
-        [screenOverlay render];
-    }
+}
+
+- (void) renderPhoto {
+    float rotationX = M_PI_2 * 0.2f * (photoAnimation < 1.0f ? photoAnimation : -(2.0f - photoAnimation));
+    float rotationY = M_PI_2 * 1.0f * (photoAnimation < 1.0f ? photoAnimation :  (2.0f - photoAnimation));
+    [photoOverlay setRotation:GLKVector3Make(rotationX, rotationY, 0.0f)];
+    [photoOverlay render];
 }
 
 - (bool) clickedInRectX:(float)x y:(float)y rx:(float)rx ry:(float)ry width:(float)width height:(float)height {

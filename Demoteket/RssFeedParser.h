@@ -38,7 +38,7 @@
     int count;
 }
 
-- (void) loadFeed:(NSURL*)url callback:(void(^)())callback;
+- (void) loadFeed:(NSURL*)url successCallback:(void(^)())successCallback errorCallback:(void(^)())errorCallback;
 
 - (int) photoCount;
 

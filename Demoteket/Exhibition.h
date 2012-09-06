@@ -56,6 +56,7 @@
 	double startTime;
     
     int mode;
+    float photoFadeAnimation;
     float photoAnimation;
     
     PhotoInfo *userPhoto;

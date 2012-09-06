@@ -250,27 +250,26 @@
     glkEffect.useConstantColor = YES;
     glkEffect.constantColor = color;
 
-    GLKMatrix4 modelViewMatrix = GLKMatrix4Identity;
-    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, sceneModelViewMatrix);
+    GLKMatrix4 modelViewMatrix = isOrthoProjection ? orthoModelViewMatrix : sceneModelViewMatrix;
     modelViewMatrix = GLKMatrix4Translate(modelViewMatrix, translation.x, translation.y, translation.z);
-    if (faceToCamera) {
+	if (faceToCamera) {
         modelViewMatrix.m00 = 1.0f; modelViewMatrix.m01 = 0.0f; modelViewMatrix.m02 = 0.0f;
         modelViewMatrix.m10 = 0.0f; modelViewMatrix.m11 = 1.0f; modelViewMatrix.m12 = 0.0f;
         modelViewMatrix.m20 = 0.0f; modelViewMatrix.m21 = 0.0f; modelViewMatrix.m22 = 1.0f;
     } else {
-	    if (rotation.x != 0.0f) {
-    	    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.x, 1.0f, 0.0f, 0.0f);
-	    }
-    	if (rotation.y != 0.0f) {
-        	modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.y, 0.0f, 1.0f, 0.0f);
-	    }
-    	if (rotation.z != 0.0f) {
-        	modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.z, 0.0f, 0.0f, 1.0f);
-	    }
+        if (rotation.x != 0.0f) {
+            modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.x, 1.0f, 0.0f, 0.0f);
+        }
+        if (rotation.y != 0.0f) {
+            modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.y, 0.0f, 1.0f, 0.0f);
+        }
+        if (rotation.z != 0.0f) {
+            modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation.z, 0.0f, 0.0f, 1.0f);
+        }
+	    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
     }
-    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, mirrorModelViewMatrix);
     
-    glkEffect.transform.modelviewMatrix = isOrthoProjection ? orthoModelViewMatrix : modelViewMatrix;
+    glkEffect.transform.modelviewMatrix = modelViewMatrix;
     glkEffect.transform.projectionMatrix = isOrthoProjection ? orthoProjectionMatrix : sceneProjectionMatrix;
 
     [glkEffect prepareToDraw];

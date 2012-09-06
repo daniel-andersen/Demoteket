@@ -50,6 +50,8 @@ GLKMatrix4 mirrorModelViewMatrix;
 GLKMatrix4 orthoProjectionMatrix;
 GLKMatrix4 orthoModelViewMatrix;
 
+EAGLContext *openglContext;
+
 bool isRenderingMirror;
 
 float screenWidth;

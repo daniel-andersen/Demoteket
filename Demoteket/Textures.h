@@ -44,10 +44,12 @@ typedef struct {
     float texCoordX1, texCoordY1, texCoordX2, texCoordY2;
     bool blendEnabled;
     GLenum blendSrc, blendDst;
+    bool released;
 } Texture;
 
 extern Texture textureMake(GLuint id);
 extern Texture textureCopy(Texture texture, float texCoordX1, float texCoordY1, float texCoordX2, float texCoordY2);
+extern void textureRelease(Texture *texture);
 extern void textureSetTexCoords(Texture *texture, float texCoordX1, float texCoordY1, float texCoordX2, float texCoordY2);
 extern void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst);
 

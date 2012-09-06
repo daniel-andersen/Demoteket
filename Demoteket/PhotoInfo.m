@@ -34,6 +34,7 @@
 @synthesize author;
 @synthesize description;
 @synthesize photoTexture;
+@synthesize textTexture;
 
 - (id) initWithPosition:(GLKVector2)p roomPosition:(GLKVector2)roomPos angle:(float)a scale:(float)s {
     if (self = [super init]) {
@@ -41,6 +42,7 @@
         roomPosition = roomPos;
         angle = a;
         scale = s;
+        description = @"Dette er en test af demotek aarhus uden internetforbindelse i en bus som ryster helt vildt!";
         [self initialize];
     }
     return self;
@@ -76,16 +78,21 @@
     if (photoFilename != NULL) {
 	    NSLog(@"Loaded photo: %@", photoFilename);
     }
+    [self releasePhotoTexture];
     photoTexture = texture;
     [self addPhotoQuads];
 }
 
 - (bool) hasBorder {
-	return [self isClickable];
+	return ![self isStaticPhoto];
 }
 
 - (bool) isClickable {
-	return photoTexture.id != demoteketLogoTexture.id && photoTexture.id != photoLoadingTexture.id;
+	return ![self isStaticPhoto];
+}
+
+- (bool) isStaticPhoto {
+	return photoTexture.id == demoteketLogoTexture.id || photoTexture.id == photoLoadingTexture.id;
 }
 
 - (void) addPhotoQuads {
@@ -112,6 +119,24 @@
     [photoQuads end];
     [borderQuads end];
     [backgroundQuads end];
+}
+
+- (void) createTextTexture {
+    [EAGLContext setCurrentContext:openglContext];
+    [self releaseTextTexture];
+    textTexture = [textures textToTexture:description width:textureAtLeastSize(screenWidthNoScale) height:textureAtLeastSize(screenHeightNoScale) asPhoto:false];
+    textTexture.released = false;
+}
+
+- (void) releasePhotoTexture {
+    if ([self isStaticPhoto]) {
+        return;
+    }
+    textureRelease(&photoTexture);
+}
+
+- (void) releaseTextTexture {
+    textureRelease(&textTexture);
 }
 
 - (void) update {

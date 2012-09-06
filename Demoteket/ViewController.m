@@ -66,6 +66,8 @@ enum {
         NSLog(@"Failed to create ES context");
     }
     
+    openglContext = self.context;
+    
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;

@@ -59,6 +59,7 @@ Texture textureMake(GLuint id) {
     texture.texCoordY2 = 1.0f;
     texture.blendEnabled = false;
     texture.id = id;
+    texture.released = false;
     return texture;
 }
 
@@ -70,7 +71,16 @@ Texture textureCopy(Texture texture, float texCoordX1, float texCoordY1, float t
     newTexture.texCoordY1 = texCoordY1;
     newTexture.texCoordX2 = texCoordX2;
     newTexture.texCoordY2 = texCoordY2;
+    newTexture.released = false;
     return newTexture;
+}
+
+void textureRelease(Texture *texture) {
+    if (texture->released) {
+        return;
+    }
+    glDeleteTextures(1, &texture->id);
+    texture->released = true;
 }
 
 void textureSetTexCoords(Texture *texture, float texCoordX1, float texCoordY1, float texCoordX2, float texCoordY2) {
