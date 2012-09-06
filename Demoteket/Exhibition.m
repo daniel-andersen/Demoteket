@@ -149,6 +149,9 @@
 - (void) loadPhotos {
     for (int i = 0; i < MIN([rssFeedParser photoCount], 10); i++) {
         [userPhotos[i + 1] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
+        userPhotos[i + 1].title = [rssFeedParser getTitle:i];
+        userPhotos[i + 1].description = [rssFeedParser getDescription:i];
+        userPhotos[i + 1].link = [rssFeedParser getLink:i];
     }
 }
 

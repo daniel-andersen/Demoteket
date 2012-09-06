@@ -33,6 +33,7 @@
 @synthesize title;
 @synthesize author;
 @synthesize description;
+@synthesize link;
 @synthesize photoTexture;
 @synthesize textTexture;
 
@@ -42,7 +43,6 @@
         roomPosition = roomPos;
         angle = a;
         scale = s;
-        description = @"Dette er en test af demotek aarhus uden internetforbindelse i en bus som ryster helt vildt!";
         [self initialize];
     }
     return self;
@@ -122,10 +122,8 @@
 }
 
 - (void) createTextTexture {
-    [EAGLContext setCurrentContext:openglContext];
-    [self releaseTextTexture];
-    textTexture = [textures textToTexture:description width:textureAtLeastSize(screenWidthNoScale) height:textureAtLeastSize(screenHeightNoScale) asPhoto:false];
-    textTexture.released = false;
+    NSString *text = [[title stringByAppendingString:@"\n\n"] stringByAppendingString:description];
+    [textures textToTexture:text width:textureAtLeastSize(screenWidthNoScale) height:textureAtLeastSize(screenHeightNoScale) texture:&textTexture];
 }
 
 - (void) releasePhotoTexture {

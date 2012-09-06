@@ -51,6 +51,9 @@ Texture turnAroundPhotoButtonTexture;
 Texture photoLoadingTexture;
 Texture photoBackgroundTexture;
 
+Texture labelTexture;
+UIImage *textImage;
+
 Texture textureMake(GLuint id) {
     Texture texture;
     texture.texCoordX1 = 0.0f;
@@ -67,12 +70,26 @@ Texture textureCopy(Texture texture, float texCoordX1, float texCoordY1, float t
     Texture newTexture;
     newTexture.id = texture.id;
     newTexture.blendEnabled = texture.blendEnabled;
+    newTexture.blendSrc = texture.blendSrc;
+    newTexture.blendDst = texture.blendDst;
     newTexture.texCoordX1 = texCoordX1;
     newTexture.texCoordY1 = texCoordY1;
     newTexture.texCoordX2 = texCoordX2;
     newTexture.texCoordY2 = texCoordY2;
     newTexture.released = false;
     return newTexture;
+}
+
+void textureCopyTo(Texture src, Texture *dst) {
+    dst->id = src.id;
+    dst->blendEnabled = src.blendEnabled;
+    dst->blendSrc = src.blendSrc;
+    dst->blendDst = src.blendDst;
+    dst->texCoordX1 = src.texCoordX1;
+    dst->texCoordY1 = src.texCoordY1;
+    dst->texCoordX2 = src.texCoordX2;
+    dst->texCoordY2 = src.texCoordY2;
+    dst->released = false;
 }
 
 void textureRelease(Texture *texture) {
@@ -150,6 +167,25 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     return [self textureFromTextureInfo:textureInfo repeat:repeat];
 }
 
+- (void) loadPhotoAsyncFromUrl:(NSURL*)url callback:(void(^)(Texture))callback {
+    [textureLoader textureWithContentsOfURL:url options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
+        if (error) {
+            NSLog(@"Error loading texture asynchronously: %@", error);
+        }
+        Texture texture = [self textureFromTextureInfo:textureInfo repeat:false];
+        callback(texture);
+    }];
+}
+
+- (void) loadTextureWithImageAsync:(UIImage*)image texture:(Texture*)texture {
+    [textureLoader textureWithCGImage:image.CGImage options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
+        if (error) {
+            NSLog(@"Error loading texture asynchronously: %@", error);
+        }
+        textureCopyTo([self textureFromTextureInfo:textureInfo repeat:false], texture);
+    }];
+}
+
 - (Texture) textureFromTextureInfo:(GLKTextureInfo*)textureInfo repeat:(bool)repeat {
     glBindTexture(GL_TEXTURE_2D, textureInfo.name);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -167,47 +203,31 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     return texture;
 }
 
-- (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture asPhoto:(bool)asPhoto {
-    return [self textToTexture:text width:texture.width height:texture.height asPhoto:asPhoto];
+- (void) textToTexture:(NSString*)text width:(int)width height:(int)height texture:(Texture*)texture {
+    [self textToTexture:text width:width height:height color:[UIColor colorWithRed:248.0f / 255.0f green:230.0f / 255.0f blue:213.0f / 255.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] texture:texture];
 }
 
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height asPhoto:(bool)asPhoto {
-    return [self textToTexture:text width:width height:height color:[UIColor colorWithRed:248.0f / 255.0f green:230.0f / 255.0f blue:213.0f / 255.0f alpha:1.0f] backgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f] asPhoto:asPhoto];
-}
-
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor asPhoto:(bool)asPhoto {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(TEXT_BORDER, TEXT_BORDER, width - (TEXT_BORDER * 2), height - (TEXT_BORDER * 2))];
+- (void) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor texture:(Texture*)texture {
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(TEXT_BORDER_LEFT, TEXT_BORDER_TOP, width - (TEXT_BORDER_RIGHT + TEXT_BORDER_LEFT), height - (TEXT_BORDER_BOTTOM + TEXT_BORDER_TOP))];
     label.text = text;
-    label.font = [UIFont fontWithName:@"Times New Roman" size:14.0f];
+    label.font = [UIFont fontWithName:@"Times New Roman" size:18.0f];
     label.textColor = color;
     label.backgroundColor = bgColor;
     label.numberOfLines = 0;
     
-    UIGraphicsBeginImageContext(label.bounds.size);
-    
-    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), TEXT_BORDER, TEXT_BORDER);
-    CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, 1.0);
-    
-    [label.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    if (asPhoto) {
-	    return [self photoFromImage:image];
-    } else {
-	    return [self loadTextureWithImage:image repeat:false];
-    }
-}
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIGraphicsBeginImageContext(label.bounds.size);
+        
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), TEXT_BORDER_LEFT, TEXT_BORDER_TOP);
+        CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, 1.0);
+        
+        [label.layer renderInContext:UIGraphicsGetCurrentContext()];
+        
+        textImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
 
-- (void) loadPhotoAsyncFromUrl:(NSURL*)url callback:(void(^)(Texture))callback {
-    [textureLoader textureWithContentsOfURL:url options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
-        if (error) {
-            NSLog(@"Error loading texture asynchronously: %@", error);
-        }
-        Texture texture = [self textureFromTextureInfo:textureInfo repeat:false];
-        callback(texture);
-    }];
+        [self loadTextureWithImageAsync:textImage texture:texture];
+    });
 }
 
 - (Texture) photoFromFile:(NSString*)filename {

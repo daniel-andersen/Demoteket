@@ -34,6 +34,7 @@
     NSString *title;
     NSString *author;
     NSString *description;
+    NSString *link;
 
     GLKVector2 roomPosition;
     GLKVector2 position;
@@ -55,6 +56,7 @@
 @property(readwrite) NSString *title;
 @property(readwrite) NSString *author;
 @property(readwrite) NSString *description;
+@property(readwrite) NSString *link;
 
 @property(readwrite) Texture photoTexture;
 @property(readwrite) Texture textTexture;

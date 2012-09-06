@@ -33,7 +33,11 @@
 
 #define PHOTO_INDEX_DEMOTEKET_LOGO 5
 
-#define TEXT_BORDER 10
+#define TEXT_BORDER_LEFT 10
+#define TEXT_BORDER_TOP 10
+#define TEXT_BORDER_RIGHT 50
+#define TEXT_BORDER_BOTTOM 10
+
 #define PHOTO_WHITE_BORDER_PCT 0.05f
 #define PHOTO_BLACK_BORDER_PCT 0.02f
 
@@ -86,11 +90,10 @@ extern void loadTextures();
 - (Texture) loadTexture:(NSString*)filename;
 - (Texture) loadTexture:(NSString*)filename repeat:(bool)repeat;
 
-- (Texture) textToTexture:(NSString*)text withSizeOf:(Texture)texture asPhoto:(bool)asPhoto;
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height asPhoto:(bool)asPhoto;
-- (Texture) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor asPhoto:(bool)asPhoto;
-
 - (void) loadPhotoAsyncFromUrl:(NSURL*)url callback:(void(^)(Texture))callback;
+
+- (void) textToTexture:(NSString*)text width:(int)width height:(int)height texture:(Texture*)texture;
+- (void) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor texture:(Texture*)texture;
 
 - (Texture) photoFromFile:(NSString*)filename;
 - (Texture) photoFromImage:(UIImage*)image;
