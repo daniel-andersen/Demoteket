@@ -67,6 +67,7 @@ extern Texture photosTexture[PHOTOS_TEXTURE_COUNT];
 extern int photosTextureCount;
 
 extern Texture demoteketLogoTexture;
+extern Texture trollsAheadLogoTexture;
 
 extern Texture floorTexture;
 extern Texture floorDistortionTexture;

@@ -90,15 +90,6 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addStrip:@"|     |"];
         [self addStrip:@"|  I  |"];
         [self addStrip:@"|     |"];
-        [self addStrip:@"+---+d+"];
-    }
-    if (number == 4) {
-        [self addStrip:@"+-+ +-+"];
-        [self addStrip:@"|     |"];
-        [self addStrip:@"|     |"];
-        [self addStrip:@"|  @  |"];
-        [self addStrip:@"|     |"];
-        [self addStrip:@"|     |"];
         [self addStrip:@"+-----+"];
     }
 }
@@ -123,6 +114,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
         [self addLightType:1 x:1.5f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
         [self addLightType:2 x:3.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
+        [self addLightType:2 x:2.0f * BLOCK_SIZE z:3.5f * BLOCK_SIZE];
 	}
     if (roomNumber == 1) {
         [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
@@ -137,12 +129,22 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
 	}
     if (roomNumber == 2) {
         [self addFloorQuadX1:0.0f z1:0.0f x2:14.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
+        [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:0 x:7.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:0 x:9.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:1 x:4.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:1 x:5.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:2 x:1.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:2 x:5.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
     }
     if (roomNumber == 3) {
         [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
-    }
-    if (roomNumber == 4) {
-        [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:7.0f * BLOCK_SIZE];
+        [self addLightType:0 x:4.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:0 x:1.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
+        [self addLightType:1 x:4.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:1 x:2.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:2 x:1.0f * BLOCK_SIZE z:0.0f * BLOCK_SIZE];
+        [self addLightType:2 x:6.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
     }
 
     [floor end];

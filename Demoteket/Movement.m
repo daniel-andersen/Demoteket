@@ -50,10 +50,9 @@
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
     
-    tourSplines = [[CubicSpline alloc] init];
     for (int i = 0; i < USER_PHOTOS_MAX_COUNT; i++) {
-        walkSplines[i] = [[CubicSpline alloc] init];
         for (int j = 0; j < 4; j++) {
+            walkSplines[j][i] = [[CubicSpline alloc] init];
             anglePointCount[j][i] = 0;
             roomVisibilityCount[j][i] = 0;
         }
@@ -86,24 +85,26 @@
     anglePointIndex = 0;
 }
 
-- (void) setWalkPointToLastPoint {
-    [walkSplines[userPhotoIndex] addPoint:[walkSplines[userPhotoIndex - 1] getEndPosition]];
+- (void) setPointToLastPoint {
+    int lastPoint = movementType == MOVEMENT_DIR_FORWARD || movementType == MOVEMENT_DIR_FORWARD_TOUR ? (userPhotoIndex - 1) : (userPhotoIndex + 1);
+    [walkSplines[movementType][userPhotoIndex] addPoint:[walkSplines[movementType][lastPoint] getEndPosition]];
 }
 
-- (void) addWalkPointAbsolute:(GLKVector2)p {
-    [walkSplines[userPhotoIndex] addPoint:p];
+- (void) addPointRelativeToLastPoint:(GLKVector2)p {
+    int lastPoint = movementType == MOVEMENT_DIR_FORWARD || movementType == MOVEMENT_DIR_FORWARD_TOUR ? (userPhotoIndex - 1) : (userPhotoIndex + 1);
+    [walkSplines[movementType][userPhotoIndex] addPoint:GLKVector2Add([walkSplines[movementType][lastPoint] getEndPosition], p)];
 }
 
-- (void) addWalkPointRelative:(GLKVector2)p {
-    [walkSplines[userPhotoIndex] addOffsetPoint:p];
+- (void) addPointRelativeToLastPoint:(GLKVector2)p ofMovementType:(int)type {
+    [walkSplines[movementType][userPhotoIndex] addPoint:GLKVector2Add([walkSplines[type][userPhotosCount - 1] getEndPosition], p)];
 }
 
-- (void) addTourPointAbsolute:(GLKVector2)p {
-    [tourSplines addPoint:p];
+- (void) addPointAbsolute:(GLKVector2)p {
+    [walkSplines[movementType][userPhotoIndex] addPoint:p];
 }
 
-- (void) addTourPointRelative:(GLKVector2)p {
-    [tourSplines addOffsetPoint:p];
+- (void) addPointRelative:(GLKVector2)p {
+    [walkSplines[movementType][userPhotoIndex] addOffsetPoint:p];
 }
 
 - (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay {
@@ -136,30 +137,25 @@
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
-- (void) showRoom:(int)index beginningAt:(float)t {
-    RoomVisibility *visibility = &roomVisibility[movementType][userPhotoIndex][roomVisibilityCount[movementType][userPhotoIndex]];
-    visibility->type = ROOM_VISIBILITY_TYPE_SHOW;
-    visibility->splineOffset = t;
-    visibility->roomIndex = index;
-    roomVisibilityCount[movementType][userPhotoIndex]++;
+- (void) setRoomVisibilityOne:(bool)v1 two:(bool)v2 three:(bool)v3 four:(bool)v4 beginningAt:(float)t {
+    [self setRoomVisibilityNumber:0 visible:v1 beginningAt:t];
+    [self setRoomVisibilityNumber:1 visible:v2 beginningAt:t];
+    [self setRoomVisibilityNumber:2 visible:v3 beginningAt:t];
+    [self setRoomVisibilityNumber:3 visible:v4 beginningAt:t];
 }
 
-- (void) hideRoom:(int)index beginningAt:(float)t {
+- (void) setRoomVisibilityNumber:(int)number visible:(bool)v beginningAt:(float)t {
     RoomVisibility *visibility = &roomVisibility[movementType][userPhotoIndex][roomVisibilityCount[movementType][userPhotoIndex]];
-    visibility->type = ROOM_VISIBILITY_TYPE_HIDE;
+    visibility->type = v ? ROOM_VISIBILITY_TYPE_SHOW : ROOM_VISIBILITY_TYPE_HIDE;
     visibility->splineOffset = t;
-    visibility->roomIndex = index;
+    visibility->roomIndex = number;
     roomVisibilityCount[movementType][userPhotoIndex]++;
 }
 
 - (void) move:(float)t {
     [self updateAngle];
-    if (angleTransition >= anglePoints[movementType][userPhotoIndex][anglePointIndex].continueDelay) {
-        [self updatePath];
-        [self updateMovement];
-    } else {
-        [self decreaseMovement];
-    }
+    [self updatePath];
+    [self updateMovement];
     [self updateRoomVisibility];
 }
 
@@ -170,12 +166,14 @@
 - (void) resume {
     paused = false;
     splineOffset = 0.0f;
-    userPhotoIndex++;
+    userPhotoIndex = movementType == MOVEMENT_DIR_FORWARD || movementType == MOVEMENT_DIR_FORWARD_TOUR ? userPhotoIndex + 1 : userPhotoIndex - 1;
     oldDestAnglePoint.type = ANGLE_TYPE_LOOK_IN;
     oldDestAnglePoint.lookIn = angle;
     anglePointIndex = 0;
     angleTransition = 0.0f;
     roomVisibilityIndex = 0;
+    [[self getSplines] setFirstPoint:position];
+    [[self getSplines] recalculateSpline];
 }
 
 - (void) startTour {
@@ -224,6 +222,9 @@
     if (GLKVector2Length(velocity) > MOVEMENT_MAX_SPEED) {
         velocity = GLKVector2MultiplyScalar(GLKVector2Normalize(velocity), MOVEMENT_MAX_SPEED);
     }
+    if (angleTransition < anglePoints[movementType][userPhotoIndex][anglePointIndex].continueDelay) {
+        [self decreaseMovement];
+    }
     position = GLKVector2Add(position, velocity);
 }
 
@@ -232,8 +233,7 @@
     if (speed <= 0.0f) {
         return;
     }
-    velocity = GLKVector2MultiplyScalar(GLKVector2Normalize(velocity), speed * (1.0f - MOVEMENT_STEERING_SPEED));
-    position = GLKVector2Add(position, velocity);
+    velocity = GLKVector2MultiplyScalar(GLKVector2Normalize(velocity), speed * 0.95f);
 }
 
 - (void) updateAngle {
@@ -313,7 +313,7 @@
 }
 
 - (CubicSpline*) getSplines {
-    return [self isOnTour] ? tourSplines : walkSplines[userPhotoIndex];
+    return walkSplines[movementType][userPhotoIndex];
 }
 
 - (GLKVector3) getPositionAndAngle {

@@ -70,8 +70,7 @@ typedef struct {
 @interface Movement : NSObject {
 
 @private
-    CubicSpline *walkSplines[USER_PHOTOS_MAX_COUNT];
-    CubicSpline *tourSplines;
+    CubicSpline *walkSplines[4][USER_PHOTOS_MAX_COUNT];
 
     float splineOffset;
 
@@ -106,19 +105,18 @@ typedef struct {
 - (void) addUserPhoto:(PhotoInfo*)photoInfo;
 - (void) setUserPhoto:(int)index;
 
-- (void) setWalkPointToLastPoint;
+- (void) setPointToLastPoint;
 
-- (void) addWalkPointAbsolute:(GLKVector2)p;
-- (void) addWalkPointRelative:(GLKVector2)p;
-- (void) addTourPointAbsolute:(GLKVector2)p;
-- (void) addTourPointRelative:(GLKVector2)p;
+- (void) addPointRelativeToLastPoint:(GLKVector2)p;
+- (void) addPointRelativeToLastPoint:(GLKVector2)p ofMovementType:(int)type;
+- (void) addPointAbsolute:(GLKVector2)p;
+- (void) addPointRelative:(GLKVector2)p;
 
 - (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
 - (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
 - (void) lookIn:(float)a beginningAt:(float)t withDelay:(float)delay;
 
-- (void) showRoom:(int)index beginningAt:(float)t;
-- (void) hideRoom:(int)index beginningAt:(float)t;
+- (void) setRoomVisibilityOne:(bool)v1 two:(bool)v2 three:(bool)v3 four:(bool)v4 beginningAt:(float)t;
 
 - (void) move:(float)t;
 

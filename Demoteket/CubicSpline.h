@@ -43,6 +43,7 @@ typedef struct {
     bool recalculate;
 }
 
+- (void) setFirstPoint:(GLKVector2)p;
 - (void) addPoint:(GLKVector2)p;
 - (void) addOffsetPoint:(GLKVector2)p;
 
@@ -50,5 +51,7 @@ typedef struct {
 - (GLKVector2) getEndPosition;
 
 - (float) getEndOffset;
+
+- (void) recalculateSpline;
 
 @end

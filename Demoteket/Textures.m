@@ -37,6 +37,7 @@ Texture photosTexture[PHOTOS_TEXTURE_COUNT];
 int photosTextureCount = 0;
 
 Texture demoteketLogoTexture;
+Texture trollsAheadLogoTexture;
 
 Texture floorTexture;
 Texture floorDistortionTexture;
@@ -142,6 +143,8 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     lightTexture[2] = [self loadTexture:@"light3.png"];
     
     demoteketLogoTexture = [self loadTexture:@"demoteket_logo.png"]; textureSetBlend(&demoteketLogoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    trollsAheadLogoTexture = [self loadTexture:@"trolls_ahead_logo.png"]; textureSetBlend(&trollsAheadLogoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     photoLoadingTexture = [self loadTexture:@"loading_photo.png"]; textureSetBlend(&photoLoadingTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     photoBackgroundTexture = [self loadTexture:@"photo_background.png"];

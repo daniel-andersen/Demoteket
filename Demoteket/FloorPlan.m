@@ -130,97 +130,175 @@ float t = 0.0f;
     [movement addUserPhoto:userPhotos[8]];
     [movement addUserPhoto:userPhotos[9]];
     [movement addUserPhoto:userPhotos[10]];
+    [movement addUserPhoto:userPhotos[11]];
 
-	// Walk mode
+	// Forward walk mode
+    [movement setMovement:MOVEMENT_DIR_FORWARD];
+    
     [movement setUserPhoto:0];
-    [movement addWalkPointAbsolute:GLKVector2Make(-4.0f, -17.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(1.0f, 4.0f)];
+    [movement addPointAbsolute:GLKVector2Make(-4.0f, -17.0f)];
+    [movement addPointRelative:GLKVector2Make(1.0f, 4.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, 2.0f) beginningAt:0.0f withDelay:0.0f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
     
     [movement setUserPhoto:1];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(-2.5f, 1.0f)];
-    [movement addWalkPointRelative:GLKVector2Make( 1.5f, 3.5f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-2.5f, 1.0f)];
+    [movement addPointRelative:GLKVector2Make( 1.5f, 3.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-0.75f, 1.0f) beginningAt:0.0f withDelay:0.2f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
 
     [movement setUserPhoto:2];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(1.0f, 6.0f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(1.0f, 6.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(0.5f, 1.0f) beginningAt:0.0f withDelay:0.25f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
 
     [movement setUserPhoto:3];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(4.0f,  3.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(3.0f, -1.0f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(4.0f,  3.0f)];
+    [movement addPointRelative:GLKVector2Make(3.0f, -1.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.25f, -2.5f) beginningAt:0.0f withDelay:0.5f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
+    [movement setRoomVisibilityOne:false two:true three:true four:false beginningAt:0.3f];
 
     [movement setUserPhoto:4];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make( 0.5f, -3.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(-3.5f, -3.75f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make( 0.5f, -3.0f)];
+    [movement addPointRelative:GLKVector2Make(-3.5f, -3.75f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-1.0f, -0.5f) beginningAt:0.2f withDelay:0.0f];
+    [movement setRoomVisibilityOne:false two:true three:true four:false beginningAt:0.0f];
 
     [movement setUserPhoto:5];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(0.0f, -3.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(0.6f, -1.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(0.7f, -1.0f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(0.0f, -3.0f)];
+    [movement addPointRelative:GLKVector2Make(0.6f, -1.0f)];
+    [movement addPointRelative:GLKVector2Make(0.7f, -1.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(0.0f, -5.0f) beginningAt:0.0f withDelay:0.4f];
+    [movement setRoomVisibilityOne:false two:true three:true four:false beginningAt:0.0f];
 
     [movement setUserPhoto:6];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(3.0f,  0.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(4.5f, -3.3f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(3.0f,  0.0f)];
+    [movement addPointRelative:GLKVector2Make(4.5f, -3.3f)];
+	[movement lookAtRelativeToStart:GLKVector2Make(8.0f, -2.0f) beginningAt:0.0f withDelay:0.7f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(0.0f, -4.0f) beginningAt:0.7f withDelay:0.0f];
+    [movement setRoomVisibilityOne:false two:true three:true four:false beginningAt:0.0f];
+    [movement setRoomVisibilityOne:false two:false three:true four:false beginningAt:0.8f];
 
     [movement setUserPhoto:7];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(2.5f, -0.2f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(2.5f, -0.2f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(4.0f, 0.0f) beginningAt:0.0f withDelay:0.7f];
+    [movement setRoomVisibilityOne:false two:false three:true four:false beginningAt:0.0f];
 
     [movement setUserPhoto:8];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(1.0f, 1.0f)];
-    [movement addWalkPointRelative:GLKVector2Make(3.5f, 1.5f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(1.0f, 1.0f)];
+    [movement addPointRelative:GLKVector2Make(3.5f, 1.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(0.5f, 2.0f) beginningAt:0.0f withDelay:0.25f];
+    [movement setRoomVisibilityOne:false two:false three:true four:false beginningAt:0.0f];
 
     [movement setUserPhoto:9];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(1.75f, -1.5f)];
+    [movement setPointToLastPoint];;
+    [movement addPointRelative:GLKVector2Make(1.75f, -1.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(1.0f, -0.5f) beginningAt:0.0f withDelay:0.5f];
+    [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
 
     [movement setUserPhoto:10];
-    [movement setWalkPointToLastPoint];
-    [movement addWalkPointRelative:GLKVector2Make(0.0f, -4.5f)];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(0.0f, -4.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-5.0f, -1.4f) beginningAt:0.0f withDelay:0.6f];
+    [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
 
-    // Forward walk
-    [movement setUserPhoto:0];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, 2.0f) beginningAt:0.0f withDelay:0.0f];
+    [movement setUserPhoto:11];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-2.0f, 1.3f)];
+    [movement addPointRelative:GLKVector2Make(-3.0f, -2.3f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-4.0f, 0.0f) beginningAt:0.0f withDelay:0.0f];
+    [movement setRoomVisibilityOne:false two:false three:false four:true beginningAt:0.0f];
+
+	// Backward walk mode
+    [movement setMovement:MOVEMENT_DIR_BACKWARD];
+    
+    [movement setUserPhoto:10];
+    [movement addPointRelativeToLastPoint:GLKVector2Make(0.0f, 0.0f) ofMovementType:MOVEMENT_DIR_FORWARD];
+    [movement addPointRelative:GLKVector2Make(3.0f, 2.3f)];
+    [movement addPointRelative:GLKVector2Make(2.5f, -0.75f)];
+	[movement lookAtRelativeToStart:GLKVector2Make(-1.0f, 0.0f) beginningAt:0.0f withDelay:0.2f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, -1.0f) beginningAt:0.9f withDelay:0.0f];
+    [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
+
+    [movement setUserPhoto:9];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(0.0f, 1.5f)];
+    [movement addPointRelative:GLKVector2Make(0.0f, 0.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(1.0f, 0.5f) beginningAt:0.0f withDelay:0.5f];
+    [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
+    
+    [movement setUserPhoto:8];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-1.0f, 3.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, 2.0f) beginningAt:0.0f withDelay:0.5f];
+    [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
+    [movement setRoomVisibilityOne:false two:false three:true four:false beginningAt:0.5f];
+
+    [movement setUserPhoto:7];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-5.5f,  0.0f)];
+    [movement addPointRelative:GLKVector2Make(-0.5f, -2.5f)];
+	[movement lookIn:-M_PI * 0.6f beginningAt:0.0f withDelay:0.2f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(2.0f, -0.3f) beginningAt:0.8f withDelay:0.0f];
+    [movement setRoomVisibilityOne:false two:false three:true four:false beginningAt:0.0f];
+
+    [movement setUserPhoto:6];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-2.2f, 1.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(0.0f, -10.0f) beginningAt:0.0f withDelay:0.2f];
+    [movement setRoomVisibilityOne:false two:false three:true four:false beginningAt:0.0f];
+
+    [movement setUserPhoto:5];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-7.0f, 2.3f)];
+	[movement lookIn:M_PI_2 beginningAt:0.0f withDelay:0.5f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, -2.0f) beginningAt:0.5f withDelay:0.0f];
+    [movement setRoomVisibilityOne:false two:true three:true four:false beginningAt:0.0f];
+    [movement setRoomVisibilityOne:false two:true three:false four:false beginningAt:0.8f];
+    
+    [movement setUserPhoto:4];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-2.0f, 0.0f)];
+    [movement addPointRelative:GLKVector2Make( 0.0f, 3.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, 1.5f) beginningAt:0.0f withDelay:0.5f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
+
+    [movement setUserPhoto:3];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(4.0f, 6.0f)];
+    [movement addPointRelative:GLKVector2Make(0.0f, 0.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-3.0f, 0.5f) beginningAt:0.0f withDelay:0.5f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
+
+    [movement setUserPhoto:2];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-1.0f, -1.5f)];
+    [movement addPointRelative:GLKVector2Make(-4.5f,  2.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.5f, 2.5f) beginningAt:0.0f withDelay:0.0f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
 
     [movement setUserPhoto:1];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-0.75f, 1.0f) beginningAt:0.0f withDelay:0.0f];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-2.5f, -5.8f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-1.8f, 1.3f) beginningAt:0.0f withDelay:0.5f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
 
-    [movement setUserPhoto:2];
-	[movement lookAtRelativeToEnd:GLKVector2Make(0.5f, 1.0f) beginningAt:0.0f withDelay:0.25f];
-
-    [movement setUserPhoto:3];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-2.25f, -2.5f) beginningAt:0.0f withDelay:0.5f];
-    [movement showRoom:2 beginningAt:0.3f];
-    [movement hideRoom:0 beginningAt:0.3f];
-
-    [movement setUserPhoto:4];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-1.0f, -0.5f) beginningAt:0.2f withDelay:0.0f];
-
-    [movement setUserPhoto:5];
-	[movement lookAtRelativeToEnd:GLKVector2Make(0.0f, -5.0f) beginningAt:0.0f withDelay:0.4f];
-
-    [movement setUserPhoto:6];
-	[movement lookAtRelativeToStart:GLKVector2Make(8.0f, -2.0f) beginningAt:0.0f withDelay:0.7f];
-	[movement lookAtRelativeToEnd:GLKVector2Make(0.0f, -4.0f) beginningAt:0.5f withDelay:0.0f];
-    [movement hideRoom:1 beginningAt:0.8f];
-
-    [movement setUserPhoto:7];
-	[movement lookAtRelativeToEnd:GLKVector2Make(4.0f, 0.0f) beginningAt:0.0f withDelay:0.7f];
-
-    [movement setUserPhoto:8];
-	[movement lookAtRelativeToEnd:GLKVector2Make(0.5f, 2.0f) beginningAt:0.0f withDelay:0.25f];
-
-    [movement setUserPhoto:9];
-	[movement lookAtRelativeToEnd:GLKVector2Make(1.0f, -0.5f) beginningAt:0.0f withDelay:0.5f];
-    [movement showRoom:3 beginningAt:0.0f];
-
-    [movement setUserPhoto:10];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-5.0f, -1.4f) beginningAt:0.0f withDelay:0.6f];
+    [movement setUserPhoto:0];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(-3.0f, -5.0f)];
+    [movement addPointRelative:GLKVector2Make( 4.0f,  0.0f)];
+	[movement lookAtRelativeToStart:GLKVector2Make(-1.8f, 1.3f) beginningAt:0.0f withDelay:0.0f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-0.7f, 1.5f) beginningAt:0.8f withDelay:0.0f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
 
     // Start
     [movement setAngle:0.0f];

@@ -92,13 +92,15 @@
 }
 
 - (bool) isStaticPhoto {
-	return photoTexture.id == demoteketLogoTexture.id || photoTexture.id == photoLoadingTexture.id;
+	return photoTexture.id == demoteketLogoTexture.id || photoTexture.id == photoLoadingTexture.id || photoTexture.id == trollsAheadLogoTexture.id;
 }
 
 - (void) addPhotoQuads {
+    float actualScale = photoTexture.id == photoLoadingTexture.id ? 1.0f : scale;
+    
     float maxSize = MAX(photoTexture.width, photoTexture.height);
-    float width = scale * (photoTexture.width / maxSize);
-    float height = scale * (photoTexture.height / aspectRatio / maxSize);
+    float width = actualScale * (photoTexture.width / maxSize);
+    float height = actualScale * (photoTexture.height / aspectRatio / maxSize);
     
     photoQuads = [[Quads alloc] init];
     [photoQuads beginWithTexture:photoTexture];

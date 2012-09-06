@@ -118,7 +118,7 @@
 - (void) createExhibition {
     [floorPlan createFloorPlan];
 
-    userPhotos[0] = [floorPlan createUserPhotoInRoom:0 x:2 z: 6 depth:PILLAR_DEPTH scale:1.7f]; // Demoteket logo
+    userPhotos[0] = [floorPlan createUserPhotoInRoom:0 x:2 z:6 depth:PILLAR_DEPTH scale:1.7f]; // Demoteket logo
     [userPhotos[0] definePhotoTexture:demoteketLogoTexture];
 
 	userPhotosCount = 1;
@@ -134,13 +134,22 @@
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:0 z: 3 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:3 z: 2 depth:PILLAR_DEPTH scale:1.2f];
 
+    userPhotos[userPhotosCount] = [floorPlan createUserPhotoInRoom:3 x:6 z:2 depth:0.0f scale:1.0f]; // Trolls Ahead logo
+    [userPhotos[userPhotosCount] definePhotoTexture:trollsAheadLogoTexture];
+	userPhotosCount++;
+    
     [floorPlan createPaths];
     [floorPlan createGeometrics];
     
     [rssFeedParser loadFeed:[NSURL URLWithString:@"http://aagaarddesign.dk/demoteket/?feed=rss2"] successCallback:^{
         [self loadPhotos];
     } errorCallback:^{
-        NSLog(@"Could not load feed!");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ingen netværksforbindelse"
+                                                        message:@"Kunne ikke indlæse billeder fra demotekaarhus.dk"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     }];
 
     NSLog(@"Exhibition initialized!");
