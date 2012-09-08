@@ -43,13 +43,6 @@ enum {
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
 
-- (void) setupGL;
-- (void) tearDownGL;
-
-- (BOOL) loadShaders;
-- (BOOL) compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
-- (BOOL) linkProgram:(GLuint)prog;
-- (BOOL) validateProgram:(GLuint)prog;
 @end
 
 @implementation ViewController
@@ -110,7 +103,7 @@ enum {
     [EAGLContext setCurrentContext:self.context];
     textureLoader = [[GLKTextureLoader alloc] initWithSharegroup:self.context.sharegroup];
     
-    [self loadShaders];
+    [self loadShaders:@"FloorDistortion" index:0];
     
     glkEffectNormal = [[GLKBaseEffect alloc] init];
     glkEffectShader = [[GLKBaseEffect alloc] init];
@@ -126,9 +119,11 @@ enum {
     
     self.effect = nil;
     
-    if (glslProgram) {
-        glDeleteProgram(glslProgram);
-        glslProgram = 0;
+    for (int i = 0; i < 2; i++) {
+	    if (glslProgram[i]) {
+    	    glDeleteProgram(glslProgram[i]);
+        	glslProgram[i] = 0;
+	    }
     }
 }
 
@@ -185,42 +180,32 @@ enum {
 
 #pragma mark -  OpenGL ES 2 shader compilation
 
-- (BOOL)loadShaders {
+- (BOOL)loadShaders:(NSString*)filename index:(int)index {
     GLuint vertShader, fragShader;
     NSString *vertShaderPathname, *fragShaderPathname;
     
-    // Create shader program.
-    glslProgram = glCreateProgram();
+    glslProgram[index] = glCreateProgram();
     
-    // Create and compile vertex shader.
-    vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
+    vertShaderPathname = [[NSBundle mainBundle] pathForResource:filename ofType:@"vsh"];
     if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
         NSLog(@"Failed to compile vertex shader");
         return NO;
     }
     
-    // Create and compile fragment shader.
-    fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh"];
+    fragShaderPathname = [[NSBundle mainBundle] pathForResource:filename ofType:@"fsh"];
     if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
         NSLog(@"Failed to compile fragment shader");
         return NO;
     }
     
-    // Attach vertex shader to program.
-    glAttachShader(glslProgram, vertShader);
+    glAttachShader(glslProgram[index], vertShader);
+    glAttachShader(glslProgram[index], fragShader);
     
-    // Attach fragment shader to program.
-    glAttachShader(glslProgram, fragShader);
+    glBindAttribLocation(glslProgram[index], ATTRIB_VERTEX, "position");
+    glBindAttribLocation(glslProgram[index], GLKVertexAttribTexCoord0, "texcoord0");
     
-    // Bind attribute locations.
-    // This needs to be done prior to linking.
-    glBindAttribLocation(glslProgram, ATTRIB_VERTEX, "position");
-    glBindAttribLocation(glslProgram, GLKVertexAttribTexCoord0, "texcoord0");
-    
-    // Link program.
-    if (![self linkProgram:glslProgram]) {
-        NSLog(@"Failed to link program: %d", glslProgram);
-        
+    if (![self linkProgram:glslProgram[index]]) {
+        NSLog(@"Failed to link program: %d", glslProgram[index]);
         if (vertShader) {
             glDeleteShader(vertShader);
             vertShader = 0;
@@ -230,28 +215,26 @@ enum {
             fragShader = 0;
         }
         if (glslProgram) {
-            glDeleteProgram(glslProgram);
-            glslProgram = 0;
+            glDeleteProgram(glslProgram[index]);
+            glslProgram[index] = 0;
         }
         
         return NO;
     }
     
-    // Get uniform locations.
-    uniformModelViewProjectionMatrix = glGetUniformLocation(glslProgram, "modelViewProjectionMatrix");
-    uniformSampler1 = glGetUniformLocation(glslProgram, "texture0");
-    uniformSampler2 = glGetUniformLocation(glslProgram, "texture1");
-    uniformScreenSizeInv = glGetUniformLocation(glslProgram, "screenSizeInv");
-    uniformOffscreenSizeInv = glGetUniformLocation(glslProgram, "offscreenSizeInv");
-    uniformRefractionConstant = glGetUniformLocation(glslProgram, "refractionConstant");
+    uniformModelViewProjectionMatrix = glGetUniformLocation(glslProgram[index], "modelViewProjectionMatrix");
+    uniformSampler1 = glGetUniformLocation(glslProgram[index], "texture0");
+    uniformSampler2 = glGetUniformLocation(glslProgram[index], "texture1");
+    uniformScreenSizeInv = glGetUniformLocation(glslProgram[index], "screenSizeInv");
+    uniformOffscreenSizeInv = glGetUniformLocation(glslProgram[index], "offscreenSizeInv");
+    uniformRefractionConstant = glGetUniformLocation(glslProgram[index], "refractionConstant");
     
-    // Release vertex and fragment shaders.
     if (vertShader) {
-        glDetachShader(glslProgram, vertShader);
+        glDetachShader(glslProgram[index], vertShader);
         glDeleteShader(vertShader);
     }
     if (fragShader) {
-        glDetachShader(glslProgram, fragShader);
+        glDetachShader(glslProgram[index], fragShader);
         glDeleteShader(fragShader);
     }
     

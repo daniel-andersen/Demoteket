@@ -238,7 +238,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     x2 += ROOM_OFFSET_X[roomNumber];
     z2 += ROOM_OFFSET_Z[roomNumber];
     [floor addQuadHorizontalX1:x1 z1:z1 x2:x2 z2:z2 y:0.0f];
-    [floor refineTexCoordsX1:0.0f y1:0.0f x2:(30.0f / (x2 - x1)) * 55.0f y2:(30.0f / (z2 - z1)) * 55.0f];
+    [floor refineTexCoordsX1:0.0f y1:0.0f x2:(30.0f / (x2 - x1)) * 15.0f y2:(30.0f / (z2 - z1)) * 15.0f];
 }
 
 - (float) calculateWallAngleAtX:(int)x z:(int)z {
@@ -498,7 +498,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
 }
 
 - (void) renderFloor {
-    currentShaderProgram = glslProgram;
+    currentShaderProgram = glslProgram[0];
     
     [floor render];
     

@@ -46,9 +46,9 @@ void main()
     
     float refraction = min((gl_FragCoord.y * refractionConstant) + (1.0 - texture2D(texture0, v_Coordinates).b) * 0.5, 1.0);
     vec4 floorColor = vec4(0.1, 0.09, 0.075, 1.0);
-
+    
     float a = min(texture2D(texture0, v_Coordinates).b + 0.15, 1.0);
-
+    
     vec4 color = (texture2D(texture1, tex2) + texture2D(texture1, tex3) + texture2D(texture1, tex4) + texture2D(texture1, tex5) + texture2D(texture1, tex1)) * 0.16;
 	gl_FragColor = (refraction * color) + ((1.0 - refraction) * floorColor);
 }

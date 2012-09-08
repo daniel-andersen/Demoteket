@@ -113,10 +113,6 @@ float t = 0.0f;
 
     [movement setRoomVisibilityCallback:^(int type, int roomIndex) {
         rooms[roomIndex].visible = type == ROOM_VISIBILITY_TYPE_SHOW;
-        NSLog(@"----");
-        for (int i = 0; i < ROOM_COUNT; i++) {
-            NSLog(@"%i, %i", i, (int) rooms[i].visible);
-        }
     }];
     
     [movement addUserPhoto:userPhotos[0]];

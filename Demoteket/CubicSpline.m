@@ -83,7 +83,6 @@
 }
 
 - (void) recalculateSpline {
-    NSLog(@"Calculating spline...");
     [self calculateSpline:splinesX];
     [self calculateSpline:splinesY];
 }

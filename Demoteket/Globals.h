@@ -60,7 +60,7 @@ float screenWidthNoScale;
 float screenHeightNoScale;
 float aspectRatio;
 
-GLuint glslProgram;
+GLuint glslProgram[2];
 GLuint uniformModelViewProjectionMatrix;
 GLuint uniformSampler1;
 GLuint uniformSampler2;
