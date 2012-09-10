@@ -38,6 +38,7 @@
 
 #define ANGLE_POINTS_MAX_COUNT 16
 #define ANGLE_TRANSITION_SPEED 0.006f
+#define ANGLE_TOUR_LOOK_AT_NEXT_PHOTO_PCT 0.4f
 
 #define ANGLE_TYPE_LOOK_AT 1
 #define ANGLE_TYPE_LOOK_IN 2
@@ -79,7 +80,7 @@ typedef struct {
     GLKVector2 velocity;
 
     AnglePoint anglePoints[2][USER_PHOTOS_MAX_COUNT][ANGLE_POINTS_MAX_COUNT];
-    AnglePoint oldDestAnglePoint;
+    AnglePoint oldDestAnglePoint[2];
     int anglePointCount[2][USER_PHOTOS_MAX_COUNT];
     int anglePointIndex;
     
@@ -89,7 +90,8 @@ typedef struct {
     void (^roomVisibilityCallbackHandler)(int, int);
     
 	float angle;
-    float angleTransition;
+    float angleTransition[2];
+    bool tourAngleUpdated;
     
     bool paused;
     int movementType;

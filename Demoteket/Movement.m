@@ -42,9 +42,10 @@
     paused = false;
 
     angle = 0.0f;
-    angleTransition = 0.0f;
-    oldDestAnglePoint.lookIn = 0.0f;
-    oldDestAnglePoint.type = ANGLE_TYPE_LOOK_IN;
+    angleTransition[1] = 1.0f;
+    angleTransition[0] = 0.0f;
+    oldDestAnglePoint[0].lookIn = 0.0f;
+    oldDestAnglePoint[0].type = ANGLE_TYPE_LOOK_IN;
 
     userPhotosCount = 0;
     
@@ -72,7 +73,7 @@
 - (void) setPositionToFirstPoint {
     [self setMovement:MOVEMENT_TYPE_FORWARD];
     splineOffset = 0.0f;
-    userPhotoIndex = 7;
+    userPhotoIndex = 0;
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
     position = [self getTargetPosition];
@@ -177,21 +178,25 @@
 
 - (void) startTour {
     tourMode = true;
+    [self backupAngleLookIn];
+    tourAngleUpdated = true;
 }
 
 - (void) stopTour {
     tourMode = false;
+    [self backupAngleLookIn];
 }
 
 - (void) resume {
     paused = false;
-    oldDestAnglePoint.type = ANGLE_TYPE_LOOK_IN;
-    oldDestAnglePoint.lookIn = angle;
-    angleTransition = 0.0f;
+    if (![self isOnTour]) {
+        [self backupAngleLookIn];
+        anglePointIndex = 0;
+    } else {
+        tourAngleUpdated = false;
+    }
     splineOffset = 0.0f;
-    userPhotoIndex = movementType == MOVEMENT_TYPE_FORWARD ? userPhotoIndex + 1 : userPhotoIndex - 1;
-    userPhotoIndex = (userPhotoIndex + userPhotosCount) % userPhotosCount;
-    anglePointIndex = 0;
+    userPhotoIndex = ((movementType == MOVEMENT_TYPE_FORWARD ? userPhotoIndex + 1 : userPhotoIndex - 1) + userPhotosCount) % userPhotosCount;
     roomVisibilityIndex = 0;
     [[self getSplines] setFirstPoint:position];
     [[self getSplines] recalculateSpline];
@@ -243,7 +248,7 @@
     if ([self isOnTour]) {
         return;
     }
-    if (angleTransition >= anglePoints[movementType][userPhotoIndex][anglePointIndex].continueDelay) {
+    if (angleTransition[0] >= [self getTargetAnglePoint].continueDelay) {
         return;
     }
     float speed = GLKVector2Length(velocity);
@@ -254,9 +259,16 @@
 }
 
 - (void) updateAngle {
-	angle = [self calculateAngleTransition:angleTransition source:[self calculateAngle:oldDestAnglePoint] dest:[self calculateAngle:anglePoints[movementType][userPhotoIndex][anglePointIndex]]];
-
-    angleTransition = MIN(angleTransition + ANGLE_TRANSITION_SPEED, 1.0f);
+    if ([self isOnTour]) {
+	    bool lookAtNextPhoto = splineOffset > [[self getSplines] getEndOffset] * ANGLE_TOUR_LOOK_AT_NEXT_PHOTO_PCT;
+        if (lookAtNextPhoto && !tourAngleUpdated) {
+            [self backupAngle];
+        }
+    }
+	float oldAngleTransition = [self calculateAngleTransition:angleTransition[1] source:[self calculateAngle:oldDestAnglePoint[1]] dest:[self calculateAngle:oldDestAnglePoint[0]]];
+	angle = [self calculateAngleTransition:angleTransition[0] source:oldAngleTransition dest:[self calculateAngle:[self getTargetAnglePoint]]];
+    angleTransition[0] = MIN(angleTransition[0] + ANGLE_TRANSITION_SPEED, 1.0f);
+    angleTransition[1] = MIN(angleTransition[1] + ANGLE_TRANSITION_SPEED, 1.0f);
 }
 
 - (float) calculateAngleTransition:(float)t source:(float)source dest:(float)dest {
@@ -283,6 +295,27 @@
     }
 }
 
+- (void) backupAngle {
+    oldDestAnglePoint[1] = oldDestAnglePoint[0];
+    angleTransition[1] = angleTransition[0];
+    if ([self isOnTour]) {
+	    oldDestAnglePoint[0] = anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex] - 1];
+	    angleTransition[0] = 0.0f;
+	    tourAngleUpdated = true;
+    } else {
+        oldDestAnglePoint[0] = anglePoints[movementType][userPhotoIndex][anglePointIndex];
+        angleTransition[0] = 0.0f;
+    }
+}
+
+- (void) backupAngleLookIn {
+    oldDestAnglePoint[1] = oldDestAnglePoint[0];
+    angleTransition[1] = angleTransition[0];
+    oldDestAnglePoint[0].type = ANGLE_TYPE_LOOK_IN;
+    oldDestAnglePoint[0].lookIn = angle;
+    angleTransition[0] = 0.0f;
+}
+
 - (void) updatePath {
     if (splineOffset >= [[self getSplines] getEndOffset]) {
         return;
@@ -304,17 +337,27 @@
         }
     };
     if ([self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) {
-        if (![self isOnTour]) {
+        if (![self isOnTour] && userPhotos[userPhotoIndex].photoTexture.id != trollsAheadLogoTexture.id) {
 		    paused = true;
         } else {
 	        [self resume];
         }
         return;
     }
-    if (anglePointIndex < anglePointCount[movementType][userPhotoIndex] - 1 && splineOffset > anglePoints[movementType][userPhotoIndex][anglePointIndex + 1].splineOffset) {
-        oldDestAnglePoint = anglePoints[movementType][userPhotoIndex][anglePointIndex];
-        angleTransition = 0.0f;
+    if (![self isOnTour] && anglePointIndex < anglePointCount[movementType][userPhotoIndex] - 1 && splineOffset > anglePoints[movementType][userPhotoIndex][anglePointIndex + 1].splineOffset) {
+        [self backupAngle];
         anglePointIndex = MIN(anglePointIndex + 1, anglePointCount[movementType][userPhotoIndex] - 1);
+    }
+}
+
+- (AnglePoint) getTargetAnglePoint {
+    if ([self isOnTour]) {
+        bool lookAtNextPhoto = splineOffset > [[self getSplines] getEndOffset] * ANGLE_TOUR_LOOK_AT_NEXT_PHOTO_PCT;
+        int index = lookAtNextPhoto ? (userPhotoIndex + 1) % userPhotosCount : userPhotoIndex;
+        int count = anglePointCount[movementType][index];
+        return anglePoints[movementType][index][count - 1];
+    } else {
+	    return anglePoints[movementType][userPhotoIndex][anglePointIndex];
     }
 }
 

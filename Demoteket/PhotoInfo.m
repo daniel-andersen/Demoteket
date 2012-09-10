@@ -97,6 +97,10 @@
 	return photoTexture.id == demoteketLogoTexture.id || photoTexture.id == photoLoadingTexture.id || photoTexture.id == trollsAheadLogoTexture.id;
 }
 
+- (bool) isStaticButNotLoadingPhoto {
+	return [self isStaticPhoto] && photoTexture.id != photoLoadingTexture.id;
+}
+
 - (void) addPhotoQuads {
     float actualScale = photoTexture.id == photoLoadingTexture.id ? 1.0f : scale;
     

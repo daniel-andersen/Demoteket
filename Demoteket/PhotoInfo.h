@@ -72,6 +72,9 @@
 - (bool) hasBorder;
 - (bool) isClickable;
 
+- (bool) isStaticPhoto;
+- (bool) isStaticButNotLoadingPhoto;
+
 - (void) createTextTexture;
 - (void) releaseTextTexture;
 

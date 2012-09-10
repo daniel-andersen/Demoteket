@@ -128,15 +128,16 @@
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:2 z: 3 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:4 z: 7 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:2 z:11 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 3 depth:PILLAR_DEPTH scale:1.2f];
+
+    userPhotos[userPhotosCount] = [floorPlan createUserPhotoInRoom:2 x:3 z:3 depth:PILLAR_DEPTH scale:1.2f]; // Trolls Ahead logo
+    [userPhotos[userPhotosCount] definePhotoTexture:trollsAheadLogoTexture];
+	userPhotosCount++;
+
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:0 z: 3 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 6 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:3 z: 2 depth:PILLAR_DEPTH scale:1.2f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:4 z: 4 depth:PILLAR_DEPTH scale:1.2f];
-
-    userPhotos[userPhotosCount] = [floorPlan createUserPhotoInRoom:3 x:9 z:2 depth:0.0f scale:1.0f]; // Trolls Ahead logo
-    [userPhotos[userPhotosCount] definePhotoTexture:trollsAheadLogoTexture];
-	userPhotosCount++;
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:9 z:2 depth:0.0f scale:1.0f];
 
     [floorPlan createPaths];
     [floorPlan createGeometrics];
@@ -156,11 +157,16 @@
 }
 
 - (void) loadPhotos {
+    int idx = 0;
     for (int i = 0; i < MIN([rssFeedParser photoCount], 10); i++) {
-        [userPhotos[i + 1] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
-        userPhotos[i + 1].title = [rssFeedParser getTitle:i];
-        userPhotos[i + 1].description = [rssFeedParser getDescription:i];
-        userPhotos[i + 1].link = [rssFeedParser getLink:i];
+        while ([userPhotos[idx] isStaticButNotLoadingPhoto]) {
+            idx++;
+        }
+        [userPhotos[idx] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
+        userPhotos[idx].title = [rssFeedParser getTitle:i];
+        userPhotos[idx].description = [rssFeedParser getDescription:i];
+        userPhotos[idx].link = [rssFeedParser getLink:i];
+        idx++;
     }
 }
 
