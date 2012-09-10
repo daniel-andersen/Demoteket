@@ -42,10 +42,12 @@
     paused = false;
 
     angle = 0.0f;
-    angleTransition[1] = 1.0f;
     angleTransition[0] = 0.0f;
     oldDestAnglePoint[0].lookIn = 0.0f;
     oldDestAnglePoint[0].type = ANGLE_TYPE_LOOK_IN;
+    angleTransition[1] = 1.0f;
+    oldDestAnglePoint[1].lookIn = 0.0f;
+    oldDestAnglePoint[1].type = ANGLE_TYPE_LOOK_IN;
 
     userPhotosCount = 0;
     
@@ -183,8 +185,8 @@
 }
 
 - (void) stopTour {
+    [self backupAngleStopTour];
     tourMode = false;
-    [self backupAngleLookIn];
 }
 
 - (void) resume {
@@ -313,6 +315,13 @@
     angleTransition[1] = angleTransition[0];
     oldDestAnglePoint[0].type = ANGLE_TYPE_LOOK_IN;
     oldDestAnglePoint[0].lookIn = angle;
+    angleTransition[0] = 0.0f;
+}
+
+- (void) backupAngleStopTour {
+    oldDestAnglePoint[1] = oldDestAnglePoint[0];
+    angleTransition[1] = angleTransition[0];
+    oldDestAnglePoint[0] = [self getTargetAnglePoint];
     angleTransition[0] = 0.0f;
 }
 
