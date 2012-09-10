@@ -142,7 +142,7 @@
     [floorPlan createPaths];
     [floorPlan createGeometrics];
     
-    [rssFeedParser loadFeed:[NSURL URLWithString:@"http://aagaarddesign.dk/demoteket/?feed=rss2"] successCallback:^{
+    [rssFeedParser loadFeed:[NSURL URLWithString:@"http://www.demotekaarhus.dk/?feed=rss2"] successCallback:^{
         [self loadPhotos];
     } errorCallback:^{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ingen netværksforbindelse"

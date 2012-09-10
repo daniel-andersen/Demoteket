@@ -24,6 +24,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "RssFeedParser.h"
+#import "NSString+HTML.h"
 
 @implementation RssFeedParser
 
@@ -82,10 +83,10 @@
             continue;
         }
         NSString* capture = [feed substringWithRange:[result rangeAtIndex:1]];
-        images[count] = [self findImage:count fromText:capture];
-        titles[count] = [self findTitle:count fromText:capture];
-        descriptions[count] = [self findDescription:count fromText:capture];
-        links[count] = [self findLink:count fromText:capture];
+        images[count] = [[self findImage:count fromText:capture] stringByDecodingHTMLEntities];
+        titles[count] = [[self findTitle:count fromText:capture] stringByDecodingHTMLEntities];
+        descriptions[count] = [[self findDescription:count fromText:capture] stringByDecodingHTMLEntities];
+        links[count] = [[self findLink:count fromText:capture] stringByDecodingHTMLEntities];
         if ([self isPhoto:images[count]]) {
 	        count++;
         }

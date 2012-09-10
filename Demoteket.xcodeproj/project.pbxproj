@@ -26,6 +26,8 @@
 		6512B88915FBBDCA00921FD2 /* FloorDistortion.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6512B88115FBBD6300921FD2 /* FloorDistortion.fsh */; };
 		6512B88A15FBBDCA00921FD2 /* FloorDistortion.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6512B88215FBBD6300921FD2 /* FloorDistortion.vsh */; };
 		652CF34015D98F5A00F4F07F /* photo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 652CF33F15D98F5A00F4F07F /* photo1.png */; };
+		653444C715FE7C0C001BCB68 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 653444C615FE7C0C001BCB68 /* NSString+HTML.m */; };
+		653444CB15FE7F45001BCB68 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 653444CA15FE7F45001BCB68 /* GTMNSString+HTML.m */; };
 		6541B5BC15F75BD800A75786 /* RssFeedParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6541B5BB15F75BD800A75786 /* RssFeedParser.m */; };
 		6544839E15E618CF008132FC /* demoteket_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6544839D15E618CF008132FC /* demoteket_logo.png */; };
 		654942C715E265380029C1E2 /* Movement.m in Sources */ = {isa = PBXBuildFile; fileRef = 654942C615E265380029C1E2 /* Movement.m */; };
@@ -79,6 +81,10 @@
 		6512B88115FBBD6300921FD2 /* FloorDistortion.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FloorDistortion.fsh; sourceTree = "<group>"; };
 		6512B88215FBBD6300921FD2 /* FloorDistortion.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FloorDistortion.vsh; sourceTree = "<group>"; };
 		652CF33F15D98F5A00F4F07F /* photo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo1.png; sourceTree = "<group>"; };
+		653444C515FE7C0B001BCB68 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
+		653444C615FE7C0C001BCB68 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
+		653444C915FE7C65001BCB68 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		653444CA15FE7F45001BCB68 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		6541B5BA15F75BD700A75786 /* RssFeedParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RssFeedParser.h; sourceTree = "<group>"; };
 		6541B5BB15F75BD800A75786 /* RssFeedParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssFeedParser.m; sourceTree = "<group>"; };
 		6544839D15E618CF008132FC /* demoteket_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demoteket_logo.png; sourceTree = "<group>"; };
@@ -190,6 +196,10 @@
 				65ED6BFC15F5D9E2008B71DE /* CubicSpline.m */,
 				6541B5BA15F75BD700A75786 /* RssFeedParser.h */,
 				6541B5BB15F75BD800A75786 /* RssFeedParser.m */,
+				653444C515FE7C0B001BCB68 /* NSString+HTML.h */,
+				653444C615FE7C0C001BCB68 /* NSString+HTML.m */,
+				653444C915FE7C65001BCB68 /* GTMNSString+HTML.h */,
+				653444CA15FE7F45001BCB68 /* GTMNSString+HTML.m */,
 			);
 			path = Demoteket;
 			sourceTree = "<group>";
@@ -333,6 +343,8 @@
 				65880BEE15E92BD90055F33D /* PhotoInfo.m in Sources */,
 				65ED6BFD15F5D9E2008B71DE /* CubicSpline.m in Sources */,
 				6541B5BC15F75BD800A75786 /* RssFeedParser.m in Sources */,
+				653444C715FE7C0C001BCB68 /* NSString+HTML.m in Sources */,
+				653444CB15FE7F45001BCB68 /* GTMNSString+HTML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
