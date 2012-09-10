@@ -47,6 +47,7 @@
     Quads *startTourButton;
     Quads *stopTourButton;
     Quads *turnAroundPhotoButton;
+    Quads *blogButton;
 
     Quads *screenOverlay;
     Quads *photoOverlay;

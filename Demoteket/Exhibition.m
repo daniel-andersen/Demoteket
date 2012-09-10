@@ -91,6 +91,15 @@
                        			  x4:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [turnAroundPhotoButton end];
 
+    blogButton = [[Quads alloc] init];
+    [blogButton beginWithTexture:blogButtonTexture];
+    [blogButton setIsOrthoProjection:true];
+    [blogButton addQuadX1:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                       x2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                       x3:NAVIGATION_BUTTON_BORDER y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                       x4:NAVIGATION_BUTTON_BORDER y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
+    [blogButton end];
+
     screenOverlay = [[Quads alloc] init];
     [screenOverlay beginWithColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
     [screenOverlay setIsOrthoProjection:true];
@@ -182,7 +191,9 @@
 	        [self clickPhoto];
 	    }
     } else {
-	    if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+        if (mode == EXHIBITION_MODE_VIEWING_TEXT && [self clickedInRectX:p.x y:p.y rx:NAVIGATION_BUTTON_BORDER ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
+            [self showBlog];
+        } else if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE width:NAVIGATION_BUTTON_SIZE height:NAVIGATION_BUTTON_SIZE]) {
             [self turnAroundPhoto];
 		} else {
 	        [self clickPhoto];
@@ -227,6 +238,10 @@
 
 - (void) hidePhoto {
     mode = EXHIBITION_MODE_NORMAL;
+}
+
+- (void) showBlog {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:userPhoto.link]];
 }
 
 - (void) update {
@@ -275,6 +290,9 @@
     if (photoFadeAnimation > 0.0f) {
         if (photoFadeAnimation == 1.0f) {
             [turnAroundPhotoButton render];
+            if ((mode == EXHIBITION_MODE_VIEWING_TEXT && photoAnimation >= 1.0f) || (mode == EXHIBITION_MODE_VIEWING_PHOTO && photoAnimation <= 1.0f)) {
+                [blogButton render];
+            }
         }
     } else {
         if ([floorPlan isBackButtonVisible]) {

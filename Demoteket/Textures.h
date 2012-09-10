@@ -33,11 +33,6 @@
 
 #define PHOTO_INDEX_DEMOTEKET_LOGO 5
 
-#define TEXT_BORDER_LEFT 10
-#define TEXT_BORDER_TOP 10
-#define TEXT_BORDER_RIGHT 50
-#define TEXT_BORDER_BOTTOM 10
-
 #define PHOTO_WHITE_BORDER_PCT 0.05f
 #define PHOTO_BLACK_BORDER_PCT 0.02f
 
@@ -78,6 +73,7 @@ extern Texture nextButtonTexture;
 extern Texture prevButtonTexture;
 extern Texture tourButtonTexture;
 extern Texture turnAroundPhotoButtonTexture;
+extern Texture blogButtonTexture;
 
 extern Texture photoLoadingTexture;
 extern Texture photoBackgroundTexture;

@@ -48,6 +48,7 @@ Texture nextButtonTexture;
 Texture prevButtonTexture;
 Texture tourButtonTexture;
 Texture turnAroundPhotoButtonTexture;
+Texture blogButtonTexture;
 
 Texture photoLoadingTexture;
 Texture photoBackgroundTexture;
@@ -121,6 +122,7 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     prevButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); textureSetTexCoords(&prevButtonTexture, 1.0f, 0.0f, 0.0f, 1.0f);
     tourButtonTexture = [self loadTexture:@"tour_button.png"]; textureSetBlend(&tourButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     turnAroundPhotoButtonTexture = [self loadTexture:@"turn_around_button.png"]; textureSetBlend(&turnAroundPhotoButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    blogButtonTexture = [self loadTexture:@"blog_button.png"]; textureSetBlend(&blogButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     wallTexture[0] = [self loadTexture:@"wall1.png"];
     wallTexture[1] = [self loadTexture:@"wall2.png"];
@@ -211,9 +213,9 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 }
 
 - (void) textToTexture:(NSString*)text width:(int)width height:(int)height color:(UIColor*)color backgroundColor:(UIColor*)bgColor texture:(Texture*)texture {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(TEXT_BORDER_LEFT, TEXT_BORDER_TOP, width - (TEXT_BORDER_RIGHT + TEXT_BORDER_LEFT), height - (TEXT_BORDER_BOTTOM + TEXT_BORDER_TOP))];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     label.text = text;
-    label.font = [UIFont fontWithName:@"Times New Roman" size:18.0f];
+    label.font = [UIFont fontWithName:@"Times New Roman" size:24.0f];
     label.textColor = color;
     label.backgroundColor = bgColor;
     label.numberOfLines = 0;
@@ -221,7 +223,7 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     dispatch_async(dispatch_get_main_queue(), ^{
         UIGraphicsBeginImageContext(label.bounds.size);
         
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), TEXT_BORDER_LEFT, TEXT_BORDER_TOP);
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, 0);
         CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, 1.0);
         
         [label.layer renderInContext:UIGraphicsGetCurrentContext()];
