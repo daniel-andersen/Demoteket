@@ -135,8 +135,8 @@ float t = 0.0f;
     [movement addPointAbsolute:GLKVector2Make(-4.0f, -17.0f)];
     [movement addPointRelative:GLKVector2Make(1.0f, 3.0f)];
 	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, 2.0f) beginningAt:0.0f withDelay:0.0f];
-    [movement setRoomVisibilityOne:true two:true three:false four:true beginningAt:0.7f];
-    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.0f];
+    [movement setRoomVisibilityOne:true two:true three:false four:true beginningAt:0.0f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.7f];
     
     [movement setUserPhoto:1];
     [movement setPointToLastPoint];
@@ -194,7 +194,7 @@ float t = 0.0f;
     [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
 
     [movement setUserPhoto:9];
-    [movement setPointToLastPoint];;
+    [movement setPointToLastPoint];
     [movement addPointRelative:GLKVector2Make(-3.5f, -0.5f)];
     [movement addPointRelative:GLKVector2Make(-1.8f, -3.0f)];
 	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, 0.5f) beginningAt:0.0f withDelay:0.1f];
@@ -204,13 +204,14 @@ float t = 0.0f;
     [movement setPointToLastPoint];
     [movement addPointRelative:GLKVector2Make(-3.5f, 0.0f)];
 	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, -1.5f) beginningAt:0.0f withDelay:0.1f];
-    [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
+    [movement setRoomVisibilityOne:false two:false three:false four:true beginningAt:0.0f];
 
     [movement setUserPhoto:11];
     [movement setPointToLastPoint];
     [movement addPointRelative:GLKVector2Make(-6.5f, -1.0f)];
 	[movement lookAtRelativeToEnd:GLKVector2Make(-1.0f, 0.75f) beginningAt:0.0f withDelay:0.3f];
-    [movement setRoomVisibilityOne:true two:false three:false four:true beginningAt:0.5f];
+    [movement setRoomVisibilityOne:true two:false three:false four:true beginningAt:0.0f];
+    [movement setRoomVisibilityOne:true two:true three:false four:true beginningAt:0.9f];
 
 	// Backward walk mode
     [movement setMovement:MOVEMENT_TYPE_BACKWARD];
