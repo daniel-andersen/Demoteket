@@ -131,13 +131,13 @@
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 3 depth:PILLAR_DEPTH scale:1.2f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:0 z: 3 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 6 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:4 z: 2 depth:PILLAR_DEPTH scale:1.2f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:6 z: 2 depth:PILLAR_DEPTH scale:1.2f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:3 z: 2 depth:PILLAR_DEPTH scale:1.2f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:4 z: 4 depth:PILLAR_DEPTH scale:1.2f];
 
-    userPhotos[userPhotosCount] = [floorPlan createUserPhotoInRoom:3 x:6 z:2 depth:0.0f scale:1.0f]; // Trolls Ahead logo
+    userPhotos[userPhotosCount] = [floorPlan createUserPhotoInRoom:3 x:9 z:2 depth:0.0f scale:1.0f]; // Trolls Ahead logo
     [userPhotos[userPhotosCount] definePhotoTexture:trollsAheadLogoTexture];
 	userPhotosCount++;
-    
+
     [floorPlan createPaths];
     [floorPlan createGeometrics];
     

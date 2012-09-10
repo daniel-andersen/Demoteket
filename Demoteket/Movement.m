@@ -72,7 +72,7 @@
 - (void) setPositionToFirstPoint {
     [self setMovement:MOVEMENT_TYPE_FORWARD];
     splineOffset = 0.0f;
-    userPhotoIndex = 8;
+    userPhotoIndex = 7;
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
     position = [self getTargetPosition];
@@ -190,7 +190,7 @@
     angleTransition = 0.0f;
     splineOffset = 0.0f;
     userPhotoIndex = movementType == MOVEMENT_TYPE_FORWARD ? userPhotoIndex + 1 : userPhotoIndex - 1;
-    userPhotoIndex = MAX(MIN(userPhotoIndex, photosCount - 1), 0);
+    userPhotoIndex = (userPhotoIndex + userPhotosCount) % userPhotosCount;
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
     [[self getSplines] setFirstPoint:position];
@@ -355,11 +355,11 @@
 }
 
 - (bool) canGoBackwards {
-    return paused && userPhotoIndex > 0;
+    return paused;
 }
 
 - (bool) canGoForwards {
-    return paused && userPhotoIndex < userPhotosCount - 1;
+    return paused;
 }
 
 - (void) setRoomVisibilityCallback:(void(^)(int, int))callback {

@@ -31,7 +31,7 @@
 @synthesize visible;
 
 const float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4, BLOCK_SIZE * -9, BLOCK_SIZE * -4};
-const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE * 10};
+const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE * 11};
 
 - (id) initWithNumber:(int)number {
     if (self = [super init]) {
@@ -62,7 +62,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
-        [self addStrip:@"+ +-+"];
+        [self addStrip:@"++  +"];
 	}
     if (number == 1) {
         [self addStrip:@"+---+"];
@@ -88,11 +88,11 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addStrip:@"+----+"];
     }
     if (number == 3) {
-        [self addStrip:@"+----------+d+"];
-        [self addStrip:@"+            |"];
-        [self addStrip:@"    D        |"];
-        [self addStrip:@"+        K   |"];
-        [self addStrip:@"+------------+"];
+        [self addStrip:@"+---++dd++"];
+        [self addStrip:@"+   ||   |"];
+        [self addStrip:@"   D++   |"];
+        [self addStrip:@"+        |"];
+        [self addStrip:@"+--------+"];
     }
 }
 
@@ -140,7 +140,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addLightType:2 x:5.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
     }
     if (roomNumber == 3) {
-        [self addFloorQuadX1:0.0f z1:0.0f x2:14.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
+        [self addFloorQuadX1:0.0f z1:0.0f x2:10.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
         [self addLightType:0 x:4.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
         [self addLightType:0 x:1.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
         [self addLightType:1 x:4.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
@@ -266,7 +266,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
 - (PhotoInfo*) hasUserPhotoAtX:(int)x z:(int)z {
     for (int i = 0; i < userPhotosCount; i++) {
         if (userPhotos[i] != NULL) {
-            if (x == (int) userPhotos[i].roomPosition.x && z == (int) userPhotos[i].roomPosition.y) {
+            if (userPhotos[i].roomNumber == roomNumber && x == (int) userPhotos[i].roomPosition.x && z == (int) userPhotos[i].roomPosition.y) {
                 return userPhotos[i];
             }
         }

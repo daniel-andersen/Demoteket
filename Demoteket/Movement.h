@@ -73,7 +73,6 @@ typedef struct {
     float splineOffset;
 
     PhotoInfo *userPhotos[USER_PHOTOS_MAX_COUNT];
-    int photosCount;
     int userPhotoIndex;
     
     GLKVector2 position;

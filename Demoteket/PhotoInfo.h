@@ -37,6 +37,8 @@
     NSString *link;
 
     GLKVector2 roomPosition;
+    int roomNumber;
+    
     GLKVector2 position;
     float angle;
     float scale;
@@ -52,6 +54,7 @@
 }
 
 @property(readwrite) GLKVector2 roomPosition;
+@property(readwrite) int roomNumber;
 
 @property(readwrite) NSString *title;
 @property(readwrite) NSString *author;
@@ -61,7 +64,7 @@
 @property(readwrite) Texture photoTexture;
 @property(readwrite) Texture textTexture;
 
-- (id) initWithPosition:(GLKVector2)p roomPosition:(GLKVector2)roomPos angle:(float)a scale:(float)s;
+- (id) initWithPosition:(GLKVector2)p roomNumber:(int)roomNum roomPosition:(GLKVector2)roomPos angle:(float)a scale:(float)s;
 
 - (void) definePhotoTexture:(Texture)texture;
 - (void) loadPhotoAsynchronously:(NSString*)filename;

@@ -30,6 +30,7 @@
 @implementation PhotoInfo
 
 @synthesize roomPosition;
+@synthesize roomNumber;
 @synthesize title;
 @synthesize author;
 @synthesize description;
@@ -37,9 +38,10 @@
 @synthesize photoTexture;
 @synthesize textTexture;
 
-- (id) initWithPosition:(GLKVector2)p roomPosition:(GLKVector2)roomPos angle:(float)a scale:(float)s {
+- (id) initWithPosition:(GLKVector2)p roomNumber:(int)roomNum roomPosition:(GLKVector2)roomPos angle:(float)a scale:(float)s {
     if (self = [super init]) {
         position = p;
+        roomNumber = roomNum;
         roomPosition = roomPos;
         angle = a;
         scale = s;
