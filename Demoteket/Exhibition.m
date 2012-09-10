@@ -128,11 +128,11 @@
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:2 z: 3 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:4 z: 7 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:2 z:11 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:7 z: 4 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:4 z: 3 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:2 z: 0 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 3 depth:PILLAR_DEPTH scale:1.2f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:0 z: 3 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:3 z: 2 depth:PILLAR_DEPTH scale:1.2f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 6 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:4 z: 2 depth:PILLAR_DEPTH scale:1.2f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:6 z: 2 depth:PILLAR_DEPTH scale:1.2f];
 
     userPhotos[userPhotosCount] = [floorPlan createUserPhotoInRoom:3 x:6 z:2 depth:0.0f scale:1.0f]; // Trolls Ahead logo
     [userPhotos[userPhotosCount] definePhotoTexture:trollsAheadLogoTexture];
@@ -145,7 +145,7 @@
         [self loadPhotos];
     } errorCallback:^{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ingen netværksforbindelse"
-                                                        message:@"Kunne ikke indlæse billeder fra demotekaarhus.dk"
+                                                        message:@"Kunne ikke indlæse billeder fra Demotek Aarhus"
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];

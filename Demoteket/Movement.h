@@ -42,10 +42,8 @@
 #define ANGLE_TYPE_LOOK_AT 1
 #define ANGLE_TYPE_LOOK_IN 2
 
-#define MOVEMENT_DIR_FORWARD        0
-#define MOVEMENT_DIR_BACKWARD       1
-#define MOVEMENT_DIR_FORWARD_TOUR   2
-#define MOVEMENT_DIR_BACKWARDS_TOUR 3
+#define MOVEMENT_TYPE_FORWARD  0
+#define MOVEMENT_TYPE_BACKWARD 1
 
 #define ROOM_VISIBILITY_MAX_COUNT 8
 
@@ -70,7 +68,7 @@ typedef struct {
 @interface Movement : NSObject {
 
 @private
-    CubicSpline *walkSplines[4][USER_PHOTOS_MAX_COUNT];
+    CubicSpline *splines[2][USER_PHOTOS_MAX_COUNT];
 
     float splineOffset;
 
@@ -81,13 +79,13 @@ typedef struct {
     GLKVector2 position;
     GLKVector2 velocity;
 
-    AnglePoint anglePoints[4][USER_PHOTOS_MAX_COUNT][ANGLE_POINTS_MAX_COUNT];
+    AnglePoint anglePoints[2][USER_PHOTOS_MAX_COUNT][ANGLE_POINTS_MAX_COUNT];
     AnglePoint oldDestAnglePoint;
-    int anglePointCount[4][USER_PHOTOS_MAX_COUNT];
+    int anglePointCount[2][USER_PHOTOS_MAX_COUNT];
     int anglePointIndex;
     
-    RoomVisibility roomVisibility[4][USER_PHOTOS_MAX_COUNT][ROOM_VISIBILITY_MAX_COUNT];
-    int roomVisibilityCount[4][USER_PHOTOS_MAX_COUNT];
+    RoomVisibility roomVisibility[2][USER_PHOTOS_MAX_COUNT][ROOM_VISIBILITY_MAX_COUNT];
+    int roomVisibilityCount[2][USER_PHOTOS_MAX_COUNT];
     int roomVisibilityIndex;
     void (^roomVisibilityCallbackHandler)(int, int);
     
@@ -96,6 +94,7 @@ typedef struct {
     
     bool paused;
     int movementType;
+    bool tourMode;
 }
 
 - (void) setAngle:(float)a;
@@ -112,6 +111,7 @@ typedef struct {
 - (void) addPointAbsolute:(GLKVector2)p;
 - (void) addPointRelative:(GLKVector2)p;
 
+- (void) lookAtAbsolute:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
 - (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
 - (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
 - (void) lookIn:(float)a beginningAt:(float)t withDelay:(float)delay;
@@ -121,7 +121,6 @@ typedef struct {
 - (void) move:(float)t;
 
 - (void) setMovement:(int)type;
-
 - (void) startTour;
 - (void) stopTour;
 

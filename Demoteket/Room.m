@@ -30,8 +30,8 @@
 
 @synthesize visible;
 
-const float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4 - WALL_DEPTH, BLOCK_SIZE * -14 - WALL_DEPTH * 2, BLOCK_SIZE * -14 - WALL_DEPTH * 2};
-const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7,                  BLOCK_SIZE *  11 + WALL_DEPTH    };
+const float ROOM_OFFSET_X[] = {0, BLOCK_SIZE * -4, BLOCK_SIZE * -9, BLOCK_SIZE * -4};
+const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE * 10};
 
 - (id) initWithNumber:(int)number {
     if (self = [super init]) {
@@ -62,7 +62,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
-        [self addStrip:@"+---+"];
+        [self addStrip:@"+ +-+"];
 	}
     if (number == 1) {
         [self addStrip:@"+---+"];
@@ -79,18 +79,20 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addStrip:@"+---+"];
 	}
     if (number == 2) {
-        [self addStrip:@"+-----+X+-+"];
-        [self addStrip:@"|     |X|  "];
-        [self addStrip:@"| +-+ +-+ +"];
-        [self addStrip:@"| |X|     |"];
-        [self addStrip:@"+d+X+-----+"];
+        [self addStrip:@"+----+"];
+        [self addStrip:@"|     "];
+        [self addStrip:@"|    +"];
+        [self addStrip:@"|  P |"];
+        [self addStrip:@"|    +"];
+        [self addStrip:@"|    d"];
+        [self addStrip:@"+----+"];
     }
     if (number == 3) {
-        [self addStrip:@"+ +---+"];
-        [self addStrip:@"|     |"];
-        [self addStrip:@"|  I  |"];
-        [self addStrip:@"|     |"];
-        [self addStrip:@"+-----+"];
+        [self addStrip:@"+----------+d+"];
+        [self addStrip:@"+            |"];
+        [self addStrip:@"    D        |"];
+        [self addStrip:@"+        K   |"];
+        [self addStrip:@"+------------+"];
     }
 }
 
@@ -128,7 +130,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addLightType:1 x:4.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
 	}
     if (roomNumber == 2) {
-        [self addFloorQuadX1:0.0f z1:0.0f x2:14.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
+        [self addFloorQuadX1:0.0f z1:0.0f x2:6.0f * BLOCK_SIZE z2:7.0f * BLOCK_SIZE];
         [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
         [self addLightType:0 x:7.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
         [self addLightType:0 x:9.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
@@ -138,7 +140,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
         [self addLightType:2 x:5.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
     }
     if (roomNumber == 3) {
-        [self addFloorQuadX1:0.0f z1:0.0f x2:7.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
+        [self addFloorQuadX1:0.0f z1:0.0f x2:14.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
         [self addLightType:0 x:4.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
         [self addLightType:0 x:1.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
         [self addLightType:1 x:4.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
@@ -356,9 +358,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2,              BLOCK_SIZE *   7
     PhotoInfo *photoInfo = [self hasUserPhotoAtX:gridX z:gridY];
     
     [pillars addQuadVerticalX1:frontX1 y1:0.0f z1:frontZ1 x2:frontX2 y2:ROOM_HEIGHT z2:frontZ2];
-    if (photoInfo != NULL) {
-	    //[self addUserPhoto:photoInfo x:frontX z:frontZ angle:angle scale:[photoInfo hasBorder] ? 1.2f : 1.75f];
-    } else {
+    if (photoInfo == NULL) {
 	    [self addPhotosType:1 x:frontX z:frontZ angle:angle];
     }
 
