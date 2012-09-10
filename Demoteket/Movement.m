@@ -348,6 +348,9 @@
     if ([self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) {
         if (![self isOnTour] && userPhotos[userPhotoIndex].photoTexture.id != trollsAheadLogoTexture.id) {
 		    paused = true;
+        } else if ([self isOnTour] && userPhotoIndex == 0) {
+            [self stopTour];
+		    paused = true;
         } else {
 	        [self resume];
         }
