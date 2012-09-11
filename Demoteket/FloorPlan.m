@@ -260,8 +260,8 @@ float t = 0.0f;
 
     [movement setUserPhoto:0];
     [movement setPointToLastPoint];
-    [movement addPointRelative:GLKVector2Make(-3.5f, -5.0f)];
-    [movement addPointRelative:GLKVector2Make( 1.5f, -2.7f)];
+    [movement addPointRelative:GLKVector2Make(1.5f, -3.0f)];
+    [movement addPointRelative:GLKVector2Make(0.0f, -4.0f)];
     [movement setRoomVisibilityOne:true two:true three:false four:true beginningAt:0.0f];
 
     // Start

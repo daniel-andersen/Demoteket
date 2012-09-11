@@ -75,8 +75,8 @@
 
 - (void) setPositionToFirstPoint {
     [self setMovement:MOVEMENT_TYPE_FORWARD];
-    splineOffset = 0.0f;
-    userPhotoIndex = 8;
+    splineOffset = 2.0f;
+    userPhotoIndex = 0;
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
     position = [self getTargetPosition];
