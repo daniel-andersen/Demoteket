@@ -217,20 +217,31 @@ float t = 0.0f;
 	// Backward walk mode
     [movement setMovement:MOVEMENT_TYPE_BACKWARD];
     
-    [movement setUserPhoto:10];
+    [movement setUserPhoto:11];
     [movement addPointRelativeToLastPoint:GLKVector2Make(0.0f, 0.0f) ofMovementType:MOVEMENT_TYPE_FORWARD];
-    [movement addPointRelative:GLKVector2Make(3.0f, 2.3f)];
-    [movement addPointRelative:GLKVector2Make(2.5f, -0.75f)];
-	[movement lookAtRelativeToStart:GLKVector2Make(-1.0f, 0.0f) beginningAt:0.0f];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, -1.0f) beginningAt:0.9f];
-    [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
+    [movement addPointRelative:GLKVector2Make(0.0f, 4.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, -1.5f) beginningAt:0.0f];
+    [movement setRoomVisibilityOne:true two:true three:false four:true beginningAt:0.0f];
+    [movement setRoomVisibilityOne:true two:false three:false four:true beginningAt:0.8f];
+
+    [movement setUserPhoto:10];
+    [movement setPointToLastPoint];
+    [movement addPointRelative:GLKVector2Make(2.5f, -3.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(1.0f, -0.75f) beginningAt:0.0f];
+    [movement setRoomVisibilityOne:false two:false three:false four:true beginningAt:0.0f];
 
     [movement setUserPhoto:9];
     [movement setPointToLastPoint];
-    [movement addPointRelative:GLKVector2Make( 0.0f, 1.5f)];
-    [movement addPointRelative:GLKVector2Make(-1.0f, 0.0f)];
-	[movement lookAtRelativeToEnd:GLKVector2Make(1.0f, 0.5f) beginningAt:0.8f];
+    [movement addPointRelative:GLKVector2Make(3.0f, -1.5f)];
+    [movement addPointRelative:GLKVector2Make(3.0f,  0.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(2.0f, 2.0f) beginningAt:0.0f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, 2.0f) beginningAt:0.5f];
     [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
+
+    
+    
+    
+    
     
     [movement setUserPhoto:8];
     [movement setPointToLastPoint];
