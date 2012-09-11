@@ -70,7 +70,7 @@ extern Texture floorDistortionTexture;
 extern Texture lightTexture[LIGHT_TYPE_COUNT];
 
 extern Texture nextButtonTexture;
-extern Texture prevButtonTexture;
+extern Texture turnAroundButtonTexture;
 extern Texture tourButtonTexture;
 extern Texture turnAroundPhotoButtonTexture;
 extern Texture blogButtonTexture;

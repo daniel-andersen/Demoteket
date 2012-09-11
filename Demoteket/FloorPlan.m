@@ -190,14 +190,14 @@ float t = 0.0f;
     [movement setUserPhoto:8];
     [movement setPointToLastPoint];
     [movement addPointRelative:GLKVector2Make( 1.0f, -1.5f)];
-    [movement addPointRelative:GLKVector2Make(-0.5f, -2.5f)];
+    [movement addPointRelative:GLKVector2Make(-0.5f, -4.0f)];
 	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, -2.0f) beginningAt:0.0f];
     [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
 
     [movement setUserPhoto:9];
     [movement setPointToLastPoint];
-    [movement addPointRelative:GLKVector2Make(-3.5f, -0.5f)];
-    [movement addPointRelative:GLKVector2Make(-1.8f, -3.0f)];
+    [movement addPointRelative:GLKVector2Make(-3.5f,  0.0f)];
+    [movement addPointRelative:GLKVector2Make(-1.8f, -2.0f)];
 	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, 0.5f) beginningAt:0.0f];
     [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
 
@@ -234,40 +234,37 @@ float t = 0.0f;
     [movement setPointToLastPoint];
     [movement addPointRelative:GLKVector2Make(3.0f, -1.5f)];
     [movement addPointRelative:GLKVector2Make(3.0f,  0.0f)];
-	[movement lookAtRelativeToEnd:GLKVector2Make(2.0f, 2.0f) beginningAt:0.0f];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, 2.0f) beginningAt:0.5f];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, 2.0f) beginningAt:0.0f];
     [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
 
-    
-    
-    
-    
-    
     [movement setUserPhoto:8];
     [movement setPointToLastPoint];
-    [movement addPointRelative:GLKVector2Make(-0.5f, 2.5f)];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-0.5f, 2.0f) beginningAt:0.0f];
+    [movement addPointRelative:GLKVector2Make(3.0f, 4.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(2.5f, -4.0f) beginningAt:0.0f];
     [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
 
     [movement setUserPhoto:7];
     [movement setPointToLastPoint];
-    [movement addPointRelative:GLKVector2Make(-7.0f,  0.0f)];
-	[movement lookIn:-M_PI * 0.6f beginningAt:0.0f];
-	[movement lookAtRelativeToEnd:GLKVector2Make(2.0f, -1.0f) beginningAt:0.8f];
+    [movement addPointRelative:GLKVector2Make(2.8f, 1.5f)];
+	[movement lookIn:-M_PI * 0.4f beginningAt:0.0f];
     [movement setRoomVisibilityOne:false two:false three:true four:true beginningAt:0.0f];
-
+    [movement setRoomVisibilityOne:false two:false three:true four:false beginningAt:0.5f];
+    
     [movement setUserPhoto:6];
     [movement setPointToLastPoint];
-    [movement addPointRelative:GLKVector2Make(0.2f, 0.0f)];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-1.0f, -2.0f) beginningAt:0.0f];
-    [movement setRoomVisibilityOne:false two:false three:true four:false beginningAt:0.0f];
+    [movement addPointRelative:GLKVector2Make(1.5f, 4.0f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-3.0f, 3.0f) beginningAt:0.0f];
+    [movement setRoomVisibilityOne:false two:true three:true four:false beginningAt:0.0f];
 
     [movement setUserPhoto:5];
     [movement setPointToLastPoint];
-    [movement addPointRelative:GLKVector2Make(-4.0f, 0.0f)];
-    [movement addPointRelative:GLKVector2Make(-3.0f, 2.0f)];
-	[movement lookAtRelativeToEnd:GLKVector2Make(-1.5f, -1.0f) beginningAt:0.0f];
+    [movement addPointRelative:GLKVector2Make(-6.0f, 0.5f)];
+	[movement lookAtRelativeToEnd:GLKVector2Make(-2.0f, -1.0f) beginningAt:0.0f];
     [movement setRoomVisibilityOne:false two:true three:true four:false beginningAt:0.0f];
+
+    
+    
+    
     
     [movement setUserPhoto:4];
     [movement setPointToLastPoint];
@@ -318,15 +315,13 @@ float t = 0.0f;
 }
 
 - (void) prevPhoto {
-    if ([movement canGoBackwards]) {
-	    [movement setMovement:MOVEMENT_TYPE_BACKWARD];
-	    [movement resume];
+    if ([movement canTurnAround]) {
+	    [movement turnAround];
     }
 }
 
 - (void) nextPhoto {
     if ([movement canGoForwards]) {
-	    [movement setMovement:MOVEMENT_TYPE_FORWARD];
 	    [movement resume];
     }
 }
@@ -409,8 +404,8 @@ float t = 0.0f;
     }
 }
 
-- (bool) isBackButtonVisible {
-    return [movement canGoBackwards];
+- (bool) isTurnAroundButtonVisible {
+    return [movement canTurnAround];
 }
 
 - (bool) isNextButtonVisible {

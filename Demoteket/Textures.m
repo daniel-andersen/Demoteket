@@ -45,7 +45,7 @@ Texture floorDistortionTexture;
 Texture lightTexture[LIGHT_TYPE_COUNT];
 
 Texture nextButtonTexture;
-Texture prevButtonTexture;
+Texture turnAroundButtonTexture;
 Texture tourButtonTexture;
 Texture turnAroundPhotoButtonTexture;
 Texture blogButtonTexture;
@@ -119,7 +119,7 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 
 - (void) load {
     nextButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&nextButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    prevButtonTexture = [self loadTexture:@"next_button.png"]; textureSetBlend(&prevButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); textureSetTexCoords(&prevButtonTexture, 1.0f, 0.0f, 0.0f, 1.0f);
+    turnAroundButtonTexture = [self loadTexture:@"prev_button.png"]; textureSetBlend(&turnAroundButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     tourButtonTexture = [self loadTexture:@"tour_button.png"]; textureSetBlend(&tourButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     turnAroundPhotoButtonTexture = [self loadTexture:@"turn_around_button.png"]; textureSetBlend(&turnAroundPhotoButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     blogButtonTexture = [self loadTexture:@"blog_button.png"]; textureSetBlend(&blogButtonTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

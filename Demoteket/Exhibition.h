@@ -43,7 +43,7 @@
 	RssFeedParser *rssFeedParser;
     
     Quads *nextButton;
-    Quads *prevButton;
+    Quads *turnAroundButton;
     Quads *startTourButton;
     Quads *stopTourButton;
     Quads *turnAroundPhotoButton;

@@ -69,7 +69,8 @@ typedef struct {
 
 @private
     CubicSpline *splines[2][USER_PHOTOS_MAX_COUNT];
-
+	CubicSpline *turnAroundSplines;
+    
     float splineOffset;
 
     PhotoInfo *userPhotos[USER_PHOTOS_MAX_COUNT];
@@ -95,6 +96,7 @@ typedef struct {
     bool paused;
     int movementType;
     bool tourMode;
+    bool turnAround;
 }
 
 - (void) setAngle:(float)a;
@@ -121,6 +123,7 @@ typedef struct {
 - (void) move:(float)t;
 
 - (void) setMovement:(int)type;
+- (void) turnAround;
 - (void) startTour;
 - (void) stopTour;
 
@@ -131,7 +134,7 @@ typedef struct {
 
 - (void) resume;
 
-- (bool) canGoBackwards;
+- (bool) canTurnAround;
 - (bool) canGoForwards;
 
 - (GLKVector3) getPositionAndAngle;

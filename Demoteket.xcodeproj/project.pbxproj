@@ -29,6 +29,7 @@
 		653444C715FE7C0C001BCB68 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 653444C615FE7C0C001BCB68 /* NSString+HTML.m */; };
 		653444CB15FE7F45001BCB68 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 653444CA15FE7F45001BCB68 /* GTMNSString+HTML.m */; };
 		653444CD15FE8988001BCB68 /* blog_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 653444CC15FE8988001BCB68 /* blog_button.png */; };
+		653444CF15FF4F22001BCB68 /* prev_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 653444CE15FF4F22001BCB68 /* prev_button.png */; };
 		6541B5BC15F75BD800A75786 /* RssFeedParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6541B5BB15F75BD800A75786 /* RssFeedParser.m */; };
 		6544839E15E618CF008132FC /* demoteket_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6544839D15E618CF008132FC /* demoteket_logo.png */; };
 		654942C715E265380029C1E2 /* Movement.m in Sources */ = {isa = PBXBuildFile; fileRef = 654942C615E265380029C1E2 /* Movement.m */; };
@@ -87,6 +88,7 @@
 		653444C915FE7C65001BCB68 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		653444CA15FE7F45001BCB68 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		653444CC15FE8988001BCB68 /* blog_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blog_button.png; sourceTree = "<group>"; };
+		653444CE15FF4F22001BCB68 /* prev_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prev_button.png; sourceTree = "<group>"; };
 		6541B5BA15F75BD700A75786 /* RssFeedParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RssFeedParser.h; sourceTree = "<group>"; };
 		6541B5BB15F75BD800A75786 /* RssFeedParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssFeedParser.m; sourceTree = "<group>"; };
 		6544839D15E618CF008132FC /* demoteket_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demoteket_logo.png; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 		6573203415D506AC002562E9 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				653444CE15FF4F22001BCB68 /* prev_button.png */,
 				653444CC15FE8988001BCB68 /* blog_button.png */,
 				6512B87715F949E000921FD2 /* trolls_ahead_logo.png */,
 				65ED6BF815F48F03008B71DE /* turn_around_button.png */,
@@ -324,6 +327,7 @@
 				65ED6BF915F48F03008B71DE /* turn_around_button.png in Resources */,
 				6512B87815F949E000921FD2 /* trolls_ahead_logo.png in Resources */,
 				653444CD15FE8988001BCB68 /* blog_button.png in Resources */,
+				653444CF15FF4F22001BCB68 /* prev_button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -34,11 +34,11 @@
     return self;
 }
 
-- (void) setFirstPoint:(GLKVector2)p {
-    splinesX[0].x = p.x;
-    splinesY[0].x = p.y;
-    if (splinePointCount == 0) {
-        splinePointCount = 1;
+- (void) setPoint:(int)index position:(GLKVector2)p {
+    splinesX[index].x = p.x;
+    splinesY[index].x = p.y;
+    if (splinePointCount < index + 1) {
+        splinePointCount = index + 1;
     }
     recalculate = true;
 }

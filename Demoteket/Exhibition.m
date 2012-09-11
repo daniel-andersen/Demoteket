@@ -55,14 +55,14 @@
                        x4:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_SIZE y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
     [nextButton end];
 
-    prevButton = [[Quads alloc] init];
-    [prevButton beginWithTexture:prevButtonTexture];
-    [prevButton setIsOrthoProjection:true];
-    [prevButton addQuadX1:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y1:NAVIGATION_BUTTON_BORDER z1:0.0f
-                       x2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
-                       x3:NAVIGATION_BUTTON_BORDER y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
-                       x4:NAVIGATION_BUTTON_BORDER y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
-    [prevButton end];
+    turnAroundButton = [[Quads alloc] init];
+    [turnAroundButton beginWithTexture:turnAroundButtonTexture];
+    [turnAroundButton setIsOrthoProjection:true];
+    [turnAroundButton addQuadX1:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y1:NAVIGATION_BUTTON_BORDER z1:0.0f
+                       		 x2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z2:0.0f
+                       		 x3:NAVIGATION_BUTTON_BORDER y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE z3:0.0f
+                       		 x4:NAVIGATION_BUTTON_BORDER y4:NAVIGATION_BUTTON_BORDER z4:0.0f];
+    [turnAroundButton end];
 
     startTourButton = [[Quads alloc] init];
     [startTourButton beginWithTexture:tourButtonTexture];
@@ -143,7 +143,7 @@
 	userPhotosCount++;
 
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:0 z: 3 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 6 depth:0.0f scale:1.0f];
+    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 7 depth:0.0f scale:1.0f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:3 z: 2 depth:PILLAR_DEPTH scale:1.2f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:4 z: 4 depth:PILLAR_DEPTH scale:1.2f];
     userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:9 z:2 depth:0.0f scale:1.0f];
@@ -295,8 +295,8 @@
             }
         }
     } else {
-        if ([floorPlan isBackButtonVisible]) {
-            [prevButton render];
+        if ([floorPlan isTurnAroundButtonVisible]) {
+            [turnAroundButton render];
         }
 	    if ([floorPlan isNextButtonVisible]) {
 		    [nextButton render];

@@ -65,7 +65,7 @@
 
 - (PhotoInfo*) getPhoto;
 
-- (bool) isBackButtonVisible;
+- (bool) isTurnAroundButtonVisible;
 - (bool) isNextButtonVisible;
 - (bool) isPaused;
 - (bool) isOnTour;

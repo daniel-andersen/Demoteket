@@ -83,6 +83,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addStrip:@"|     "];
         [self addStrip:@"|    +"];
         [self addStrip:@"|  P |"];
+        [self addStrip:@"|    |"];
         [self addStrip:@"|    +"];
         [self addStrip:@"|    d"];
         [self addStrip:@"+----+"];
@@ -130,7 +131,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addLightType:1 x:4.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
 	}
     if (roomNumber == 2) {
-        [self addFloorQuadX1:0.0f z1:0.0f x2:6.0f * BLOCK_SIZE z2:7.0f * BLOCK_SIZE];
+        [self addFloorQuadX1:0.0f z1:0.0f x2:6.0f * BLOCK_SIZE z2:8.0f * BLOCK_SIZE];
         [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
         [self addLightType:0 x:7.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
         [self addLightType:0 x:9.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];

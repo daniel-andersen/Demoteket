@@ -36,11 +36,12 @@
 
 - (void) reset {
     movementType = MOVEMENT_TYPE_FORWARD;
+    paused = false;
     tourMode = false;
+	turnAround = false;
 
     velocity = GLKVector2Make(0.0f, 0.0f);
-    paused = false;
-
+    
     angle = 0.0f;
     angleTransition[0] = 0.0f;
     oldDestAnglePoint[0].lookIn = 0.0f;
@@ -54,6 +55,8 @@
     userPhotoIndex = 0;
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
+    
+    turnAroundSplines = [[CubicSpline alloc] init];
     
     for (int i = 0; i < USER_PHOTOS_MAX_COUNT; i++) {
         for (int j = 0; j < 4; j++) {
@@ -75,7 +78,7 @@
 - (void) setPositionToFirstPoint {
     [self setMovement:MOVEMENT_TYPE_FORWARD];
     splineOffset = 0.0f;
-    userPhotoIndex = 0;
+    userPhotoIndex = 8;
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
     position = [self getTargetPosition];
@@ -174,6 +177,16 @@
     movementType = type;
 }
 
+- (void) turnAround {
+    [self backupAngleLookIn];
+    anglePointIndex = 0;
+    movementType = movementType == MOVEMENT_TYPE_FORWARD ? MOVEMENT_TYPE_BACKWARD : MOVEMENT_TYPE_FORWARD;
+    [turnAroundSplines setPoint:0 position:position];
+    [turnAroundSplines setPoint:1 position:[splines[movementType][userPhotoIndex] getEndPosition]];
+    [turnAroundSplines recalculateSpline];
+    turnAround = true;
+}
+
 - (void) startTour {
     tourMode = true;
     [self backupAngleLookIn];
@@ -193,10 +206,11 @@
     } else {
         tourAngleUpdated = false;
     }
+    turnAround = false;
+    roomVisibilityIndex = 0;
     splineOffset = 0.0f;
     userPhotoIndex = ((movementType == MOVEMENT_TYPE_FORWARD ? userPhotoIndex + 1 : userPhotoIndex - 1) + userPhotosCount) % userPhotosCount;
-    roomVisibilityIndex = 0;
-    [[self getSplines] setFirstPoint:position];
+    [[self getSplines] setPoint:0 position:position];
     [[self getSplines] recalculateSpline];
 }
 
@@ -342,6 +356,7 @@
         }
     };
     if ([self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) {
+        turnAround = false;
         if (![self isOnTour] && userPhotos[userPhotoIndex].photoTexture.id != trollsAheadLogoTexture.id) {
 		    paused = true;
         } else if ([self isOnTour] && userPhotoIndex == 0) {
@@ -390,7 +405,7 @@
 }
 
 - (CubicSpline*) getSplines {
-    return splines[movementType][userPhotoIndex];
+    return turnAround ? turnAroundSplines : splines[movementType][userPhotoIndex];
 }
 
 - (GLKVector3) getPositionAndAngle {
@@ -405,7 +420,7 @@
     return tourMode;
 }
 
-- (bool) canGoBackwards {
+- (bool) canTurnAround {
     return paused;
 }
 
