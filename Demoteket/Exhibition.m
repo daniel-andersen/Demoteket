@@ -130,23 +130,20 @@
     userPhotos[0] = [floorPlan createUserPhotoInRoom:0 x:2 z:6 depth:PILLAR_DEPTH scale:1.7f]; // Demoteket logo
     [userPhotos[0] definePhotoTexture:demoteketLogoTexture];
 
-	userPhotosCount = 1;
+    userPhotos[1] = [floorPlan createUserPhotoInRoom:0 x:3 z: 4 depth:PILLAR_DEPTH scale:1.2f];
+    userPhotos[2] = [floorPlan createUserPhotoInRoom:0 x:1 z: 0 depth:0.0f scale:1.0f];
+    userPhotos[3] = [floorPlan createUserPhotoInRoom:1 x:2 z: 3 depth:0.0f scale:1.0f];
+    userPhotos[4] = [floorPlan createUserPhotoInRoom:1 x:4 z: 7 depth:0.0f scale:1.0f];
+    userPhotos[5] = [floorPlan createUserPhotoInRoom:1 x:2 z:11 depth:0.0f scale:1.0f];
 
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:0 x:3 z: 4 depth:PILLAR_DEPTH scale:1.2f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:0 x:1 z: 0 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:2 z: 3 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:4 z: 7 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:1 x:2 z:11 depth:0.0f scale:1.0f];
+    userPhotos[6] = [floorPlan createUserPhotoInRoom:2 x:3 z:3 depth:PILLAR_DEPTH scale:1.2f]; // Trolls Ahead logo
+    [userPhotos[6] definePhotoTexture:trollsAheadLogoTexture];
 
-    userPhotos[userPhotosCount] = [floorPlan createUserPhotoInRoom:2 x:3 z:3 depth:PILLAR_DEPTH scale:1.2f]; // Trolls Ahead logo
-    [userPhotos[userPhotosCount] definePhotoTexture:trollsAheadLogoTexture];
-	userPhotosCount++;
-
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:0 z: 3 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:2 x:3 z: 7 depth:0.0f scale:1.0f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:3 z: 2 depth:PILLAR_DEPTH scale:1.2f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:4 z: 4 depth:PILLAR_DEPTH scale:1.2f];
-    userPhotos[userPhotosCount++] = [floorPlan createUserPhotoInRoom:3 x:9 z:2 depth:0.0f scale:1.0f];
+    userPhotos[7] = [floorPlan createUserPhotoInRoom:2 x:0 z: 3 depth:0.0f scale:1.0f];
+    userPhotos[8] = [floorPlan createUserPhotoInRoom:2 x:3 z: 7 depth:0.0f scale:1.0f];
+    userPhotos[9] = [floorPlan createUserPhotoInRoom:3 x:3 z: 2 depth:PILLAR_DEPTH scale:1.2f];
+    userPhotos[10] = [floorPlan createUserPhotoInRoom:3 x:4 z: 4 depth:PILLAR_DEPTH scale:1.2f];
+    userPhotos[11] = [floorPlan createUserPhotoInRoom:3 x:9 z:2 depth:0.0f scale:1.0f];
 
     [floorPlan createPaths];
     [floorPlan createGeometrics];

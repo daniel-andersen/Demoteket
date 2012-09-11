@@ -33,8 +33,7 @@
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i * sizeof(GLfloat)))
 
-PhotoInfo *userPhotos[USER_PHOTOS_MAX_COUNT];
-int userPhotosCount;
+PhotoInfo *userPhotos[USER_PHOTOS_COUNT];
 
 Textures *textures;
 GLKBaseEffect *glkEffectNormal;

@@ -52,7 +52,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
     }
     if (number == 0) {
         [self addStrip:@"+---+"];
-        [self addStrip:@"d   |"];
+        [self addStrip:@"    |"];
         [self addStrip:@"+   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"|  E|"];
@@ -62,7 +62,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
         [self addStrip:@"|   |"];
-        [self addStrip:@"++  +"];
+        [self addStrip:@"+-+ +"];
 	}
     if (number == 1) {
         [self addStrip:@"+---+"];
@@ -75,7 +75,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addStrip:@"|   |"];
         [self addStrip:@"| D |"];
         [self addStrip:@"+   |"];
-        [self addStrip:@"d   |"];
+        [self addStrip:@"    |"];
         [self addStrip:@"+---+"];
 	}
     if (number == 2) {
@@ -85,13 +85,13 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addStrip:@"|  P |"];
         [self addStrip:@"|    |"];
         [self addStrip:@"|    +"];
-        [self addStrip:@"|    d"];
+        [self addStrip:@"|     "];
         [self addStrip:@"+----+"];
     }
     if (number == 3) {
-        [self addStrip:@"+---++dd++"];
-        [self addStrip:@"+   ||   |"];
-        [self addStrip:@"   D++   |"];
+        [self addStrip:@"+---+X+ ++"];
+        [self addStrip:@"+   |X|  |"];
+        [self addStrip:@"   D+-+  |"];
         [self addStrip:@"+        |"];
         [self addStrip:@"+--------+"];
     }
@@ -247,10 +247,10 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
 - (float) calculateWallAngleAtX:(int)x z:(int)z {
     char tile = [self getTileX:x y:z];
     if (tile == '-') {
-        return [self isOutsideRoomX:x y:z - 1] ? 0.0f : M_PI;
+        return [self isEmptyX:x y:z + 1] ? 0.0f : M_PI;
     }
     if (tile == '|') {
-        return [self isOutsideRoomX:x - 1 y:z] ? -M_PI_2 : M_PI_2;
+        return [self isEmptyX:x + 1 y:z] ? -M_PI_2 : M_PI_2;
     }
     if (tile >= 'A' && tile <= 'Z') {
         return letterToAngle(tile);
@@ -265,7 +265,7 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
 }
 
 - (PhotoInfo*) hasUserPhotoAtX:(int)x z:(int)z {
-    for (int i = 0; i < userPhotosCount; i++) {
+    for (int i = 0; i < USER_PHOTOS_COUNT; i++) {
         if (userPhotos[i] != NULL) {
             if (userPhotos[i].roomNumber == roomNumber && x == (int) userPhotos[i].roomPosition.x && z == (int) userPhotos[i].roomPosition.y) {
                 return userPhotos[i];

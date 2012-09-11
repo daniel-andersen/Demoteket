@@ -38,7 +38,7 @@
 
 #define ANGLE_POINTS_MAX_COUNT 16
 #define ANGLE_TRANSITION_SPEED 0.006f
-#define ANGLE_TOUR_LOOK_AT_NEXT_PHOTO_PCT 0.4f
+#define ANGLE_TOUR_LOOK_AT_NEXT_PHOTO_PCT 0.7f
 
 #define ANGLE_TYPE_LOOK_AT 1
 #define ANGLE_TYPE_LOOK_IN 2
@@ -68,24 +68,23 @@ typedef struct {
 @interface Movement : NSObject {
 
 @private
-    CubicSpline *splines[2][USER_PHOTOS_MAX_COUNT];
+    CubicSpline *splines[2][USER_PHOTOS_COUNT];
 	CubicSpline *turnAroundSplines;
     
     float splineOffset;
 
-    PhotoInfo *userPhotos[USER_PHOTOS_MAX_COUNT];
     int userPhotoIndex;
     
     GLKVector2 position;
     GLKVector2 velocity;
 
-    AnglePoint anglePoints[2][USER_PHOTOS_MAX_COUNT][ANGLE_POINTS_MAX_COUNT];
+    AnglePoint anglePoints[2][USER_PHOTOS_COUNT][ANGLE_POINTS_MAX_COUNT];
     AnglePoint oldDestAnglePoint[2];
-    int anglePointCount[2][USER_PHOTOS_MAX_COUNT];
+    int anglePointCount[2][USER_PHOTOS_COUNT];
     int anglePointIndex;
     
-    RoomVisibility roomVisibility[2][USER_PHOTOS_MAX_COUNT][ROOM_VISIBILITY_MAX_COUNT];
-    int roomVisibilityCount[2][USER_PHOTOS_MAX_COUNT];
+    RoomVisibility roomVisibility[2][USER_PHOTOS_COUNT][ROOM_VISIBILITY_MAX_COUNT];
+    int roomVisibilityCount[2][USER_PHOTOS_COUNT];
     int roomVisibilityIndex;
     void (^roomVisibilityCallbackHandler)(int, int);
     
@@ -103,7 +102,6 @@ typedef struct {
 - (void) setPosition:(GLKVector2)p;
 - (void) setPositionToFirstPoint;
 
-- (void) addUserPhoto:(PhotoInfo*)photoInfo;
 - (void) setUserPhoto:(int)index;
 
 - (void) setPointToLastPoint;

@@ -31,6 +31,7 @@
 
 @synthesize roomPosition;
 @synthesize roomNumber;
+@synthesize position;
 @synthesize title;
 @synthesize author;
 @synthesize description;

@@ -31,10 +31,10 @@
 
 	NSString *feed;
 
-    NSString *descriptions[USER_PHOTOS_MAX_COUNT];
-    NSString *titles[USER_PHOTOS_MAX_COUNT];
-    NSString *links[USER_PHOTOS_MAX_COUNT];
-    NSString *images[USER_PHOTOS_MAX_COUNT];
+    NSString *descriptions[USER_PHOTOS_COUNT];
+    NSString *titles[USER_PHOTOS_COUNT];
+    NSString *links[USER_PHOTOS_COUNT];
+    NSString *images[USER_PHOTOS_COUNT];
     int count;
 }
 

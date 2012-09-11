@@ -50,15 +50,13 @@
     oldDestAnglePoint[1].lookIn = 0.0f;
     oldDestAnglePoint[1].type = ANGLE_TYPE_LOOK_IN;
 
-    userPhotosCount = 0;
-    
     userPhotoIndex = 0;
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
     
     turnAroundSplines = [[CubicSpline alloc] init];
     
-    for (int i = 0; i < USER_PHOTOS_MAX_COUNT; i++) {
+    for (int i = 0; i < USER_PHOTOS_COUNT; i++) {
         for (int j = 0; j < 4; j++) {
             splines[j][i] = [[CubicSpline alloc] init];
             anglePointCount[j][i] = 0;
@@ -82,10 +80,14 @@
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
     position = [self getTargetPosition];
-}
-
-- (void) addUserPhoto:(PhotoInfo*)photoInfo {
-    userPhotos[userPhotosCount++] = photoInfo;
+    for (int i = 0; i < USER_PHOTOS_COUNT; i++) {
+        anglePoints[0][i][anglePointCount[0][i]].lookAt = GLKVector2Make(-userPhotos[i].position.x, -userPhotos[i].position.y);
+        anglePoints[1][i][anglePointCount[1][i]].lookAt = GLKVector2Make(-userPhotos[i].position.x, -userPhotos[i].position.y);
+        anglePoints[0][i][anglePointCount[0][i]].splineOffset = 1.0f - (1.0f / (float) (anglePointCount[0][i] + 2));
+        anglePoints[1][i][anglePointCount[1][i]].splineOffset = 1.0f - (1.0f / (float) (anglePointCount[1][i] + 2));
+        anglePointCount[0][i]++;
+        anglePointCount[1][i]++;
+    }
 }
 
 - (void) setUserPhoto:(int)index {
@@ -104,7 +106,7 @@
 }
 
 - (void) addPointRelativeToLastPoint:(GLKVector2)p ofMovementType:(int)type {
-    [splines[movementType][userPhotoIndex] addPoint:GLKVector2Add([splines[type][userPhotosCount - 1] getEndPosition], p)];
+    [splines[movementType][userPhotoIndex] addPoint:GLKVector2Add([splines[type][USER_PHOTOS_COUNT - 1] getEndPosition], p)];
 }
 
 - (void) addPointAbsolute:(GLKVector2)p {
@@ -178,18 +180,19 @@
 }
 
 - (void) turnAround {
-    [self backupAngleLookIn];
-    anglePointIndex = 0;
+    [self backupAngle];
     movementType = movementType == MOVEMENT_TYPE_FORWARD ? MOVEMENT_TYPE_BACKWARD : MOVEMENT_TYPE_FORWARD;
     [turnAroundSplines setPoint:0 position:position];
     [turnAroundSplines setPoint:1 position:[splines[movementType][userPhotoIndex] getEndPosition]];
     [turnAroundSplines recalculateSpline];
     turnAround = true;
+    paused = true;
 }
 
 - (void) startTour {
     tourMode = true;
-    [self backupAngleLookIn];
+    [self backupAngle];
+    movementType = MOVEMENT_TYPE_FORWARD;
     [self resume];
 }
 
@@ -209,7 +212,7 @@
     turnAround = false;
     roomVisibilityIndex = 0;
     splineOffset = 0.0f;
-    userPhotoIndex = ((movementType == MOVEMENT_TYPE_FORWARD ? userPhotoIndex + 1 : userPhotoIndex - 1) + userPhotosCount) % userPhotosCount;
+    userPhotoIndex = ((movementType == MOVEMENT_TYPE_FORWARD ? userPhotoIndex + 1 : userPhotoIndex - 1) + USER_PHOTOS_COUNT) % USER_PHOTOS_COUNT;
     [[self getSplines] setPoint:0 position:position];
     [[self getSplines] recalculateSpline];
 }
@@ -315,7 +318,7 @@
 	    angleTransition[0] = 0.0f;
 	    tourAngleUpdated = true;
     } else {
-        oldDestAnglePoint[0] = anglePoints[movementType][userPhotoIndex][anglePointIndex];
+        oldDestAnglePoint[0] = [self getTargetAnglePoint];
         angleTransition[0] = 0.0f;
     }
 }
@@ -367,7 +370,7 @@
         }
         return;
     }
-    if (![self isOnTour] && anglePointIndex < anglePointCount[movementType][userPhotoIndex] - 1 && splineOffset > anglePoints[movementType][userPhotoIndex][anglePointIndex + 1].splineOffset) {
+    if (![self isOnTour] && !turnAround && anglePointIndex < anglePointCount[movementType][userPhotoIndex] - 1 && splineOffset > anglePoints[movementType][userPhotoIndex][anglePointIndex + 1].splineOffset) {
         [self backupAngle];
         anglePointIndex = MIN(anglePointIndex + 1, anglePointCount[movementType][userPhotoIndex] - 1);
     }
@@ -376,9 +379,14 @@
 - (AnglePoint) getTargetAnglePoint {
     if ([self isOnTour]) {
         bool lookAtNextPhoto = splineOffset > [[self getSplines] getEndOffset] * ANGLE_TOUR_LOOK_AT_NEXT_PHOTO_PCT;
-        int index = lookAtNextPhoto ? (userPhotoIndex + 1) % userPhotosCount : userPhotoIndex;
+        int index = lookAtNextPhoto ? (userPhotoIndex + 1) % USER_PHOTOS_COUNT : userPhotoIndex;
         int count = anglePointCount[movementType][index];
         return anglePoints[movementType][index][count - 1];
+    } else if (turnAround) {
+        AnglePoint anglePoint;
+        anglePoint.type = ANGLE_TYPE_LOOK_AT;
+        anglePoint.lookAt = GLKVector2Make(-userPhotos[userPhotoIndex].position.x, -userPhotos[userPhotoIndex].position.y);
+        return anglePoint;
     } else {
 	    return anglePoints[movementType][userPhotoIndex][anglePointIndex];
     }

@@ -56,6 +56,8 @@
 @property(readwrite) GLKVector2 roomPosition;
 @property(readwrite) int roomNumber;
 
+@property(readwrite) GLKVector2 position;
+
 @property(readwrite) NSString *title;
 @property(readwrite) NSString *author;
 @property(readwrite) NSString *description;

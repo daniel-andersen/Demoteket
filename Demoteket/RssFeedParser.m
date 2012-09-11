@@ -90,7 +90,7 @@
         if ([self isPhoto:images[count]]) {
 	        count++;
         }
-        if (count >= USER_PHOTOS_MAX_COUNT) {
+        if (count >= USER_PHOTOS_COUNT) {
             return;
         }
     }
