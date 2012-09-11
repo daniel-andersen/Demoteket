@@ -57,7 +57,6 @@ typedef struct {
     GLKVector2 lookAt;
     float lookIn;
     float angleSpeed;
-    float continueDelay;
 } AnglePoint;
 
 typedef struct {
@@ -112,10 +111,10 @@ typedef struct {
 - (void) addPointAbsolute:(GLKVector2)p;
 - (void) addPointRelative:(GLKVector2)p;
 
-- (void) lookAtAbsolute:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
-- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
-- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay;
-- (void) lookIn:(float)a beginningAt:(float)t withDelay:(float)delay;
+- (void) lookAtAbsolute:(GLKVector2)p beginningAt:(float)t;
+- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t;
+- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t;
+- (void) lookIn:(float)a beginningAt:(float)t;
 
 - (void) setRoomVisibilityOne:(bool)v1 two:(bool)v2 three:(bool)v3 four:(bool)v4 beginningAt:(float)t;
 

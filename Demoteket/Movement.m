@@ -112,43 +112,39 @@
     [splines[movementType][userPhotoIndex] addOffsetPoint:p];
 }
 
-- (void) lookAtAbsolute:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay {
+- (void) lookAtAbsolute:(GLKVector2)p beginningAt:(float)t {
     AnglePoint *anglePoint = &anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex]];
     anglePoint->type = ANGLE_TYPE_LOOK_AT;
     anglePoint->splineOffset = t;
     anglePoint->lookAt = p;
     anglePoint->angleSpeed = 1.0f;
-    anglePoint->continueDelay = delay;
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
-- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay {
+- (void) lookAtRelativeToStart:(GLKVector2)p beginningAt:(float)t {
     AnglePoint *anglePoint = &anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex]];
     anglePoint->type = ANGLE_TYPE_LOOK_AT;
     anglePoint->splineOffset = t;
     anglePoint->lookAt = GLKVector2Add(p, [self getStartPosition]);
     anglePoint->angleSpeed = 1.0f;
-    anglePoint->continueDelay = delay;
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
-- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t withDelay:(float)delay {
+- (void) lookAtRelativeToEnd:(GLKVector2)p beginningAt:(float)t {
     AnglePoint *anglePoint = &anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex]];
     anglePoint->type = ANGLE_TYPE_LOOK_AT;
     anglePoint->splineOffset = t;
     anglePoint->lookAt = GLKVector2Add(p, [self getEndPosition]);
     anglePoint->angleSpeed = 1.0f;
-    anglePoint->continueDelay = delay;
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
-- (void) lookIn:(float)a beginningAt:(float)t withDelay:(float)delay {
+- (void) lookIn:(float)a beginningAt:(float)t {
     AnglePoint *anglePoint = &anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex]];
     anglePoint->type = ANGLE_TYPE_LOOK_IN;
     anglePoint->splineOffset = t;
     anglePoint->lookIn = a;
     anglePoint->angleSpeed = 1.0f;
-    anglePoint->continueDelay = delay;
     anglePointCount[movementType][userPhotoIndex]++;
 }
 
@@ -181,7 +177,7 @@
 - (void) startTour {
     tourMode = true;
     [self backupAngleLookIn];
-    tourAngleUpdated = true;
+    [self resume];
 }
 
 - (void) stopTour {
@@ -250,7 +246,7 @@
     if ([self isOnTour]) {
         return;
     }
-    if (angleTransition[0] >= [self getTargetAnglePoint].continueDelay) {
+    if (splineOffset >= 1.0f || ABS([self calculateAngle:[self getTargetAnglePoint]] - angle) < 0.3f) {
         return;
     }
     float speed = GLKVector2Length(velocity);
