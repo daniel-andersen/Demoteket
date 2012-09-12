@@ -32,6 +32,7 @@
 
 @interface ViewController : GLKViewController
 
+- (void) didBecomeInactive;
 - (void) didBecomeActive;
 
 @end

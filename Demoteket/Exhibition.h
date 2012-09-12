@@ -69,6 +69,8 @@
 - (id) init;
 
 - (void) createExhibition;
+
+- (void) inactivate;
 - (void) reactivate;
 
 - (void) tap:(GLKVector2)p;

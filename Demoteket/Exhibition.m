@@ -161,6 +161,9 @@
     [self refreshFeed];
 }
 
+- (void) inactivate {
+}
+
 - (void) refreshFeed {
     [rssFeedParser loadFeed:[NSURL URLWithString:@"http://www.demotekaarhus.dk/?feed=rss2"] successCallback:^{
         [self loadPhotos];

@@ -52,6 +52,10 @@ enum {
 @synthesize context = _context;
 @synthesize effect = _effect;
 
+- (void) didBecomeInactive {
+    [exhibition inactivate];
+}
+
 - (void) didBecomeActive {
     [exhibition reactivate];
 }
