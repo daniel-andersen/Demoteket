@@ -31,14 +31,16 @@
 
 	NSString *feed;
 
-    NSString *descriptions[USER_PHOTOS_COUNT];
-    NSString *titles[USER_PHOTOS_COUNT];
-    NSString *links[USER_PHOTOS_COUNT];
-    NSString *images[USER_PHOTOS_COUNT];
+    NSString *descriptions[2][USER_PHOTOS_COUNT];
+    NSString *titles[2][USER_PHOTOS_COUNT];
+    NSString *links[2][USER_PHOTOS_COUNT];
+    NSString *images[2][USER_PHOTOS_COUNT];
     int count;
+    int oldCount;
 }
 
 - (void) loadFeed:(NSURL*)url successCallback:(void(^)())successCallback errorCallback:(void(^)())errorCallback;
+- (bool) hasChanges;
 
 - (int) photoCount;
 

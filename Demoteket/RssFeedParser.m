@@ -31,6 +31,7 @@
 - (void) loadFeed:(NSURL*)url successCallback:(void(^)())successCallback errorCallback:(void(^)())errorCallback {
     NSLog(@"Asynchronously loading feed");
     [NSURLConnection sendAsynchronousRequest:[[NSMutableURLRequest alloc] initWithURL:url] queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        [self backupFeed];
         if (error) {
             if (errorCallback != NULL) {
                 errorCallback();
@@ -46,6 +47,37 @@
     }];
 }
 
+- (void) backupFeed {
+    oldCount = count;
+    for (int i = 0; i < USER_PHOTOS_COUNT; i++) {
+        descriptions[1][i] = descriptions[0][i];
+        titles[1][i] = titles[0][i];
+        images[1][i] = images[0][i];
+        links[1][i] = links[0][i];
+    }
+}
+
+- (bool) hasChanges {
+    if (count != oldCount) {
+        return true;
+    }
+    for (int i = 0; i < count; i++) {
+        if ([descriptions[0][i] compare:descriptions[1][i]] != NSOrderedSame) {
+            return true;
+        }
+        if ([titles[0][i] compare:titles[1][i]] != NSOrderedSame) {
+            return true;
+        }
+        if ([images[0][i] compare:images[1][i]] != NSOrderedSame) {
+            return true;
+        }
+        if ([links[0][i] compare:links[1][i]] != NSOrderedSame) {
+            return true;
+        }
+    }
+    return false;
+}
+
 - (int) photoCount {
     return count;
 }
@@ -55,19 +87,19 @@
 }
 
 - (NSString*) getDescription:(int)index {
-    return index < count ? descriptions[index] : NULL;
+    return index < count ? descriptions[0][index] : NULL;
 }
 
 - (NSString*) getTitle:(int)index {
-    return index < count ? titles[index] : NULL;
+    return index < count ? titles[0][index] : NULL;
 }
 
 - (NSString*) getLink:(int)index {
-    return index < count ? links[index] : NULL;
+    return index < count ? links[0][index] : NULL;
 }
 
 - (NSString*) getImage:(int)index {
-    return index < count ? images[index] : NULL;
+    return index < count ? images[0][index] : NULL;
 }
 
 - (void) findElements {
@@ -83,11 +115,11 @@
             continue;
         }
         NSString* capture = [feed substringWithRange:[result rangeAtIndex:1]];
-        images[count] = [[self findImage:count fromText:capture] stringByDecodingHTMLEntities];
-        titles[count] = [[self findTitle:count fromText:capture] stringByDecodingHTMLEntities];
-        descriptions[count] = [[self findDescription:count fromText:capture] stringByDecodingHTMLEntities];
-        links[count] = [[self findLink:count fromText:capture] stringByDecodingHTMLEntities];
-        if ([self isPhoto:images[count]]) {
+        images[0][count] = [[self findImage:count fromText:capture] stringByDecodingHTMLEntities];
+        titles[0][count] = [[self findTitle:count fromText:capture] stringByDecodingHTMLEntities];
+        descriptions[0][count] = [[self findDescription:count fromText:capture] stringByDecodingHTMLEntities];
+        links[0][count] = [[self findLink:count fromText:capture] stringByDecodingHTMLEntities];
+        if ([self isPhoto:images[0][count]]) {
 	        count++;
         }
         if (count >= USER_PHOTOS_COUNT) {

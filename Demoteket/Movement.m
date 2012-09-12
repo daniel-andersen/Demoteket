@@ -46,9 +46,11 @@
     angleTransition[0] = 0.0f;
     oldDestAnglePoint[0].lookIn = 0.0f;
     oldDestAnglePoint[0].type = ANGLE_TYPE_LOOK_IN;
-    angleTransition[1] = 1.0f;
-    oldDestAnglePoint[1].lookIn = 0.0f;
-    oldDestAnglePoint[1].type = ANGLE_TYPE_LOOK_IN;
+    for (int i = 1; i < ANGLE_TRANSITION_MAX_COUNT; i++) {
+	    angleTransition[i] = 1.0f;
+        oldDestAnglePoint[i].lookIn = 0.0f;
+        oldDestAnglePoint[i].type = ANGLE_TYPE_LOOK_IN;
+    }
 
     userPhotoIndex = 0;
     anglePointIndex = 0;
@@ -198,6 +200,7 @@
 
 - (void) stopTour {
     [self backupAngleStopTour];
+    anglePointIndex = anglePointCount[movementType][userPhotoIndex] - 1;
     tourMode = false;
 }
 
@@ -207,6 +210,9 @@
         [self backupAngleLookIn];
         anglePointIndex = 0;
     } else {
+        if (splineOffset <= [[self getSplines] getEndOffset] * ANGLE_TOUR_LOOK_AT_NEXT_PHOTO_PCT) {
+            [self backupAngle];
+        }
         tourAngleUpdated = false;
     }
     turnAround = false;
@@ -229,7 +235,7 @@
         return;
     }
     RoomVisibility *visibility = &roomVisibility[movementType][userPhotoIndex][roomVisibilityIndex];
-    if (splineOffset > visibility->splineOffset) {
+    if (splineOffset > visibility->splineOffset * [[self getSplines] getEndOffset]) {
         if (roomVisibilityCallbackHandler != nil) {
 	        roomVisibilityCallbackHandler(visibility->type, visibility->roomIndex);
         }
@@ -280,10 +286,14 @@
             [self backupAngle];
         }
     }
-	float oldAngleTransition = [self calculateAngleTransition:angleTransition[1] source:[self calculateAngle:oldDestAnglePoint[1]] dest:[self calculateAngle:oldDestAnglePoint[0]]];
-	angle = [self calculateAngleTransition:angleTransition[0] source:oldAngleTransition dest:[self calculateAngle:[self getTargetAnglePoint]]];
-    angleTransition[0] = MIN(angleTransition[0] + ANGLE_TRANSITION_SPEED, 1.0f);
-    angleTransition[1] = MIN(angleTransition[1] + ANGLE_TRANSITION_SPEED, 1.0f);
+    float transitionAngle = [self calculateAngle:oldDestAnglePoint[ANGLE_TRANSITION_MAX_COUNT - 1]];
+    for (int i = ANGLE_TRANSITION_MAX_COUNT - 1; i >= 1; i--) {
+        transitionAngle = [self calculateAngleTransition:angleTransition[i] source:transitionAngle dest:[self calculateAngle:oldDestAnglePoint[i - 1]]];
+    }
+	angle = [self calculateAngleTransition:angleTransition[0] source:transitionAngle dest:[self calculateAngle:[self getTargetAnglePoint]]];
+    for (int i = 0; i < ANGLE_TRANSITION_MAX_COUNT; i++) {
+	    angleTransition[i] = MIN(angleTransition[i] + ANGLE_TRANSITION_SPEED, 1.0f);
+    }
 }
 
 - (float) calculateAngleTransition:(float)t source:(float)source dest:(float)dest {
@@ -311,8 +321,7 @@
 }
 
 - (void) backupAngle {
-    oldDestAnglePoint[1] = oldDestAnglePoint[0];
-    angleTransition[1] = angleTransition[0];
+    [self shiftAngleHistory];
     if ([self isOnTour]) {
 	    oldDestAnglePoint[0] = anglePoints[movementType][userPhotoIndex][anglePointCount[movementType][userPhotoIndex] - 1];
 	    angleTransition[0] = 0.0f;
@@ -324,18 +333,23 @@
 }
 
 - (void) backupAngleLookIn {
-    oldDestAnglePoint[1] = oldDestAnglePoint[0];
-    angleTransition[1] = angleTransition[0];
+    [self shiftAngleHistory];
     oldDestAnglePoint[0].type = ANGLE_TYPE_LOOK_IN;
     oldDestAnglePoint[0].lookIn = angle;
     angleTransition[0] = 0.0f;
 }
 
 - (void) backupAngleStopTour {
-    oldDestAnglePoint[1] = oldDestAnglePoint[0];
-    angleTransition[1] = angleTransition[0];
+    [self shiftAngleHistory];
     oldDestAnglePoint[0] = [self getTargetAnglePoint];
     angleTransition[0] = 0.0f;
+}
+
+- (void) shiftAngleHistory {
+    for (int i = ANGLE_TRANSITION_MAX_COUNT - 1; i >= 1; i--) {
+        oldDestAnglePoint[i] = oldDestAnglePoint[i - 1];
+        angleTransition[i] = angleTransition[i - 1];
+    }
 }
 
 - (void) updatePath {

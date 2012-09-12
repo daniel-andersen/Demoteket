@@ -62,6 +62,7 @@
 @property(readwrite) NSString *author;
 @property(readwrite) NSString *description;
 @property(readwrite) NSString *link;
+@property(readwrite) NSString *photoFilename;
 
 @property(readwrite) Texture photoTexture;
 @property(readwrite) Texture textTexture;

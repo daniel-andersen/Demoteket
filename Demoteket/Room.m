@@ -115,39 +115,41 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
         [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
         [self addLightType:0 x:4.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
         [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:0 x:3.0f * BLOCK_SIZE z:10.0f * BLOCK_SIZE];
         [self addLightType:1 x:1.5f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:1 x:5.0f * BLOCK_SIZE z:8.0f * BLOCK_SIZE];
         [self addLightType:2 x:3.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
-        [self addLightType:2 x:2.0f * BLOCK_SIZE z:3.5f * BLOCK_SIZE];
+        [self addLightType:2 x:2.0f * BLOCK_SIZE z:11.0f * BLOCK_SIZE];
 	}
     if (roomNumber == 1) {
         [self addFloorQuadX1:0.0f z1:0.0f x2:5.0f * BLOCK_SIZE z2:12.0f * BLOCK_SIZE];
-        [self addLightType:1 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
         [self addLightType:0 x:3.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
         [self addLightType:0 x:5.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
-        [self addLightType:1 x:2.0f * BLOCK_SIZE z:5.0f * BLOCK_SIZE];
-        [self addLightType:2 x:1.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
         [self addLightType:0 x:3.0f * BLOCK_SIZE z:10.0f * BLOCK_SIZE];
-        [self addLightType:2 x:0.0f * BLOCK_SIZE z:12.0f * BLOCK_SIZE];
+        [self addLightType:0 x:4.0f * BLOCK_SIZE z:11.0f * BLOCK_SIZE];
+        [self addLightType:1 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:1 x:2.0f * BLOCK_SIZE z:5.0f * BLOCK_SIZE];
         [self addLightType:1 x:4.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
+        [self addLightType:2 x:1.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:2 x:0.0f * BLOCK_SIZE z:12.0f * BLOCK_SIZE];
 	}
     if (roomNumber == 2) {
         [self addFloorQuadX1:0.0f z1:0.0f x2:6.0f * BLOCK_SIZE z2:8.0f * BLOCK_SIZE];
-        [self addLightType:0 x:1.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
-        [self addLightType:0 x:7.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
-        [self addLightType:0 x:9.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
-        [self addLightType:1 x:4.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
-        [self addLightType:1 x:5.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
-        [self addLightType:2 x:1.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:0 x:3.0f * BLOCK_SIZE z:6.0f * BLOCK_SIZE];
+        [self addLightType:0 x:4.0f * BLOCK_SIZE z:7.0f * BLOCK_SIZE];
+        [self addLightType:1 x:5.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
+        [self addLightType:1 x:1.0f * BLOCK_SIZE z:6.0f * BLOCK_SIZE];
         [self addLightType:2 x:5.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
+        [self addLightType:2 x:3.0f * BLOCK_SIZE z:5.0f * BLOCK_SIZE];
     }
     if (roomNumber == 3) {
         [self addFloorQuadX1:0.0f z1:0.0f x2:10.0f * BLOCK_SIZE z2:5.0f * BLOCK_SIZE];
-        [self addLightType:0 x:4.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
-        [self addLightType:0 x:1.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
-        [self addLightType:1 x:4.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
-        [self addLightType:1 x:2.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
-        [self addLightType:2 x:1.0f * BLOCK_SIZE z:0.0f * BLOCK_SIZE];
-        [self addLightType:2 x:6.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
+        [self addLightType:0 x:9.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
+        [self addLightType:0 x:5.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
+        [self addLightType:1 x:3.0f * BLOCK_SIZE z:2.0f * BLOCK_SIZE];
+        [self addLightType:1 x:9.0f * BLOCK_SIZE z:1.0f * BLOCK_SIZE];
+        [self addLightType:2 x:4.0f * BLOCK_SIZE z:3.0f * BLOCK_SIZE];
+        [self addLightType:2 x:2.0f * BLOCK_SIZE z:4.0f * BLOCK_SIZE];
     }
 
     [floor end];
@@ -489,16 +491,22 @@ const float ROOM_OFFSET_Z[] = {0, BLOCK_SIZE * -2, BLOCK_SIZE *  7, BLOCK_SIZE *
     [wallsBorder render];
 	[pillars render];
 	[pillarsBorder render];
-    for (int i = 0; i < lightsCount; i++) {
-		[lights[i] render];
-    }
     for (int i = 0; i < PHOTO_COUNT; i++) {
         [photosBorder[i] render];
 		[photos[i] render];
     }
 }
 
+- (void) renderLight {
+    for (int i = 0; i < lightsCount; i++) {
+		[lights[i] render];
+    }
+}
+
 - (void) renderFloor {
+    if (!visible) {
+        return;
+    }
     currentShaderProgram = glslProgram[0];
     
     [floor render];

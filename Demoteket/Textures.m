@@ -154,6 +154,36 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     floorDistortionTexture = [self loadTexture:@"floor_distortion.png" repeat:true]; textureSetTexCoords(&floorDistortionTexture, 0.0f, 0.0f, 55.0f, 55.0f);
 }
 
+- (void) dealloc {
+    textureRelease(&nextButtonTexture);
+    textureRelease(&turnAroundButtonTexture);
+    textureRelease(&tourButtonTexture);
+    textureRelease(&turnAroundPhotoButtonTexture);
+    textureRelease(&blogButtonTexture);
+    
+    for (int i = 0; i < WALL_TEXTURE_COUNT; i++) {
+	    textureRelease(&wallTexture[i]);
+    }
+    
+    textureRelease(&wallBorderTexture);
+    
+    textureRelease(&pillarTexture);
+    textureRelease(&pillarBorderTexture);
+    
+    for (int i = 0; i < PHOTOS_TEXTURE_COUNT; i++) {
+	    textureRelease(&photosTexture[i]);
+    }
+    for (int i = 0; i < LIGHT_TYPE_COUNT; i++) {
+	    textureRelease(&lightTexture[i]);
+    }
+    
+    textureRelease(&demoteketLogoTexture);
+    textureRelease(&trollsAheadLogoTexture);
+    textureRelease(&photoLoadingTexture);
+    textureRelease(&photoBackgroundTexture);
+    textureRelease(&floorDistortionTexture);
+}
+
 - (Texture) loadTexture:(NSString*)filename {
     return [self loadTexture:filename repeat:false];
 }

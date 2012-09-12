@@ -124,7 +124,7 @@ float t = 0.0f;
     [movement addPointAbsolute:GLKVector2Make(-4.0f, -17.0f)];
     [movement addPointRelative:GLKVector2Make(1.0f, 3.0f)];
     [movement setRoomVisibilityOne:true two:true three:false four:true beginningAt:0.0f];
-    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.9f];
+    [movement setRoomVisibilityOne:true two:true three:false four:false beginningAt:0.5f];
     
     [movement setUserPhoto:1];
     [movement setPointToLastPoint];
@@ -318,6 +318,7 @@ float t = 0.0f;
     
     [self renderRooms];
     [self renderFloor];
+    [self renderLight];
 }
 
 - (void) setupPosition {
@@ -361,6 +362,12 @@ float t = 0.0f;
 - (void) renderFloor {
     for (int i = 0; i < ROOM_COUNT; i++) {
         [rooms[i] renderFloor];
+    }
+}
+
+- (void) renderLight {
+    for (int i = 0; i < ROOM_COUNT; i++) {
+        [rooms[i] renderLight];
     }
 }
 

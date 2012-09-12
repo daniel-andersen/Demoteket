@@ -36,6 +36,7 @@
 @synthesize author;
 @synthesize description;
 @synthesize link;
+@synthesize photoFilename;
 @synthesize photoTexture;
 @synthesize textTexture;
 
@@ -49,6 +50,11 @@
         [self initialize];
     }
     return self;
+}
+
+- (void) dealloc {
+    [self releasePhotoTexture];
+    [self releaseTextTexture];
 }
 
 - (void) initialize {

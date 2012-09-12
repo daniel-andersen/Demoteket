@@ -24,7 +24,6 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "Exhibition.h"
-#import "Globals.h"
 
 #define NAVIGATION_BUTTON_BORDER 0.05f
 #define NAVIGATION_BUTTON_SIZE 0.1f
@@ -40,6 +39,7 @@
 
 - (void) initialize {
 	rssFeedParser = [[RssFeedParser alloc] init];
+    feedFirstTimeLoad = true;
     
     textures = [[Textures alloc] init];
     [textures load];
@@ -148,8 +148,22 @@
     [floorPlan createPaths];
     [floorPlan createGeometrics];
     
+	[self refreshFeed];
+    
+    NSLog(@"Exhibition initialized!");
+}
+
+- (void) reactivate {
+    if (mode != EXHIBITION_MODE_NORMAL) {
+        [self hidePhoto];
+    }
+    [self refreshFeed];
+}
+
+- (void) refreshFeed {
     [rssFeedParser loadFeed:[NSURL URLWithString:@"http://www.demotekaarhus.dk/?feed=rss2"] successCallback:^{
         [self loadPhotos];
+        feedFirstTimeLoad = false;
     } errorCallback:^{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ingen netværksforbindelse"
                                                         message:@"Kunne ikke indlæse billeder fra Demotek Aarhus"
@@ -158,15 +172,21 @@
                                               otherButtonTitles:nil];
         [alert show];
     }];
-
-    NSLog(@"Exhibition initialized!");
 }
 
 - (void) loadPhotos {
+    if (!feedFirstTimeLoad && ![rssFeedParser hasChanges]) {
+        NSLog(@"Feed didn't change");
+        //return;
+    }
+    NSLog(@"Feed changed");
     int idx = 0;
     for (int i = 0; i < MIN([rssFeedParser photoCount], 10); i++) {
         while ([userPhotos[idx] isStaticButNotLoadingPhoto]) {
             idx++;
+        }
+        if (!feedFirstTimeLoad && ![rssFeedParser hasChanges]) {
+	        idx++;
         }
         [userPhotos[idx] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
         userPhotos[idx].title = [rssFeedParser getTitle:i];

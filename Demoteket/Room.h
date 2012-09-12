@@ -81,6 +81,7 @@ extern const float ROOM_OFFSET_Z[];
 
 - (void) render;
 - (void) renderFloor;
+- (void) renderLight;
 
 - (float) calculateWallAngleAtX:(int)x z:(int)z;
 

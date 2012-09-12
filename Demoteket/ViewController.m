@@ -24,6 +24,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "ViewController.h"
+#import "Exhibition.h"
 #import "Globals.h"
 
 enum {
@@ -36,6 +37,7 @@ enum {
 @private
 
     Exhibition *exhibition;
+
     float frameSeconds;
     double startTime;
 }
@@ -49,6 +51,10 @@ enum {
 
 @synthesize context = _context;
 @synthesize effect = _effect;
+
+- (void) didBecomeActive {
+    [exhibition reactivate];
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];

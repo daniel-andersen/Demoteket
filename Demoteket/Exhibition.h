@@ -41,6 +41,7 @@
 
     FloorPlan *floorPlan;
 	RssFeedParser *rssFeedParser;
+    bool feedFirstTimeLoad;
     
     Quads *nextButton;
     Quads *turnAroundButton;
@@ -68,6 +69,7 @@
 - (id) init;
 
 - (void) createExhibition;
+- (void) reactivate;
 
 - (void) tap:(GLKVector2)p;
 
