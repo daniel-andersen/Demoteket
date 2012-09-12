@@ -182,7 +182,7 @@
 - (void) loadPhotos {
     if (!feedFirstTimeLoad && ![rssFeedParser hasChanges]) {
         NSLog(@"Feed didn't change");
-        //return;
+        return;
     }
     if (feedFirstTimeLoad) {
         [self doLoadPhotos];
