@@ -32,6 +32,7 @@
 #define EXHIBITION_MODE_NORMAL 0
 #define EXHIBITION_MODE_VIEWING_PHOTO 1
 #define EXHIBITION_MODE_VIEWING_TEXT 2
+#define EXHIBITION_MODE_CHANGING_PHOTOS 3
 
 #define MOVEMENT_START_DELAY 2.0f
 
@@ -63,7 +64,6 @@
     
     PhotoInfo *userPhoto;
     Texture photoTexture;
-    Texture textTexture;
 }
 
 - (id) init;

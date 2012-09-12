@@ -36,8 +36,6 @@
 
     Room *rooms[ROOM_COUNT];
 
-    GLKVector3 position;
-
     Movement *movement;
     
     int currentRoom;

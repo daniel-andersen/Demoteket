@@ -40,7 +40,6 @@
 
 - (void) initialize {
 	rssFeedParser = [[RssFeedParser alloc] init];
-    feedFirstTimeLoad = true;
     
     textures = [[Textures alloc] init];
     [textures load];
@@ -121,11 +120,13 @@
     [photoOverlay end];
 
     overlayAnimation = 0.0f;
-    mode = EXHIBITION_MODE_NORMAL;
     startTime = CFAbsoluteTimeGetCurrent();
 }
 
 - (void) createExhibition {
+    mode = EXHIBITION_MODE_NORMAL;
+    feedFirstTimeLoad = true;
+
     [floorPlan createFloorPlan];
 
     userPhotos[0] = [floorPlan createUserPhotoInRoom:0 x:2 z:6 depth:PILLAR_DEPTH scale:1.7f]; // Demoteket logo
@@ -181,9 +182,18 @@
 - (void) loadPhotos {
     if (!feedFirstTimeLoad && ![rssFeedParser hasChanges]) {
         NSLog(@"Feed didn't change");
-        return;
+        //return;
     }
-    NSLog(@"Feed changed");
+    if (feedFirstTimeLoad) {
+        [self doLoadPhotos];
+    } else {
+        NSLog(@"Feed changed");
+        overlayAnimation = -1.0f;
+        mode = EXHIBITION_MODE_CHANGING_PHOTOS;
+    }
+}
+
+- (void) doLoadPhotos {
     int idx = 0;
     for (int i = 0; i < MIN([rssFeedParser photoCount], 10); i++) {
         while ([userPhotos[idx] isStaticButNotLoadingPhoto]) {
@@ -290,7 +300,11 @@
     } else {
 	    overlayAnimation = MIN(1.0f, overlayAnimation + APPEAR_SPEED);
     }
-    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f - overlayAnimation)];
+    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, overlayAnimation >= 0.0f ? 1.0f - overlayAnimation : -overlayAnimation)];
+
+    if (mode == EXHIBITION_MODE_CHANGING_PHOTOS && overlayAnimation >= 0.0f) {
+        [self createExhibition];
+    }
 }
 
 - (void) render {

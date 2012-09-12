@@ -169,7 +169,6 @@
         GLKVector3 v2 = GLKVector3Subtract(p3, p1);
 
         GLKVector3 n = GLKVector3Normalize(GLKVector3CrossProduct(v1, v2));
-        n = GLKVector3Make(0.0f, -1.0f, 0.0f);
 
         vertices[v + 5] = n.x;
         vertices[v + 6] = n.y;
