@@ -40,6 +40,10 @@ float t = 0.0f;
 }
 
 - (void) dealloc {
+    NSLog(@"Releasing framebuffer");
+    glDeleteFramebuffers(1, &mirrorFramebuffer);
+    glDeleteRenderbuffers(1, &mirrorDepthBuffer);
+    glDeleteTextures(1, &mirrorTexture);
 }
 
 - (void) createMirrorFramebuffer {

@@ -155,6 +155,7 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 }
 
 - (void) dealloc {
+    NSLog(@"Releasing textures");
     textureRelease(&nextButtonTexture);
     textureRelease(&turnAroundButtonTexture);
     textureRelease(&tourButtonTexture);
