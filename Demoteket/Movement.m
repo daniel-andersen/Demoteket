@@ -43,15 +43,12 @@
     velocity = GLKVector2Make(0.0f, 0.0f);
     
     angle = 0.0f;
-    angleTransition[0] = 0.0f;
-    oldDestAnglePoint[0].lookIn = 0.0f;
-    oldDestAnglePoint[0].type = ANGLE_TYPE_LOOK_IN;
-    for (int i = 1; i < ANGLE_TRANSITION_MAX_COUNT; i++) {
+    for (int i = 0; i < ANGLE_TRANSITION_MAX_COUNT; i++) {
 	    angleTransition[i] = 1.0f;
         oldDestAnglePoint[i].lookIn = 0.0f;
         oldDestAnglePoint[i].type = ANGLE_TYPE_LOOK_IN;
     }
-
+    
     userPhotoIndex = 0;
     anglePointIndex = 0;
     roomVisibilityIndex = 0;
@@ -59,10 +56,12 @@
     turnAroundSplines = [[CubicSpline alloc] init];
     
     for (int i = 0; i < USER_PHOTOS_COUNT; i++) {
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 2; j++) {
             splines[j][i] = [[CubicSpline alloc] init];
-            anglePointCount[j][i] = 0;
             roomVisibilityCount[j][i] = 0;
+        }
+        for (int j = 0; j < 4; j++) {
+            anglePointCount[j][i] = 0;
         }
     }
 }
@@ -90,6 +89,7 @@
         anglePointCount[0][i]++;
         anglePointCount[1][i]++;
     }
+    angle = [self calculateAngle:[self getTargetAnglePoint]];
 }
 
 - (void) setUserPhoto:(int)index {
@@ -197,7 +197,7 @@
     if (movementType == MOVEMENT_TYPE_BACKWARD) {
         [self turnAround];
     } else {
-	    [self backupAngle];
+	    [self backupAngleLookIn];
 	    [self resume];
     }
 }
@@ -272,6 +272,9 @@
 - (void) decreaseMovement {
     if ([self isOnTour]) {
         return;
+    }
+    if (paused && [self isWithinCompletelyStopDistance]) {
+        velocity = GLKVector2Make(0.0f, 0.0f);
     }
     if (splineOffset >= 1.0f || ABS([self calculateAngle:[self getTargetAnglePoint]] - angle) < 0.3f) {
         return;
@@ -397,6 +400,10 @@
 
 - (bool) isWithinPauseDistance {
     return (!turnAround && [self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) || (turnAround && [self distanceToEnd] < MOVEMENT_RESUME_TURNAROUND_DISTANCE);
+}
+
+- (bool) isWithinCompletelyStopDistance {
+    return [self distanceToEnd] < MOVEMENT_COMPLETELY_STOP_DISTANCE;
 }
 
 - (AnglePoint) getTargetAnglePoint {
