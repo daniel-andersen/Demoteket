@@ -302,7 +302,7 @@
     } else {
 	    overlayAnimation = MIN(1.0f, overlayAnimation + APPEAR_SPEED);
     }
-    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, overlayAnimation >= 0.0f ? 1.0f - overlayAnimation : -overlayAnimation)];
+    [screenOverlay setColor:GLKVector4Make(0.0f, 0.0f, 0.0f, overlayAnimation >= 0.0f ? 1.0f - overlayAnimation : 1.0 + overlayAnimation)];
 
     if (mode == EXHIBITION_MODE_CHANGING_PHOTOS && overlayAnimation >= 0.0f) {
         [self createExhibition];
