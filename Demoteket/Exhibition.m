@@ -212,7 +212,9 @@
 
 - (void) tap:(GLKVector2)p {
     if (mode == EXHIBITION_MODE_NORMAL) {
-	    if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_TOUCH_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_TOUCH_SIZE width:NAVIGATION_BUTTON_TOUCH_SIZE height:NAVIGATION_BUTTON_TOUCH_SIZE]) {
+        if ([floorPlan isOnTour]) {
+            [floorPlan toggleTour];
+        } else if ([self clickedInRectX:p.x y:p.y rx:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_TOUCH_SIZE ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_TOUCH_SIZE width:NAVIGATION_BUTTON_TOUCH_SIZE height:NAVIGATION_BUTTON_TOUCH_SIZE]) {
 		    [floorPlan nextPhoto];
 		} else if ([self clickedInRectX:p.x y:p.y rx:NAVIGATION_BUTTON_BORDER ry:1.0f - NAVIGATION_BUTTON_BORDER - NAVIGATION_BUTTON_TOUCH_SIZE width:NAVIGATION_BUTTON_TOUCH_SIZE height:NAVIGATION_BUTTON_TOUCH_SIZE]) {
 		    [floorPlan prevPhoto];

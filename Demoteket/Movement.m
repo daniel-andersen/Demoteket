@@ -187,15 +187,19 @@
     [turnAroundSplines setPoint:0 position:position];
     [turnAroundSplines setPoint:1 position:[splines[movementType][userPhotoIndex] getEndPosition]];
     [turnAroundSplines recalculateSpline];
+    splineOffset = 0.0f;
     turnAround = true;
-    paused = true;
+    paused = false;
 }
 
 - (void) startTour {
     tourMode = true;
-    [self backupAngle];
-    movementType = MOVEMENT_TYPE_FORWARD;
-    [self resume];
+    if (movementType == MOVEMENT_TYPE_BACKWARD) {
+        [self turnAround];
+    } else {
+	    [self backupAngle];
+	    [self resume];
+    }
 }
 
 - (void) stopTour {
@@ -372,9 +376,10 @@
             break;
         }
     };
-    if ([self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) {
-        turnAround = false;
-        if (![self isOnTour] && userPhotos[userPhotoIndex].photoTexture.id != trollsAheadLogoTexture.id) {
+    if ([self isWithinPauseDistance]) {
+        if (tourMode && turnAround) {
+            [self resume];
+        } else if (![self isOnTour] && userPhotos[userPhotoIndex].photoTexture.id != trollsAheadLogoTexture.id) {
 		    paused = true;
         } else if ([self isOnTour] && userPhotoIndex == 0) {
             [self stopTour];
@@ -388,6 +393,10 @@
         [self backupAngle];
         anglePointIndex = MIN(anglePointIndex + 1, anglePointCount[movementType][userPhotoIndex] - 1);
     }
+}
+
+- (bool) isWithinPauseDistance {
+    return (!turnAround && [self distanceToEnd] < MOVEMENT_RESUME_DISTANCE) || (turnAround && [self distanceToEnd] < MOVEMENT_RESUME_TURNAROUND_DISTANCE);
 }
 
 - (AnglePoint) getTargetAnglePoint {
@@ -439,7 +448,7 @@
 }
 
 - (bool) isOnTour {
-    return tourMode;
+    return tourMode && !turnAround;
 }
 
 - (bool) canTurnAround {
