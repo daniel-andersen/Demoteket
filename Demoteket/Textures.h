@@ -78,6 +78,8 @@ extern Texture blogButtonTexture;
 extern Texture photoLoadingTexture;
 extern Texture photoBackgroundTexture;
 
+extern Texture textFadeTexture;
+
 extern void loadTextures();
 
 @interface Textures : NSObject

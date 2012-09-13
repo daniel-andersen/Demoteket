@@ -53,6 +53,8 @@ Texture blogButtonTexture;
 Texture photoLoadingTexture;
 Texture photoBackgroundTexture;
 
+Texture textFadeTexture;
+
 Texture labelTexture;
 UIImage *textImage;
 
@@ -152,6 +154,8 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
     photoBackgroundTexture = [self loadTexture:@"photo_background.png"];
 
     floorDistortionTexture = [self loadTexture:@"floor_distortion.png" repeat:true]; textureSetTexCoords(&floorDistortionTexture, 0.0f, 0.0f, 55.0f, 55.0f);
+
+    textFadeTexture = [self loadTexture:@"text_fade.png" repeat:true]; textureSetBlend(&textFadeTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 - (void) dealloc {

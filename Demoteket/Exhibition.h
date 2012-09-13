@@ -53,7 +53,8 @@
 
     Quads *screenOverlay;
     Quads *photoOverlay;
-
+	Quads *textFade;
+    
     float overlayAnimation;
 
 	double startTime;

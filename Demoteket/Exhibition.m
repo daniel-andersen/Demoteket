@@ -119,6 +119,15 @@
     [photoOverlay setTranslation:GLKVector3Make(0.5f, 0.5f, 0.0f)];
     [photoOverlay end];
 
+    textFade = [[Quads alloc] init];
+    [textFade beginWithTexture:textFadeTexture];
+    [textFade setIsOrthoProjection:true];
+    [textFade addQuadX1:1.0f y1:0.0f z1:0.0f
+                     x2:1.0f y2:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE * 2.0f z2:0.0f
+                     x3:0.0f y3:NAVIGATION_BUTTON_BORDER + NAVIGATION_BUTTON_SIZE * 2.0f z3:0.0f
+                     x4:0.0f y4:0.0f z4:0.0f];
+    [textFade end];
+
     overlayAnimation = 0.0f;
     startTime = CFAbsoluteTimeGetCurrent();
 }
@@ -288,6 +297,7 @@
 	    photoFadeAnimation = MAX(0.0f, photoFadeAnimation - PHOTO_APPEAR_SPEED);
     }
     [photoOverlay setColor:GLKVector4Make(1.0f, 1.0f, 1.0f, photoFadeAnimation)];
+    [textFade setColor:GLKVector4Make(1.0f, 1.0f, 1.0f, photoFadeAnimation)];
     
     if (mode == EXHIBITION_MODE_VIEWING_PHOTO || mode == EXHIBITION_MODE_VIEWING_TEXT) {
 	    photoAnimation = MIN(2.0f, photoAnimation + PHOTO_APPEAR_SPEED);
@@ -326,10 +336,10 @@
 - (void) renderButtons {
     if (photoFadeAnimation > 0.0f) {
         if (photoFadeAnimation == 1.0f) {
-            [turnAroundPhotoButton render];
-            if ((mode == EXHIBITION_MODE_VIEWING_TEXT && photoAnimation >= 1.0f) || (mode == EXHIBITION_MODE_VIEWING_PHOTO && photoAnimation <= 1.0f)) {
+            if ([self hasBlogButton]) {
                 [blogButton render];
             }
+            [turnAroundPhotoButton render];
         }
     } else {
         if ([floorPlan isTurnAroundButtonVisible]) {
@@ -347,11 +357,18 @@
     }
 }
 
+- (bool) hasBlogButton {
+    return (mode == EXHIBITION_MODE_VIEWING_TEXT && photoAnimation >= 1.0f) || (mode == EXHIBITION_MODE_VIEWING_PHOTO && photoAnimation <= 1.0f) || (mode == EXHIBITION_MODE_NORMAL && photoAnimation > 0.0f && photoOverlay.texture.id == userPhoto.textTexture.id);
+}
+
 - (void) renderPhoto {
     float rotationX = M_PI_2 * 0.2f * (photoAnimation < 1.0f ? photoAnimation : -(2.0f - photoAnimation));
     float rotationY = M_PI_2 * 1.0f * (photoAnimation < 1.0f ? photoAnimation :  (2.0f - photoAnimation));
     [photoOverlay setRotation:GLKVector3Make(rotationX, rotationY, 0.0f)];
     [photoOverlay render];
+    if ([self hasBlogButton]) {
+        [textFade render];
+    }
 }
 
 - (bool) clickedInRectX:(float)x y:(float)y rx:(float)rx ry:(float)ry width:(float)width height:(float)height {
