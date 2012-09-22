@@ -75,6 +75,8 @@ GLuint currentShaderProgram;
 
 GLKTextureLoader *textureLoader;
 
+NSOperationQueue *photoLoadingQueue;
+
 extern float letterToAngle(char ch);
 extern int textureAtLeastSize(int size);
 

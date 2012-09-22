@@ -39,6 +39,9 @@
 }
 
 - (void) initialize {
+    photoLoadingQueue = [[NSOperationQueue alloc] init];
+	[photoLoadingQueue setMaxConcurrentOperationCount:1];
+    
 	rssFeedParser = [[RssFeedParser alloc] init];
     
     textures = [[Textures alloc] init];

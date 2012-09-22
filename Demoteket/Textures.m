@@ -208,19 +208,29 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 }
 
 - (void) loadPhotoAsyncFromUrl:(NSURL*)url callback:(void(^)(Texture))callback {
-    [textureLoader textureWithContentsOfURL:url options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
+    [photoLoadingQueue addOperation:[NSBlockOperation blockOperationWithBlock:^(void) {
+        NSError *error = nil;
+        NSData *data = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
         if (error) {
-            NSLog(@"Error loading texture asynchronously: %@", error);
+            NSLog(@"Error loading photo asynchronously: %@", error);
+            return;
         }
-        Texture texture = [self textureFromTextureInfo:textureInfo repeat:false];
-        callback(texture);
-    }];
+        [textureLoader textureWithContentsOfData:data options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
+            if (error) {
+                NSLog(@"Error loading texture asynchronously: %@", error);
+                return;
+            }
+            Texture texture = [self textureFromTextureInfo:textureInfo repeat:false];
+            callback(texture);
+        }];
+    }]];
 }
 
 - (void) loadTextureWithImageAsync:(UIImage*)image texture:(Texture*)texture {
     [textureLoader textureWithCGImage:image.CGImage options:nil queue:NULL completionHandler:^(GLKTextureInfo *textureInfo, NSError *error) {
         if (error) {
             NSLog(@"Error loading texture asynchronously: %@", error);
+            return;
         }
         textureCopyTo([self textureFromTextureInfo:textureInfo repeat:false], texture);
     }];
