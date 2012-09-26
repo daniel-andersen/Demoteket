@@ -78,6 +78,8 @@
 - (bool) isStaticPhoto;
 - (bool) isStaticButNotLoadingPhoto;
 
+- (void) setNoPhoto;
+
 - (void) createTextTexture;
 - (void) releaseTextTexture;
 

@@ -75,6 +75,7 @@ extern Texture tourButtonTexture;
 extern Texture turnAroundPhotoButtonTexture;
 extern Texture blogButtonTexture;
 
+extern Texture noPhotoTexture;
 extern Texture photoLoadingTexture;
 extern Texture photoBackgroundTexture;
 

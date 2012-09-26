@@ -101,15 +101,19 @@
 }
 
 - (bool) isStaticPhoto {
-	return photoTexture.id == demoteketLogoTexture.id || photoTexture.id == photoLoadingTexture.id || photoTexture.id == trollsAheadLogoTexture.id;
+	return photoTexture.id == demoteketLogoTexture.id || photoTexture.id == photoLoadingTexture.id || photoTexture.id == trollsAheadLogoTexture.id || photoTexture.id == noPhotoTexture.id;
 }
 
 - (bool) isStaticButNotLoadingPhoto {
-	return [self isStaticPhoto] && photoTexture.id != photoLoadingTexture.id;
+	return [self isStaticPhoto] && photoTexture.id != photoLoadingTexture.id && photoTexture.id != noPhotoTexture.id;
+}
+
+- (void) setNoPhoto {
+    photoQuads.texture = noPhotoTexture;
 }
 
 - (void) addPhotoQuads {
-    float actualScale = photoTexture.id == photoLoadingTexture.id ? 1.0f : scale;
+    float actualScale = photoTexture.id == photoLoadingTexture.id || photoTexture.id == noPhotoTexture.id ? 1.0f : scale;
     
     float maxSize = MAX(photoTexture.width, photoTexture.height);
     float width = actualScale * (photoTexture.width / maxSize);

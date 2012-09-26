@@ -207,17 +207,18 @@
 
 - (void) doLoadPhotos {
     int idx = 0;
-    for (int i = 0; i < MIN([rssFeedParser photoCount], 10); i++) {
+    for (int i = 0; i < 10; i++) {
         while ([userPhotos[idx] isStaticButNotLoadingPhoto]) {
             idx++;
         }
-        if (!feedFirstTimeLoad && ![rssFeedParser hasChanges]) {
-	        idx++;
+        if (i < [rssFeedParser photoCount]) {
+	        [userPhotos[idx] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
+	        userPhotos[idx].title = [rssFeedParser getTitle:i];
+	        userPhotos[idx].description = [rssFeedParser getDescription:i];
+	        userPhotos[idx].link = [rssFeedParser getLink:i];
+        } else {
+	        [userPhotos[idx] setNoPhoto];
         }
-        [userPhotos[idx] loadPhotoAsynchronously:[rssFeedParser getImage:i]];
-        userPhotos[idx].title = [rssFeedParser getTitle:i];
-        userPhotos[idx].description = [rssFeedParser getDescription:i];
-        userPhotos[idx].link = [rssFeedParser getLink:i];
         idx++;
     }
 }

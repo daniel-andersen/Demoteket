@@ -50,6 +50,7 @@ Texture tourButtonTexture;
 Texture turnAroundPhotoButtonTexture;
 Texture blogButtonTexture;
 
+Texture noPhotoTexture;
 Texture photoLoadingTexture;
 Texture photoBackgroundTexture;
 
@@ -150,7 +151,8 @@ void textureSetBlend(Texture *texture, GLenum blendSrc, GLenum blendDst) {
 
     trollsAheadLogoTexture = [self loadTexture:@"trolls_ahead_logo.png"]; textureSetBlend(&trollsAheadLogoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    photoLoadingTexture = [self loadTexture:@"loading_photo.png"]; textureSetBlend(&photoLoadingTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); textureSetTexCoords(&photoLoadingTexture, 0.0f, 0.1679f, 1.0f, 1.0f - 0.1679f);
+    noPhotoTexture = [self loadTexture:@"no_photo.png"]; textureSetBlend(&noPhotoTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    photoLoadingTexture = [self loadTexture:@"loading_photo.png"]; textureSetBlend(&photoLoadingTexture, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     photoBackgroundTexture = [self loadTexture:@"photo_background.png"];
 
     floorDistortionTexture = [self loadTexture:@"floor_distortion.png" repeat:true]; textureSetTexCoords(&floorDistortionTexture, 0.0f, 0.0f, 55.0f, 55.0f);
