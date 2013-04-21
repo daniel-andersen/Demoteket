@@ -115,6 +115,9 @@
             continue;
         }
         NSString* capture = [feed substringWithRange:[result rangeAtIndex:1]];
+        if (![self isCorrectCategory:capture]) {
+            continue;
+        }
         images[0][count] = [[self findImage:count fromText:capture] stringByDecodingHTMLEntities];
         titles[0][count] = [[self findTitle:count fromText:capture] stringByDecodingHTMLEntities];
         descriptions[0][count] = [[self findDescription:count fromText:capture] stringByDecodingHTMLEntities];
@@ -126,6 +129,22 @@
             return;
         }
     }
+}
+
+- (BOOL)isCorrectCategory:(NSString*)text {
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"<category\\>\\<\\!\\[CDATA\\[(.*?)\\]\\]\\>\\<\\/category\\>" options:NSRegularExpressionDotMatchesLineSeparators error:&error];
+    if (error) {
+        return false;
+    }
+    NSArray *results = [regex matchesInString:text options:0 range:NSMakeRange(0, [text length])];
+    for (NSTextCheckingResult *result in results) {
+        NSString* capture = [text substringWithRange:[result rangeAtIndex:1]];
+        if ([@"værker" isEqualToString:[capture lowercaseString]]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 - (NSString*) findTitle:(int)index fromText:(NSString*)text {
