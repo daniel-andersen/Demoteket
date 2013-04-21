@@ -74,7 +74,7 @@
     photoFilename = filename;
     if ([filename hasPrefix:@"http"]) {
         NSLog(@"Loading asynchronously: %@", filename);
-        [textures loadPhotoAsyncFromUrl:[NSURL URLWithString:filename] callback:^(Texture t) {
+        [textures loadPhotoAsyncFromUrl:[NSURL URLWithString:[filename stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] callback:^(Texture t) {
             [self photoLoaded:t];
         }];
     } else {

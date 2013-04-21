@@ -287,7 +287,7 @@
 }
 
 - (void) showBlog {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:userPhoto.link]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[userPhoto.link stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
 }
 
 - (void) update {
