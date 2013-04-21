@@ -198,6 +198,7 @@
 		65083E8815D43C3A003108B5 /* Demoteket */ = {
 			isa = PBXGroup;
 			children = (
+				65083E8915D43C3A003108B5 /* Supporting Files */,
 				6512B87E15FBBD6300921FD2 /* Shaders */,
 				6573203415D506AC002562E9 /* Images */,
 				65083E9115D43C3A003108B5 /* AppDelegate.h */,
@@ -206,7 +207,6 @@
 				65083E9915D43C3B003108B5 /* ViewController.m */,
 				65083E9B15D43C3B003108B5 /* ViewController_iPhone.xib */,
 				65083E9E15D43C3B003108B5 /* ViewController_iPad.xib */,
-				65083E8915D43C3A003108B5 /* Supporting Files */,
 				65083EA615D43C6A003108B5 /* Exhibition.h */,
 				65083EA715D43C6A003108B5 /* Exhibition.m */,
 				65083EA915D43CFC003108B5 /* FloorPlan.h */,
