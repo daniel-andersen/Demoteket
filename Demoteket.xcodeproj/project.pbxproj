@@ -166,17 +166,7 @@
 		65083E6F15D43C3A003108B5 = {
 			isa = PBXGroup;
 			children = (
-				65603B39161042F900B4B110 /* Default-568h@2x.png */,
-				659ACDEF1600B2B700038F6E /* Default-Landscape~ipad.png */,
-				659ACDED1600B26900038F6E /* Default-Landscape@2x~ipad.png */,
-				659ACDEB1600B24400038F6E /* Default-Portrait@2x~ipad.png */,
-				659ACDE91600B20300038F6E /* Default-Portrait~ipad.png */,
-				659ACDE71600B1C200038F6E /* icon_144x144.png */,
-				659ACDE51600B1B900038F6E /* icon_72x72.png */,
-				659ACDE31600B1A900038F6E /* icon_114x114.png */,
-				659ACDE11600B19E00038F6E /* icon_57x57.png */,
-				659ACDDF1600B10300038F6E /* Default@2x.png */,
-				659ACDDD1600B0A700038F6E /* Default.png */,
+				6531D81D17247800004500F2 /* App images */,
 				65880BEF15E955C20055F33D /* QuartzCore.framework */,
 				65880BE915E8F2640055F33D /* AudioToolbox.framework */,
 				65083E8815D43C3A003108B5 /* Demoteket */,
@@ -263,6 +253,24 @@
 				6512B88215FBBD6300921FD2 /* FloorDistortion.vsh */,
 			);
 			path = Shaders;
+			sourceTree = "<group>";
+		};
+		6531D81D17247800004500F2 /* App images */ = {
+			isa = PBXGroup;
+			children = (
+				65603B39161042F900B4B110 /* Default-568h@2x.png */,
+				659ACDEF1600B2B700038F6E /* Default-Landscape~ipad.png */,
+				659ACDED1600B26900038F6E /* Default-Landscape@2x~ipad.png */,
+				659ACDEB1600B24400038F6E /* Default-Portrait@2x~ipad.png */,
+				659ACDE91600B20300038F6E /* Default-Portrait~ipad.png */,
+				659ACDE71600B1C200038F6E /* icon_144x144.png */,
+				659ACDE51600B1B900038F6E /* icon_72x72.png */,
+				659ACDE31600B1A900038F6E /* icon_114x114.png */,
+				659ACDE11600B19E00038F6E /* icon_57x57.png */,
+				659ACDDF1600B10300038F6E /* Default@2x.png */,
+				659ACDDD1600B0A700038F6E /* Default.png */,
+			);
+			name = "App images";
 			sourceTree = "<group>";
 		};
 		6573203415D506AC002562E9 /* Images */ = {
